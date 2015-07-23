@@ -88,13 +88,12 @@ namespace simplexpress
     {
         int first = 0,
             last = n - 1,
-            middle,
             position = -1;
         bool found = false;
 
         while(!found && first <= last)
         {
-            middle = (first + last) / 2;
+            int middle = (first + last) / 2;
             if(arr[middle] == value)
             {
                 found = true;
@@ -425,7 +424,7 @@ namespace simplexpress
             i = 1;
         }
 
-        for(i=i; i <= AL; i++)
+        for(i; i <= AL; i++)
         {
             try
             {
