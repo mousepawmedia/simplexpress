@@ -144,7 +144,7 @@
 1431101223 /usr/include/x86_64-linux-gnu/unicode/localpointer.h
 	"unicode/utypes.h"
 
-1434146057 source:/home/jason/Code/Repositories/simplexpress-git/main.cpp
+1437694145 source:/home/jason/Code/Repositories/simplexpress-git/main.cpp
 	<iostream>
 	<string>
 	"simplexpress.hpp"
@@ -153,7 +153,7 @@
 	<unicode/stringpiece.h>
 	<unicode/uchar.h>
 
-1434146057 /home/jason/Code/Repositories/simplexpress-git/include/simplexpress.hpp
+1438128356 /home/jason/Code/Repositories/simplexpress-git/include/simplexpress.hpp
 	<iostream>
 	<string>
 	<vector>
@@ -162,10 +162,17 @@
 	<unicode/uchar.h>
 	"utf_tools.hpp"
 
-1434146057 /home/jason/Code/Repositories/simplexpress-git/include/utf_tools.hpp
+1437790427 /home/jason/Code/Repositories/simplexpress-git/include/utf_tools.hpp
 	<iostream>
 	<math.h>
 	<stdexcept>
+	<stdlib.h>
 	<unicode/uchar.h>
 	<unicode/unistr.h>
+
+1438140861 source:/home/jason/Code/Repositories/simplexpress-git/src/simplexpress.cpp
+	"simplexpress.hpp"
+
+1438105198 source:/home/jason/Code/Repositories/simplexpress-git/src/utf_tools.cpp
+	"utf_tools.hpp"
 

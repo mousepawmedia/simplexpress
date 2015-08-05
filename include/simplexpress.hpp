@@ -39,7 +39,7 @@ namespace simplexpress
             \param the model string to parse.*/
             void parseModel(UnicodeString);
 
-            /**Extract lower and possible upper integer values in range from
+            /**Extract lower and possible upper hex values in range from
             a string.
             \param the string to extract range from.
             \param a pointer to an integer for storing lower range
@@ -62,23 +62,30 @@ namespace simplexpress
             ///Option flag that the string must fully match the model.
             bool fullMatch = true;
 
-            ///The model index.
-            int modelIndex = 0;
-
+            ///The model itself.
             vector<UnicodeString> model;
 
-            void prev();
-            void next();
+            ///Move to the previous unit.
+            bool prev();
+            ///Move to the next unit.
+            bool next();
+            ///Move to the previous character in the unit.
+            bool unitPrev();
+            ///Move to the next character in the unit.
+            bool unitNext();
 
             static specifier specifier_tests;
+        protected:
+            ///The model index (current unit).
+            short int modelIndex = 0;
+            ///The unit index, usually used for literal units.
+            short int unitIndex = 0;
 
         private:
             //The temporary return for certain tests.
             bool temp_r = false;
             //Whether we're testing in a group.
             bool flag_group = false;
-            //The primary unit index.
-            int n = 0;
     };
 
     /**A normal Simplex, which accepts strings.*/

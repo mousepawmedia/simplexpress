@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <stdexcept>
+#include <stdlib.h>
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
 
@@ -21,8 +22,9 @@ namespace simplexpress
 
             /**Checks to see if the character is a digit.
             \param the character to check
+            \param the radix for the digit, default 10.
             \return true if in set, else false*/
-            static bool digit(UChar);
+            static bool digit(UChar, int=10);
 
             /**Checks to see if the character is a lowercase
             letter (Latin alphabet.)
@@ -137,8 +139,11 @@ namespace simplexpress
             static const int WHITESPACE_BRK_CNT = 7;
             static const int arr_whitespace_brk[WHITESPACE_BRK_CNT];
 
-            static const int WHITESPACE_SYMB_CNT= 6;
+            static const int WHITESPACE_SYMB_CNT = 6;
             static const int arr_whitespace_symb[WHITESPACE_SYMB_CNT];
+
+            static const int SPECIAL_DUODECIMAL_CNT = 9;
+            static const int arr_special_duodecimal[SPECIAL_DUODECIMAL_CNT];
         private:
     };
 
@@ -157,7 +162,7 @@ namespace simplexpress
             };
 
             static bool s_alphanumeric(UChar, LetterCase=CASE_ANY);
-            static bool s_digit(UChar);
+            static bool s_digit(UChar, int=10);
             static bool s_greek(UChar, LetterCase=CASE_ANY);
             static bool s_ipa(UChar);
             static bool s_latin(UChar, LetterCase=CASE_ANY);
@@ -169,7 +174,8 @@ namespace simplexpress
     {
         public:
             utf_utils(){}
-
+            static int ch_to_hex(UChar);
+            static int str_to_hex(UnicodeString, bool=false);
             static int ch_to_int(UChar);
             static int str_to_int(UnicodeString, bool=false);
         protected:

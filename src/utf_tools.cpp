@@ -77,7 +77,10 @@ namespace simplexpress
         {0x00B7, 0x237D, 0x2420, 0x2422, 0x2423, 0x2800
         };
 
-    //Functions are alphabetically (not categorically) sorted here.
+    //NOTE: The wide character 0x1D4B3 is not supported in practice.
+    const int char_sets::arr_special_duodecimal[SPECIAL_DUODECIMAL_CNT] =
+        {0x0041, 0x0042, 0x0045, 0x0054, 0x0058, 0x2130, 0x218A, 0x218B, 0x1D4B3
+        };
 
     bool char_sets::alpha(UChar ch)
     {
@@ -111,9 +114,57 @@ namespace simplexpress
         return position;
     }
 
-    bool char_sets::digit(UChar ch)
+    bool char_sets::digit(UChar ch, int radix)
     {
-        return (ch >= 0x0030 && ch <= 0x0039);
+        //If the radix is 1-10...
+        if(radix > 1 && radix <= 10)
+        {
+            /*Allow the digits from 0 to 9 (less the difference between
+            10 and radix).*/
+            return (ch >= 0x0030 && ch <= (0x0039-(10-radix)));
+        }
+        else if(radix == 12)
+        {
+            //Allow all 0-9 digits.
+            if(ch >= 0x0030 && ch <= 0x0039)
+            {
+                return true;
+            }
+            else
+            {
+                /*Duodecimal can use A, B, E, T, X, or any of four Unicode characters
+                beyond digits. Perform binary search on this array of Unicode
+                character code points.*/
+                ch = u_toupper(ch);
+                return (char_bin_search(arr_special_duodecimal,
+                    SPECIAL_DUODECIMAL_CNT, ch) > -1);
+            }
+        }
+        else if(radix > 10 && radix <= 35)
+        {
+            //Allow all 0-9 digits.
+            if(ch >= 0x0030 && ch <= 0x0039)
+            {
+                return true;
+            }
+            else
+            {
+                //If no match, check for a letter.
+                //Convert character to uppercase...
+                ch = u_toupper(ch);
+                /*Allow for Latin letters sequentially for all unassigned numbers.
+                That is, use A- some letter. That end letter is Z minus an offset
+                calculated from 26 minus the difference between radix and 10.*/
+                return (ch >= 0x0041 && ch <= (0x005A - (26-(radix-10))));
+            }
+        }
+        else
+        {
+            //TODO: Throw an error.
+            std::cerr << "Invalid radix " << radix << "! Must be 1-35."
+                      << std::endl;
+        }
+
     }
 
     bool char_sets::greek(UChar ch)
@@ -288,9 +339,9 @@ namespace simplexpress
         return false;
     }
 
-    bool specifier::s_digit(UChar ch)
+    bool specifier::s_digit(UChar ch, int radix)
     {
-        return (digit(ch));
+        return (digit(ch, radix));
     }
 
     bool specifier::s_greek(UChar ch, LetterCase ltrCase)
@@ -366,6 +417,62 @@ namespace simplexpress
         return (whitespace(ch));
     }
 
+    int utf_utils::ch_to_hex(UChar ch)
+    {
+        int c = static_cast<int>(u_toupper(ch));
+        int i;
+
+        //48 [0] - 57 [9] (-48)
+        if(c >= 48 && c <= 57)
+        {
+            i = (c-48);
+        }
+        else if(c >= 65 && c <= 70)
+        {
+            //65 [A] - 70 [F] (-55)
+            i = (c-55);
+        }
+        else
+        {
+            throw std::out_of_range("The character could not be converted.");
+        }
+        return i;
+    }
+
+    int utf_utils::str_to_hex(UnicodeString str, bool failsafe)
+    {
+        //Initialize our return integer.
+        int r = 0,
+        //The integerized character.
+            ci = 0,
+        //The incrementer.
+            i = 0;
+        const int AL = str.length() - 1;
+
+        for(i; i <= AL; i++)
+        {
+            try
+            {
+                ci = ch_to_hex(str[i]);
+            }
+            catch(const std::out_of_range& oor)
+            {
+                if(failsafe)
+                {
+                    return -1;
+                }
+                else
+                {
+                    throw std::out_of_range("The string cannot be converted.");
+                }
+            }
+
+            r += pow(16, (AL-i)) * ci;
+        }
+
+        return r;
+    }
+
     int utf_utils::ch_to_int(UChar ch)
     {
         //48 [0] - 57 [9]
@@ -381,6 +488,13 @@ namespace simplexpress
 
     int utf_utils::str_to_int(UnicodeString str, bool failsafe)
     {
+        //If we start with 0x, it's hex.
+        if(str[0] == '0' && str[1] == 'x')
+        {
+            return utf_utils::str_to_hex(str, failsafe);
+        }
+        //Otherwise, proceed with interpreting in binary.
+
         //Initialize our return integer.
         int r = 0,
         //The integerized character.

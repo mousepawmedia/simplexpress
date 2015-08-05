@@ -6,7 +6,7 @@ namespace simplexpress
     void BaseSimplex::parseModel(UnicodeString input)
     {
         /*SIMPLEXpress' syntax is space-delimited, which makes parsing quite
-        easy - just split by spaces.*/
+        easy - just split by spaces (mostly).*/
 
         //If model is not empty, get out of Dodge!
         if(model.size() != 0)
@@ -17,15 +17,44 @@ namespace simplexpress
         //The buffer for the current unit.
         UnicodeString unit;
 
+        //String escape flag.
+        bool escape = false;
+
         //For each index in the input string...
         for(int i = 0; i < input.length(); i++)
         {
-            //If the character is a space and unit is not empty...
-            if(input[i] == ' ' && unit != "")
+            /*If the character is a space, unit is not empty, and
+            string isn't escaped...*/
+            if(input[i] == ' ' && unit != "" && !escape)
             {
                 //Push the unit to the model vector.
                 model.push_back(unit);
                 unit = "";
+            }
+            else if(input[i] == '\\' && !escape)
+            {
+                //Flag the escape.
+                escape = true;
+            }
+            //If escape is flagged (previous character was a backslash)...
+            else if(escape)
+            {
+                switch(input[i])
+                {
+                    case ' ':
+                    case '\\':
+                        //Character escaped. Push it in as a literal.
+                        unit += input[i];
+                        break;
+                    default:
+                    {
+                        //We weren't really escaping anything. Push both chars in.
+                        unit += '\\';
+                        unit += input[i];
+                    }
+                }
+                //Turn off escape flag.
+                escape = false;
             }
             else
             {
@@ -44,7 +73,7 @@ namespace simplexpress
         if(model.size() == 0)
         {
             //TODO: Throw a snit (that is, an error).
-            std::cout << "ERROR: Empty Simplex model." << std::endl;
+            std::cerr << "ERROR: Empty Simplex model." << std::endl;
         }
     }
 
@@ -54,51 +83,94 @@ namespace simplexpress
         bool r = false;
 
         //NOTE: Remove this when we're done. -->
-        std::cout << "Unit " << n << std::endl;
+        std::cout << "Unit " << modelIndex << std::endl;
         string str;
-        model[n].toUTF8String(str);
+        model[modelIndex].toUTF8String(str);
         std::cout << str << std::endl;
         // <--
 
         //If Specifier...
-        if(model[n][0] == '^')
+        if(model[modelIndex][0] == '^')
         {
             specifier::LetterCase letrCase = specifier::CASE_ANY;
-            if(model[n].length() > 2)
-            {
-                if(model[n][2] == 'L')
-                {
-                    letrCase = specifier::CASE_LOWER;
-                }
-                else if(model[n][2] == 'U')
-                {
-                    letrCase = specifier::CASE_UPPER;
-                }
-            }
 
-            switch(model[n][1])
+            switch(model[modelIndex][1])
             {
                 //Alphanumeric
                 case 'A':
                 {
+                    //If we have more than 2 characters in the model...
+                    if(model[modelIndex].length() > 2)
+                    {
+                        //If the third character is an L...
+                        if(model[modelIndex][2] == 'L')
+                        {
+                            //We want lowercase.
+                            letrCase = specifier::CASE_LOWER;
+                        }
+                        //If the third character is an U...
+                        else if(model[modelIndex][2] == 'U')
+                        {
+                            //We want uppercase.
+                            letrCase = specifier::CASE_UPPER;
+                        }
+                    }
                     r = (specifier::s_alphanumeric(ch, letrCase) ? true : false);
                     break;
                 }
                 //Digit
                 case 'D':
                 {
-                    r = (specifier::s_digit(ch) ? true : false);
+                    int radix = 10;
+                    if(model[modelIndex].length() > 2)
+                    {
+                        radix = utf_utils::str_to_int(model[modelIndex].tempSubStringBetween(2));
+                        //TODO: Try/Catch for non-numbers!
+                    }
+                    r = (specifier::s_digit(ch, radix) ? true : false);
                     break;
                 }
                 //Extended Latin.
                 case 'E':
                 {
+                    //If we have more than 2 characters in the model...
+                    if(model[modelIndex].length() > 2)
+                    {
+                        //If the third character is an L...
+                        if(model[modelIndex][2] == 'L')
+                        {
+                            //We want lowercase.
+                            letrCase = specifier::CASE_LOWER;
+                        }
+                        //If the third character is an U...
+                        else if(model[modelIndex][2] == 'U')
+                        {
+                            //We want uppercase.
+                            letrCase = specifier::CASE_UPPER;
+                        }
+                    }
                     r = (specifier::s_latin_ext(ch, letrCase) ? true : false);
                     break;
                 }
                 //Letter
                 case 'L':
                 {
+                    //If we have more than 2 characters in the model...
+                    if(model[modelIndex].length() > 2)
+                    {
+                        //If the third character is an L...
+                        if(model[modelIndex][2] == 'L')
+                        {
+                            //We want lowercase.
+                            letrCase = specifier::CASE_LOWER;
+                        }
+                        //If the third character is an U...
+                        else if(model[modelIndex][2] == 'U')
+                        {
+                            //We want uppercase.
+                            letrCase = specifier::CASE_UPPER;
+                        }
+                    }
                     r = (specifier::s_latin(ch, letrCase) ? true : false);
                     break;
                 }
@@ -157,8 +229,7 @@ namespace simplexpress
                 {
                     //Get the lower and upper ranges for the Unicode code.
                     int lower, upper = 10000;
-                    parseRange(model[n], &lower, &upper);
-
+                    parseRange(model[modelIndex], &lower, &upper);
                     //If in inclusive range, true, else false.
                     r = (ch >= lower && ch <= upper ? true : false);
                     break;
@@ -187,33 +258,21 @@ namespace simplexpress
                 case '\\':
                 {
                     r = (ch == '\\' ? true : false);
+                    break;
                 }
             }
+
+            //Finished with model. Move on.
+            next();
         }
         //Else if Modifier...
-        else if(model[n][0] == '\\')
+        else if(model[modelIndex][0] == '\\')
         {
             //TODO: I think this needs to be checked for at n+1 always.
             //At position n, it would be an error.
 
-            switch(model[n][1])
+            switch(model[modelIndex][1])
             {
-                //Lowercase only.
-                case 'L':
-                {
-                    //TODO: This is going to have to force the LOWER equivalents of
-                    //any tests contained therein. Easier said than done?
-                    //Most non-case tests could have an override - 0 for normal,
-                    //1 for lower and 2 for upper.
-                    break;
-                }
-                //Uppercase only.
-                case 'U':
-                {
-                    //TODO: This is going to have to force the UPPER equivalents of
-                    //any tests contained therein. Easier said than done?
-                    break;
-                }
                 //Start of set.
                 case '[':
                 {
@@ -245,7 +304,7 @@ namespace simplexpress
                 }
                 default:
                 {
-                    if(isdigit(model[n][1]))
+                    if(isdigit(model[modelIndex][1]))
                     {
                         //TODO: That many matches.
                         break;
@@ -253,10 +312,17 @@ namespace simplexpress
                 }
             }
         }
-        //Else (if) literal character...
+        //Else (if) literal character or string...
         else
         {
-
+            //If we have a match...
+            if(ch == model[modelIndex][unitIndex])
+            {
+                //Move to the next character (or next model if we're done.)
+                unitNext() ? true : next();
+                //Set return value to true.
+                r = true;
+            }
         }
 
         return r;
@@ -273,21 +339,21 @@ namespace simplexpress
             UChar ch = input[i];
             if(!dash && ch == '-')
             {
-                *lower = utf_utils::str_to_int(buffer, true);
+                *lower = utf_utils::str_to_hex(buffer, true);
                 buffer = "";
                 dash = true;
             }
-            else if(!dash && specifier::s_digit(ch))
+            else if(!dash && specifier::s_digit(ch, 16))
             {
                 buffer += ch;
             }
-            else if(dash && specifier::s_digit(ch))
+            else if(dash && specifier::s_digit(ch, 16))
             {
                 buffer += ch;
             }
             else
             {
-                std::cout << "Error parsing numerical range!" << std::endl;
+                std::cerr << "Error parsing numerical range!" << std::endl;
             }
         }
 
@@ -295,37 +361,91 @@ namespace simplexpress
         {
             if(dash)
             {
-                *upper = utf_utils::str_to_int(buffer, true);
+                *upper = utf_utils::str_to_hex(buffer, true);
             }
             else if(!dash)
             {
-                *lower = utf_utils::str_to_int(buffer, true);
+                *lower = utf_utils::str_to_hex(buffer, true);
             }
+        }
+
+        //Validate that upper and lower aren't swapped.
+        if(dash && (*upper < *lower))
+        {
+            //Hold the upper value temporarily.
+            int temp = *upper;
+            //Assign the lower value to the upper value.
+            *upper = *lower;
+            //Assign the former upper value (temp) to lower.
+            *lower = temp;
+            //NOTE: This isn't the best solution, but it works for now.
+            std::cerr << "Invalid range. Swapping lower and upper values."
+                      << std::endl;
         }
 
         return;
 
     }
 
-    void BaseSimplex::prev()
+    bool BaseSimplex::prev()
     {
-        if(n > 0)
+        bool r = false;
+        if(modelIndex > 0)
         {
-            n--;
+            modelIndex--;
+            r = true;
         }
+        return r;
     }
 
-    void BaseSimplex::next()
+    bool BaseSimplex::next()
     {
-        if(n < model.size())
+        bool r = false;
+        if(modelIndex < (model.size() - 1))
         {
-            n++;
+            modelIndex++;
+            r = true;
         }
+        return r;
+    }
+
+    bool BaseSimplex::unitPrev()
+    {
+        bool r = false;
+        if(unitIndex > 0)
+        {
+            unitIndex--;
+            r = true;
+        }
+        return r;
+    }
+
+    bool BaseSimplex::unitNext()
+    {
+        bool r;
+
+        //If the unit index is less than the maximum possible...
+        if(unitIndex < (model[modelIndex].length() - 1))
+        {
+            //Increase the unit index.
+            unitIndex++;
+            //Return true (we were able to increase the index.)
+            r = true;
+        }
+        //Otherwise...
+        else
+        {
+            //Reset the index.
+            unitIndex = 0;
+            //And return false (no more data.)
+            r = false;
+        }
+        return r;
     }
 
     void BaseSimplex::flush()
     {
-        n = 0;
+        modelIndex = 0;
     }
 
     /*--------------------Simplex--------------------*/
@@ -352,7 +472,6 @@ namespace simplexpress
         for(int i = 0; i < check.length(); i++)
         {
             r = base_lex(check[i]);
-            next();
             if(!r)
             {
                 break;

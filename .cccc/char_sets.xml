@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Detailed report on module char_sets-->
+<CCCC_Project>
+<module_summary>
+<lines_of_code value="209" level="0" />
+<lines_of_code_per_member_function value="******" level="0" />
+<McCabes_cyclomatic_complexity value="67" level="0" />
+<McCabes_cyclomatic_complexity_per_member_function value="******" level="2" />
+<lines_of_code value="103" level="0" />
+<lines_of_code_per_member_function value="********" level="2" />
+<lines_of_code_per_line_of_comment value="2.029" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.650" level="0" />
+<weighted_methods_per_class_unity value="16" level="0" />
+<weighted_methods_per_class_visibility value="16" level="0" />
+<depth_of_inheritance_tree value="0" level="0" />
+<number_of_children value="1" level="0" />
+<coupling_between_objects value="3" level="0" />
+<IF4 value="4" level="0" />
+<IF4_per_member_function value="********" level="2" />
+<IF4_visible value="4" level="0" />
+<IF4_visible_per_member_function value="********" level="2" />
+<IF4_concrete value="4" level="0" />
+<IF4_concrete_per_member_function value="********" level="2" />
+</module_summary>
+<module_detail>
+<description>definition</description>
+<source_reference file="include/utf_tools.hpp" line="16" />
+<lines_of_code value="22" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="******" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</module_detail>
+<procedural_detail>
+<member_function>
+<name>alpha(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="85" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="80" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="1" level="0" />
+<lines_of_comment value="4" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>char_bin_search(...)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="90" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="122" />
+</extent>
+<lines_of_code value="26" level="0" />
+<McCabes_cyclomatic_complexity value="5" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="******" level="2" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="******" level="0" />
+</member_function>
+<member_function>
+<name>char_sets()</name>
+<extent>
+<description>definition</description>
+<source_reference file="include/utf_tools.hpp" line="19" />
+</extent>
+<lines_of_code value="1" level="0" />
+<McCabes_cyclomatic_complexity value="0" level="0" />
+<lines_of_comment value="0" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>digit(UChar,int)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="117" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="27" />
+</extent>
+<lines_of_code value="38" level="1" />
+<McCabes_cyclomatic_complexity value="16" level="1" />
+<lines_of_comment value="19" level="0" />
+<lines_of_code_per_line_of_comment value="2.000" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.842" level="0" />
+</member_function>
+<member_function>
+<name>greek(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="170" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="61" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="6" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>greek_lower(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="175" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="67" />
+</extent>
+<lines_of_code value="10" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="4" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>greek_upper(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="185" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="73" />
+</extent>
+<lines_of_code value="10" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="4" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>ipa(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="249" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="112" />
+</extent>
+<lines_of_code value="30" level="0" />
+<McCabes_cyclomatic_complexity value="11" level="1" />
+<lines_of_comment value="16" level="0" />
+<lines_of_code_per_line_of_comment value="1.875" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.687" level="0" />
+</member_function>
+<member_function>
+<name>latin(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="195" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="88" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="6" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>latin_ext(UChar,bool)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="201" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="95" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="4" level="0" />
+<lines_of_comment value="5" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>latin_ext_letter(UChar,bool)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="206" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="102" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="3" level="0" />
+<lines_of_comment value="6" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>latin_ext_lower(UChar,bool)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="212" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="40" />
+</extent>
+<lines_of_code value="10" level="0" />
+<McCabes_cyclomatic_complexity value="4" level="0" />
+<lines_of_comment value="7" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>latin_ext_upper(UChar,bool)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="224" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="53" />
+</extent>
+<lines_of_code value="10" level="0" />
+<McCabes_cyclomatic_complexity value="4" level="0" />
+<lines_of_comment value="8" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>latin_lower(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="238" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="33" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="4" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>latin_upper(UChar)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="243" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="46" />
+</extent>
+<lines_of_code value="5" level="0" />
+<McCabes_cyclomatic_complexity value="2" level="0" />
+<lines_of_comment value="4" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="------" level="0" />
+</member_function>
+<member_function>
+<name>whitespace(UChar,bool)</name>
+<extent>
+<description>definition</description>
+<source_reference file="src/utf_tools.cpp" line="290" />
+</extent>
+<extent>
+<description>declaration</description>
+<source_reference file="include/utf_tools.hpp" line="119" />
+</extent>
+<lines_of_code value="17" level="0" />
+<McCabes_cyclomatic_complexity value="7" level="0" />
+<lines_of_comment value="10" level="0" />
+<lines_of_code_per_line_of_comment value="------" level="0" />
+<McCabes_cyclomatic_complexity_per_line_of_comment value="0.700" level="0" />
+</member_function>
+</procedural_detail>
+<structural_detail>
+<module>
+<name>char_sets</name>
+<client_module>
+<name>specifier</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>inheritance</description>
+<source_reference file="include/utf_tools.hpp" line="152" />
+</extent>
+</client_module>
+<supplier_module>
+<name>UChar</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="85" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="117" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="170" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="175" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="185" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="195" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="201" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="206" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="212" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="224" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="238" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="243" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="249" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="290" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="27" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="33" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="40" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="46" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="53" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="61" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="67" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="73" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="80" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="88" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="95" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="102" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="112" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="119" />
+</extent>
+<name>bool</name>
+<visible>true</visible>
+<concrete>true</concrete>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="201" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="206" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="212" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="224" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="src/utf_tools.cpp" line="290" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="40" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="53" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="95" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="102" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="include/utf_tools.hpp" line="119" />
+</extent>
+</supplier_module>
+</module>
+</structural_detail>
+</CCCC_Project>

@@ -23,7 +23,14 @@ int main()
 
     UnicodeString buffer;
     string std_buffer;
-    Simplex simplex("^LU ^LL");
+    std::cout << "Enter a model: ";
+    if(std_buffer == "#EXIT" && std_buffer == "#exit")
+    {
+        return 0;
+    }
+    getline(std::cin, std_buffer);
+    buffer = UnicodeString::fromUTF8(StringPiece(std_buffer));
+    Simplex simplex(buffer);
 
     //Do while command is not the pseudocommand #EXIT (or #exit)...
     do
