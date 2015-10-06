@@ -38,9 +38,14 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-g" />
+			<Add option="--cflags icu-uc icu-io" />
 		</Compiler>
+		<Linker>
+			<Add option="--libs icu-uc icu-io" />
+		</Linker>
 		<Unit filename="include/simplexpress.hpp" />
 		<Unit filename="include/utf_tools.hpp" />
 		<Unit filename="main.cpp" />
