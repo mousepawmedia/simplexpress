@@ -35,69 +35,69 @@
 1432186236 source:/mnt/MyData/Repositories/ratscript/trunk/simplexpress/src/utf_tools.cpp
 	"utf_tools.hpp"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/uchar.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/uchar.h
 	"unicode/utypes.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/utypes.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/utypes.h
 	"unicode/umachine.h"
 	"unicode/uversion.h"
 	"unicode/uconfig.h"
 	<float.h>
 	"unicode/utf.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/umachine.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/umachine.h
 	"unicode/ptypes.h"
 	<stddef.h>
 	"unicode/urename.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/ptypes.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/ptypes.h
 	<stddef.h>
 	"unicode/platform.h"
 	<stdint.h>
 	<features.h>
 	<inttypes.h>
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/platform.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/platform.h
 	"unicode/uconfig.h"
 	"unicode/uvernum.h"
 	<android/api-level.h>
 	<TargetConditionals.h>
 	<sys/isa_defs.h>
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/uconfig.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/uconfig.h
 	"uconfig_local.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/uvernum.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/uvernum.h
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/urename.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/urename.h
 	"unicode/uconfig.h"
 	"unicode/umachine.h"
 	"unicode/uvernum.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/uversion.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/uversion.h
 	"unicode/umachine.h"
 	"unicode/uvernum.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/utf.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/utf.h
 	"unicode/umachine.h"
 	"unicode/utf8.h"
 	"unicode/utf16.h"
 	"unicode/utf_old.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/utf8.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/utf8.h
 	"unicode/umachine.h"
 	"unicode/utf.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/utf16.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/utf16.h
 	"unicode/umachine.h"
 	"unicode/utf.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/utf_old.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/utf_old.h
 	"unicode/utf.h"
 	"unicode/utf8.h"
 	"unicode/utf16.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/unistr.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/unistr.h
 	"unicode/utypes.h"
 	"unicode/rep.h"
 	"unicode/std_string.h"
@@ -105,43 +105,43 @@
 	"unicode/bytestream.h"
 	"unicode/ucasemap.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/rep.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/rep.h
 	"unicode/uobject.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/uobject.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/uobject.h
 	"unicode/utypes.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/std_string.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/std_string.h
 	"unicode/utypes.h"
 	<string>
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/stringpiece.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/stringpiece.h
 	"unicode/utypes.h"
 	"unicode/uobject.h"
 	"unicode/std_string.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/bytestream.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/bytestream.h
 	"unicode/utypes.h"
 	"unicode/uobject.h"
 	"unicode/std_string.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/ucasemap.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/ucasemap.h
 	"unicode/utypes.h"
 	"unicode/ustring.h"
 	"unicode/localpointer.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/ustring.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/ustring.h
 	"unicode/utypes.h"
 	"unicode/putil.h"
 	"unicode/uiter.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/putil.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/putil.h
 	"unicode/utypes.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/uiter.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/uiter.h
 	"unicode/utypes.h"
 
-1431101223 /usr/include/x86_64-linux-gnu/unicode/localpointer.h
+1453411133 /usr/include/x86_64-linux-gnu/unicode/localpointer.h
 	"unicode/utypes.h"
 
 1438816652 source:/home/jason/Code/Repositories/simplexpress-git/main.cpp
@@ -174,5 +174,306 @@
 	"simplexpress.hpp"
 
 1438816652 source:/home/jason/Code/Repositories/simplexpress-git/src/utf_tools.cpp
+	"utf_tools.hpp"
+
+1456962378 source:/home/jarek/Desktop/simplexpress-git/main.cpp
+	<iostream>
+	<string>
+	"simplexpress.hpp"
+	"utf_tools.hpp"
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1458098007 /home/jarek/Desktop/simplexpress-git/include/simplexpress.hpp
+	<iostream>
+	<string>
+	<vector>
+	"Rules.hpp"
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1456962378 /home/jarek/Desktop/simplexpress-git/include/utf_tools.hpp
+	<iostream>
+	<math.h>
+	<stdexcept>
+	<stdlib.h>
+	<unicode/uchar.h>
+	<unicode/unistr.h>
+
+1458165865 source:/home/jarek/Desktop/simplexpress-git/src/simplexpress.cpp
+	"simplexpress.hpp"
+
+1456962378 source:/home/jarek/Desktop/simplexpress-git/src/utf_tools.cpp
+	"utf_tools.hpp"
+
+1458017706 source:/home/jarek/Desktop/simplexpress-git/src/simplexpress(new).cpp
+
+1459299298 /home/jarek/Desktop/simplexpress-git/include/Rules.hpp
+
+1458161306 source:/home/jarek/Desktop/simplexpress-git/src/Unit.cpp
+	<vector>
+	<iostream>
+	"Rules.hpp"
+	<string>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1458017706 source:/home/jarek/Desktop/simplexpress-git(new)/src/simplexpress(new).cpp
+
+1456962378 source:/home/jarek/Desktop/simplexpress-git(new)/src/utf_tools.cpp
+	"utf_tools.hpp"
+
+1456962378 /home/jarek/Desktop/simplexpress-git(new)/include/utf_tools.hpp
+	<iostream>
+	<math.h>
+	<stdexcept>
+	<stdlib.h>
+	<unicode/uchar.h>
+	<unicode/unistr.h>
+
+1460078954 source:/home/jarek/Desktop/simplexpress-git(new)/main.cpp
+	<iostream>
+	<string>
+	"simplexpress.hpp"
+	"utf_tools.hpp"
+	"Unit.hpp"
+	"Rules.hpp"
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1459472087 /home/jarek/Desktop/simplexpress-git(new)/include/simplexpress.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1460076325 /home/jarek/Desktop/simplexpress-git(new)/Unit.hpp
+	<vector>
+	<iostream>
+	"Rules.hpp"
+	"simplexpress.hpp"
+	<string>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1460076278 /home/jarek/Desktop/simplexpress-git(new)/Rules.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1460076278 source:/home/jarek/Desktop/simplexpress-git(new)/Rules.cpp
+	"Rules.hpp"
+
+1459991709 source:/home/jarek/Desktop/simplexpress-git(new)/src/simplexpress.cpp
+	"simplexpress.hpp"
+
+1460077124 source:/home/jarek/Desktop/simplexpress-git(new)/Units.cpp
+	"Unit.hpp"
+	"Rules.hpp"
+
+1461871940 source:/home/jarek/Desktop/simplexpress-gitnew/main.cpp
+	<iostream>
+	<string>
+	"utf_tools.hpp"
+	"Unit.hpp"
+	"Rules.hpp"
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<uchar.h>
+
+1461405416 /home/jarek/Desktop/simplexpress-gitnew/include/simplexpress.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1461405416 /home/jarek/Desktop/simplexpress-gitnew/include/utf_tools.hpp
+	<iostream>
+	<math.h>
+	<stdexcept>
+	<stdlib.h>
+	<unicode/uchar.h>
+	<unicode/unistr.h>
+
+1462034315 /home/jarek/Desktop/simplexpress-gitnew/Unit.hpp
+	<vector>
+	<iostream>
+	"Rules.hpp"
+	"simplexpress.hpp"
+	<string>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1462031938 /home/jarek/Desktop/simplexpress-gitnew/Rules.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1462034219 source:/home/jarek/Desktop/simplexpress-gitnew/Rules.cpp
+	"Rules.hpp"
+
+1458017706 source:/home/jarek/Desktop/simplexpress-gitnew/src/simplexpress(new).cpp
+
+1461405416 source:/home/jarek/Desktop/simplexpress-gitnew/src/simplexpress.cpp
+	"simplexpress.hpp"
+
+1461405416 source:/home/jarek/Desktop/simplexpress-gitnew/src/utf_tools.cpp
+	"utf_tools.hpp"
+
+1462034329 source:/home/jarek/Desktop/simplexpress-gitnew/Units.cpp
+	"Unit.hpp"
+	"Rules.hpp"
+
+1463158896 source:/home/jarek/Desktop/simplexpress/Rules.cpp
+	"Rules.hpp"
+
+1466311057 /home/jarek/Desktop/simplexpress/Rules.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1461405416 /home/jarek/Desktop/simplexpress/include/utf_tools.hpp
+	<iostream>
+	<math.h>
+	<stdexcept>
+	<stdlib.h>
+	<unicode/uchar.h>
+	<unicode/unistr.h>
+
+1461405416 source:/home/jarek/Desktop/simplexpress/src/simplexpress.cpp
+	"simplexpress.hpp"
+
+1461405416 /home/jarek/Desktop/simplexpress/include/simplexpress.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1461405416 source:/home/jarek/Desktop/simplexpress/src/utf_tools.cpp
+	"utf_tools.hpp"
+
+1467326211 source:/home/jarek/Desktop/simplexpress/main.cpp
+	<iostream>
+	<string>
+	"utf_tools.hpp"
+	"Simplex.hpp"
+	"Rules.hpp"
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<uchar.h>
+	<vector>
+
+1467002564 /home/jarek/Desktop/simplexpress/Unit.hpp
+	<vector>
+	<iostream>
+	"Rules.hpp"
+	"simplexpress.hpp"
+	<string>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1467145653 source:/home/jarek/Desktop/simplexpress/Units.cpp
+	"Unit.hpp"
+	"Rules.hpp"
+
+1467326332 /home/jarek/Desktop/simplexpress/include/Simplex.hpp
+	<vector>
+	<iostream>
+	"Rules.hpp"
+	<string>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1466311057 /home/jarek/Desktop/simplexpress/include/Rules.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1463158896 source:/home/jarek/Desktop/simplexpress/src/Rules.cpp
+	"Rules.hpp"
+
+1467326350 source:/home/jarek/Desktop/simplexpress/src/Simplex.cpp
+	"Simplex.hpp"
+	"Rules.hpp"
+
+1467326211 source:/home/jarek/repos/simplexpress-git/main.cpp
+	<iostream>
+	<string>
+	"utf_tools.hpp"
+	"Simplex.hpp"
+	"Rules.hpp"
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<uchar.h>
+	<vector>
+
+1461405416 /home/jarek/repos/simplexpress-git/include/utf_tools.hpp
+	<iostream>
+	<math.h>
+	<stdexcept>
+	<stdlib.h>
+	<unicode/uchar.h>
+	<unicode/unistr.h>
+
+1467326332 /home/jarek/repos/simplexpress-git/include/Simplex.hpp
+	<vector>
+	<iostream>
+	"Rules.hpp"
+	<string>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+
+1466311057 /home/jarek/repos/simplexpress-git/include/Rules.hpp
+	<iostream>
+	<string>
+	<vector>
+	<unicode/unistr.h>
+	<unicode/stringpiece.h>
+	<unicode/uchar.h>
+	"utf_tools.hpp"
+
+1463158896 source:/home/jarek/repos/simplexpress-git/src/Rules.cpp
+	"Rules.hpp"
+
+1467329391 source:/home/jarek/repos/simplexpress-git/src/Simplex.cpp
+	"Simplex.hpp"
+	"Rules.hpp"
+
+1461405416 source:/home/jarek/repos/simplexpress-git/src/utf_tools.cpp
 	"utf_tools.hpp"
 

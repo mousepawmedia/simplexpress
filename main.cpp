@@ -1,47 +1,39 @@
 #include <iostream>
 #include <string>
-#include "simplexpress.hpp"
 #include "utf_tools.hpp"
+#include "Simplex.hpp"
+#include "Rules.hpp"
 #include <unicode/unistr.h>
 #include <unicode/stringpiece.h>
-#include <unicode/uchar.h>
+#include <uchar.h>
+#include <vector>
 
 //REMEMBER TO SET COMPILER: --cflags --libs icu-uc icu-io
 
+using std::vector;
 using std::string;
+
+/**change unit class to be named `Simplex`*/
 using simplexpress::Simplex;
-using simplexpress::char_sets;
-using simplexpress::utf_utils;
 
 int main()
 {
-    simplexpress::char_sets chars;
-    std::cout << "SIMPLEXpress v1.0\n"
+
+    std::cout << "SIMPLEXpress v0.2\n"
               << "Copyright (C) 2015 MousePaw Games. All Rights Reserved.\n"
-              << "'#exit' to quit.\n"
+              << "'#exit' or #EXIT to quit.\n"
               << "-----\n" << std::endl;
+    string input, model;
+    do{
+        std::cout << "Please enter a model: ";
+        getline(std::cin, model);
+        if(model == "#exit" || model == "#EXIT")
+            break;
+        std::cout << "Enter what you want checked against model: ";
+        getline(std::cin, input);
 
-    UnicodeString buffer;
-    string std_buffer;
-    std::cout << "Enter a model: ";
-    if(std_buffer == "#EXIT" && std_buffer == "#exit")
-    {
-        return 0;
-    }
-    getline(std::cin, std_buffer);
-    buffer = UnicodeString::fromUTF8(StringPiece(std_buffer));
-    Simplex simplex(buffer);
+        Simplex unit(input, model);
+        //this is for later when I can fully switch it to an array of Units
 
-    //Do while command is not the pseudocommand #EXIT (or #exit)...
-    do
-    {
-        //Get the user input.
-        getline(std::cin, std_buffer);
-        buffer = UnicodeString::fromUTF8(StringPiece(std_buffer));
-        bool r = simplex.match(buffer);
-        std::cout << r << std::endl;
-    }
-    while(std_buffer != "#EXIT" && std_buffer != "#exit");
-
-    return 0;
+    }while(model!="#exit"||model!="#EXIT");
 }
