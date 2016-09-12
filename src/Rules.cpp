@@ -169,8 +169,7 @@ namespace simplexpress
             //Tab
             bool Rule::rule_t(UChar ch){return (ch == '\t' ? true : false);}
 
-            /*Unicode(accepts u78 or u57-78). For now is implemented in Unit::rule_choice
-            till the time I figure out how to best implement it here*/
+            /*Unicode(accepts u78 or u57-78). For now unimplemented.*/
             bool Rule::rule_u(UChar ch){
                 return false;
             }

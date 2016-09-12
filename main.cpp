@@ -32,8 +32,6 @@ int main()
         std::cout << "Enter what you want checked against model: ";
         getline(std::cin, input);
 
-        Simplex unit(input, model);
-        //this is for later when I can fully switch it to an array of Units
-
+        Simplex simplex(model, input);
     }while(model!="#exit"||model!="#EXIT");
 }

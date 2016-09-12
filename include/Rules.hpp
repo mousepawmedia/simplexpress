@@ -101,7 +101,6 @@ namespace simplexpress{
             /**Specifier for whitespace
             \param pass in UChar so knows what to look for*/
             bool rule_w(UChar);
-
     };
 }
 #endif

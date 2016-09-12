@@ -45,10 +45,12 @@
 		</Linker>
 		<Unit filename="include/Rules.hpp" />
 		<Unit filename="include/Simplex.hpp" />
+		<Unit filename="include/Unit.hpp" />
 		<Unit filename="include/utf_tools.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Rules.cpp" />
 		<Unit filename="src/Simplex.cpp" />
+		<Unit filename="src/Unit.cpp" />
 		<Unit filename="src/utf_tools.cpp" />
 		<Extensions>
 			<code_completion />
