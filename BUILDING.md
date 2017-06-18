@@ -16,7 +16,7 @@ that can emulate that).
 Building and Linking Dependencies
 -----------------------------------
 SIMPLEXpress relies on CPGF and PawLIB. The default behavior is for the build
-system to look in a 'pawlib-git/pawlib' folder in the same directory as this
+system to look in a 'pawlib/pawlib' folder in the same directory as this
 repository. (This is our default for company development environments.)
 
 You can specify custom paths for these libraries by creating a ".config" file

@@ -27,7 +27,7 @@
 # This sets the path to PawLIB and CPGF.
 # The build system will look for 'lib/' and 'include/' at this location.
 #
-# The default is '${CMAKE_HOME_DIRECTORY}/../../pawlib-git/pawlib', which
+# The default is '${CMAKE_HOME_DIRECTORY}/../../pawlib/pawlib', which
 # assumes a copy of the pawlib git repository in the same directory as this
 # repository folder.
 #
@@ -35,5 +35,5 @@
 # library.
 
 set(PAWLIB_DIR
-	${CMAKE_HOME_DIRECTORY}/../../pawlib-git/pawlib
+	${CMAKE_HOME_DIRECTORY}/../../pawlib/pawlib
 )

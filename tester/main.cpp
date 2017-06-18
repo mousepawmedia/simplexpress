@@ -20,7 +20,7 @@ int main()
 {
 
     std::cout << "SIMPLEXpress v0.2\n"
-              << "Copyright (C) 2015 MousePaw Games. All Rights Reserved.\n"
+              << "Copyright (C) 2015 MousePaw Media. All Rights Reserved.\n"
               << "'#exit' or #EXIT to quit.\n"
               << "-----\n" << std::endl;
     string input, model;
