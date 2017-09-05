@@ -4,16 +4,16 @@
 	<Project>
 		<Option title="simplexpress-tester" />
 		<Option makefile_is_custom="1" />
-		<Option execution_dir="../../simplexpress-git" />
+		<Option execution_dir="../../simplexpress" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<MakeCommands>
-			<Build command="" />
+			<Build command="$make tester" />
 			<CompileFile command="" />
-			<Clean command="make clean" />
+			<Clean command="$make clean" />
 			<DistClean command="$make -f $makefile distclean$target" />
 			<AskRebuildNeeded command="" />
-			<SilentBuild command=" &gt; $(CMD_NULL)" />
+			<SilentBuild command="$make tester &gt; $(CMD_NULL)" />
 		</MakeCommands>
 		<Build>
 			<Target title="Debug">

@@ -4,16 +4,16 @@
 	<Project>
 		<Option title="simplexpress" />
 		<Option makefile_is_custom="1" />
-		<Option execution_dir="../../simplexpress-git" />
+		<Option execution_dir="../../simplexpress" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<MakeCommands>
-			<Build command="" />
+			<Build command="$make simplexpress" />
 			<CompileFile command="" />
-			<Clean command="make clean" />
+			<Clean command="$make clean" />
 			<DistClean command="$make -f $makefile distclean$target" />
 			<AskRebuildNeeded command="" />
-			<SilentBuild command=" &gt; $(CMD_NULL)" />
+			<SilentBuild command="$make simplexpress &gt; $(CMD_NULL)" />
 		</MakeCommands>
 		<Build>
 			<Target title="Debug">
@@ -22,19 +22,19 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-std=c++11" />
 					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="`pkg-config --cflags --libs icu-uc icu-io`" />
 					<Add directory="include" />
 				</Compiler>
 				<MakeCommands>
-					<Build command="make library_debug" />
+					<Build command="$make simplexpress_debug" />
 					<CompileFile command="" />
-					<Clean command="make cleandebug" />
+					<Clean command="$make cleandebug" />
 					<DistClean command="$make -f $makefile distclean$target" />
 					<AskRebuildNeeded command="" />
-					<SilentBuild command="make library_debug &gt; $(CMD_NULL)" />
+					<SilentBuild command="$make simplexpress_debug &gt; $(CMD_NULL)" />
 				</MakeCommands>
 			</Target>
 			<Target title="Release">
@@ -51,18 +51,18 @@
 					<Add option="-s" />
 				</Linker>
 				<MakeCommands>
-					<Build command="make library" />
+					<Build command="$make simplexpress_release" />
 					<CompileFile command="" />
-					<Clean command="make cleanrelease" />
+					<Clean command="$make cleanrelease" />
 					<DistClean command="$make -f $makefile distclean$target" />
 					<AskRebuildNeeded command="" />
-					<SilentBuild command="make library &gt; $(CMD_NULL)" />
+					<SilentBuild command="$make simplexpress_release &gt; $(CMD_NULL)" />
 				</MakeCommands>
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++11" />
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add option="-g" />
 			<Add option="`pkg-config --cflags --libs icu-uc icu-io`" />
 		</Compiler>
