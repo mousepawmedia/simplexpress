@@ -9,6 +9,7 @@ the user can easily write powerful expressions.
 
 Authors
 -------------
+ - Bowen Volwiler
  - Jarek Thomas
  - Jason C. McDonald
 

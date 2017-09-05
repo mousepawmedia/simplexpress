@@ -1,12 +1,15 @@
 #include <iostream>
 #include <string>
-#include "utf_tools.hpp"
-#include "Simplex.hpp"
-#include "Rules.hpp"
-#include <unicode/unistr.h>
-#include <unicode/stringpiece.h>
 #include <uchar.h>
 #include <vector>
+
+#include "simplexpress/utf_tools.hpp"
+#include "simplexpress/simplex.hpp"
+#include "simplexpress/rules.hpp"
+
+#include <unicode/unistr.h>
+#include <unicode/stringpiece.h>
+
 
 //REMEMBER TO SET COMPILER: --cflags --libs icu-uc icu-io
 

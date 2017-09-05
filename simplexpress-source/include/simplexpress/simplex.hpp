@@ -45,12 +45,14 @@
 
 #include <vector>
 #include <iostream>
-#include "Rules.hpp"
 #include <string>
+
 #include <unicode/unistr.h>
 #include <unicode/stringpiece.h>
 #include <unicode/uchar.h>//want to get rid of these and get rid of uchar and use pawchar
-#include "Unit.hpp"
+
+#include "simplexpress/rules.hpp"
+#include "simplexpress/unit.hpp"
 
 using std::vector;
 using std::string;

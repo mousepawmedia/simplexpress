@@ -8,6 +8,7 @@
 **/lib
 **/libs
 simplexpress/
+!simplexpress-source/include/simplexpress
 docs/build
 *.depend
 *.layout

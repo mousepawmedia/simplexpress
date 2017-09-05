@@ -1,4 +1,4 @@
-#include "utf_tools.hpp"
+#include "simplexpress/utf_tools.hpp"
 
 namespace simplexpress
 {
@@ -164,7 +164,7 @@ namespace simplexpress
             std::cerr << "Invalid radix " << radix << "! Must be 1-35."
                       << std::endl;
         }
-
+        return false;
     }
 
     bool char_sets::greek(UChar ch)
@@ -444,12 +444,10 @@ namespace simplexpress
         //Initialize our return integer.
         int r = 0,
         //The integerized character.
-            ci = 0,
-        //The incrementer.
-            i = 0;
+            ci = 0;
         const int AL = str.length() - 1;
 
-        for(i; i <= AL; i++)
+        for(int i = 0; i <= AL; i++)
         {
             try
             {
@@ -538,11 +536,11 @@ namespace simplexpress
             i = 1;
         }
 
-        for(i; i <= AL; i++)
+        for(int ii = i; ii <= AL; ii++)
         {
             try
             {
-                ci = ch_to_int(str[i]);
+                ci = ch_to_int(str[ii]);
             }
             catch(const std::out_of_range& oor)
             {
@@ -557,6 +555,7 @@ namespace simplexpress
             }
 
             r += pow(10, (AL-i)) * ci;
+            i = ii;
         }
 
         //If we found a negative sign at i=0 earlier...

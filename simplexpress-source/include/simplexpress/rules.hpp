@@ -46,10 +46,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 #include <unicode/unistr.h>
 #include <unicode/stringpiece.h>
 #include <unicode/uchar.h>//want to get rid of these and get rid of uchar and use pawchar
-#include "utf_tools.hpp"
+
+#include "simplexpress/utf_tools.hpp"
 
 using std::vector;
 

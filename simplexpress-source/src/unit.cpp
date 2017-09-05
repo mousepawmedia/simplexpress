@@ -1,6 +1,6 @@
-#include "Unit.hpp"
-#include "Rules.hpp"
-#include "Simplex.hpp"
+#include "simplexpress/unit.hpp"
+#include "simplexpress/rules.hpp"
+#include "simplexpress/simplex.hpp"
 
 namespace simplexpress
 {

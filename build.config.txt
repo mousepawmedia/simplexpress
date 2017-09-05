@@ -21,10 +21,24 @@
 # file name (before the .config). For example, passing the argument
 # "-DCONFIG_FILENAME=foo" would build using "foo.config".
 
-
-##### PAWLIB & CPGF #####
+##### THIRD-PARTY DEPENDENCIES #####
 #
-# This sets the path to PawLIB and CPGF.
+# This sets the path to CPGF.
+# The build system will look for `lib/` and `include/' at this location.
+#
+# The default for all is '${CMAKE_HOME_DIRECTORY}/../../libdeps/lib', which
+# assumes a copy of the libdeps repository in the same directory as this
+# repository folder.
+#
+# 'make <library>' or 'make all' would need to be run in libdeps first.
+
+set(CPGF_DIR
+	${CMAKE_HOME_DIRECTORY}/../../libdeps/libs
+)
+
+##### PAWLIB #####
+#
+# This sets the path to PawLIB.
 # The build system will look for 'lib/' and 'include/' at this location.
 #
 # The default is '${CMAKE_HOME_DIRECTORY}/../../pawlib/pawlib', which
@@ -37,3 +51,15 @@
 set(PAWLIB_DIR
 	${CMAKE_HOME_DIRECTORY}/../../pawlib/pawlib
 )
+
+##### LLVM LIBC++ #####
+#
+# This option asks the Clang compiler to use LLVM's libc++ library.
+# The build system will look for this library in the system paths.
+#
+# If you are not compiling with Clang, this option will be ignored.
+# NOTE: libc++ is already used by default on Mac.
+#
+# Set the option to either `true` or `false` below.
+
+set(LLVM false)

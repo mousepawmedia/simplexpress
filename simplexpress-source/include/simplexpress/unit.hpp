@@ -46,10 +46,12 @@
 
 #include <iostream>
 #include <string>
+
 #include <unicode/unistr.h>
 #include <unicode/stringpiece.h>
 #include <unicode/uchar.h>//want to get rid of these and get rid of uchar and use pawchar
-#include "Rules.hpp"
+
+#include "simplexpress/rules.hpp"
 
 namespace simplexpress
 {
