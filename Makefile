@@ -35,6 +35,8 @@ none:
 clean:
 	$(MAKE) clean -C simplexpress-source
 	$(MAKE) clean -C simplexpress-tester
+	@rm -f tester
+	@rm -f tester_debug
 
 cleanall: clean
 	$(MAKE) clean -C docs
@@ -42,10 +44,12 @@ cleanall: clean
 cleandebug:
 	$(MAKE) cleandebug -C simplexpress-source
 	$(MAKE) cleandebug -C simplexpress-tester
+	@rm -f tester_debug
 
 cleanrelease:
 	$(MAKE) cleanrelease -C simplexpress-source
 	$(MAKE) cleanrelease -C simplexpress-tester
+	@rm -f tester
 
 docs:
 	$(MAKE) html -C docs
@@ -84,7 +88,7 @@ ready: library
 	@cp simplexpress-source/lib/Release/libsimplexpress.a simplexpress/lib/libsimplexpress.a
 	@echo "Copying README and LICENSE..."
 	@cp README.md simplexpress/README.md
-	@cp LICENSE.md simplexpress/LICENCE.md
+	@cp LICENSE.md simplexpress/LICENSE.md
 	@echo "-------------"
 	@echo "<<<<<<< FINISHED >>>>>>>"
 	@echo "The library is in 'simplexpress'."

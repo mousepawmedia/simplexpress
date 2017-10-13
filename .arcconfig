@@ -1,5 +1,5 @@
 {
-	"phabricator.uri" : "https://hawksnest.ddns.net:8446",
+	"phabricator.uri" : "https://phabricator.mousepawmedia.net",
 	"repository.callsign" : "S",
 	"load" : [
 		".arclibs/cppcheck"
