@@ -171,6 +171,8 @@ namespace simplexpress
 
             /*Unicode(accepts u78 or u57-78). For now unimplemented.*/
             bool Rule::rule_u(UChar ch){
+                // FIXME: Temporarily ignore unused parameter.
+                (void)ch;
                 return false;
             }
 

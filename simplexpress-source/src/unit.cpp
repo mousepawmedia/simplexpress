@@ -139,6 +139,8 @@ namespace simplexpress
 
     bool Unit::literal_sets(UChar ch)
     {
+        // FIXME: Temporarily ignore unused parameter.
+        (void)ch;
         bool return_var = false;
         return return_var;
     }

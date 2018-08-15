@@ -205,6 +205,8 @@ namespace simplexpress
 
     bool char_sets::latin_ext_letter(UChar ch, bool includeStd)
     {
+        // FIXME: Temporarily ignore unused parameter.
+        (void)includeStd;
         //If in latin_ext range and not one of the two non-letter characters...
         return (latin_ext(ch) && ch != 0x00D7 && ch != 0x00F7);
     }

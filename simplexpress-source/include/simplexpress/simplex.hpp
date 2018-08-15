@@ -69,7 +69,7 @@ namespace simplexpress{
             std::vector<Unit*> model;
 
             /**To keep track of where we are in the model.*/
-            int model_index = 0;
+            unsigned int model_index = 0;
 
             /**enumeration to roughly determine how we are
             interpreting as we parse through the model.*/
