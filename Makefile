@@ -5,7 +5,7 @@
 # Author(s): Jason C. McDonald
 
 # LICENSE
-# Copyright (c) 2018 MousePaw Media.
+# Copyright (c) 2018-2020 MousePaw Media.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

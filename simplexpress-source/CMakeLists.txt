@@ -5,7 +5,7 @@
 # Author(s): Jason C. McDonald
 
 # LICENSE
-# Copyright (c) 2018 MousePaw Media.
+# Copyright (c) 2018-2020 MousePaw Media.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,13 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     endif()
     set(COMPILERTYPE "clang")
     message("Clang 3.4 or later detected. Proceeding...")
+# Allow AppleClang 5.x
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "5")
+        message(FATAL_ERROR "Clang is too old. >= v5.x required. Aborting build.")
+    endif()
+    set(COMPILERTYPE "clang")
+    message("Clang 5.0 or later detected.  Proceeding...")
 # Allow GCC 5.x
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "5")
@@ -74,9 +81,9 @@ else()
     message(FATAL_ERROR "Not using or simulating a compatible compiler (minimum GCC 5.x, Clang 3.4). Other compilers are not yet supported. Aborting build.")
 endif()
 
-# Target C++14
-set(CMAKE_CXX_STANDARD 14)
-# Disable extensions (turns gnu++14 to c++14)
+# Target C++17
+set(CMAKE_CXX_STANDARD 17)
+# Disable extensions (turns gnu++17 to c++17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Target 32-bit or 64-bit, based on ARCH variable.
