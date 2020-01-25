@@ -26,14 +26,13 @@ namespace simplexpress
         return return_var;
     }
 
-
     void Simplex::parse_model(string user_model)
     {
         //used to hold the different types
         std::string literals, in_unit;
 
         int unit_counter = 0;
-        UnicodeString buffer;
+        onestring buffer;
 
         parse_status Status = NORMAL;
 
@@ -76,7 +75,8 @@ namespace simplexpress
             case NORMAL:
                 {
                     literals.push_back(user_model[i]);
-                    buffer = UnicodeString::fromUTF8(StringPiece(literals));
+                    // NOTE: It was passed through in intermediatry ICU StringPieces
+                    buffer = literals;
                     Unit *unit = new Unit(buffer);
                     model.push_back(unit);
                     literals.clear();
@@ -98,7 +98,8 @@ namespace simplexpress
             case ESCAPED:
                 {
                     in_unit.push_back('/');
-                    buffer = UnicodeString::fromUTF8(StringPiece(in_unit));
+                    // FIXME: see line 78
+                    buffer = in_unit;
 
                     Unit* unit = new Unit(buffer);
 
@@ -111,11 +112,12 @@ namespace simplexpress
             case SPACE_CONVERT:
                 {
                     in_unit.push_back('/');
-                    buffer = UnicodeString::fromUTF8(StringPiece(in_unit));
+                    // FIXME: see line 78
+                    buffer = in_unit;
                     Unit *unit = new Unit(buffer);
                     model.push_back(unit);
                     in_unit.clear();
-                    std::cout << user_model[i] << std::endl;
+                    std::cout << user_model[i] << std::endl; // NOTE: I've always used "\n", is endl preferred?
                     in_unit.push_back('^');
                     Status = IN_UNIT;
                 }
@@ -126,8 +128,8 @@ namespace simplexpress
     bool Simplex::match(string model_check)
     {
         bool return_var = false;
-
-        UnicodeString buffer = UnicodeString::fromUTF8(StringPiece(model_check));
+        // FIXME: see line 78
+        onestring buffer = onestring(model_check);
         for(uint16_t i = 0; i < buffer.length(); ++i)
         {
             return_var = model[model_index]->check_model(buffer[i]);

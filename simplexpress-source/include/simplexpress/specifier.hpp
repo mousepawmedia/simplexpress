@@ -1,12 +1,12 @@
-/** UTF Tools [SIMPLEXpress]
+/** Specifier [SIMPLEXpress]
   * Version: 1.0
   *
   * Last Updated: 21 January 2020
-  * Author: Ben D. Lovy, Jason C. McDonald
+  * Author: Ben D. Lovy, Jarek Thomas
   */
 
 /* LICENSE
- * Copyright (c) 2016 MousePaw Media.
+ * Copyright (c) 2020 MousePaw Media.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,8 +40,8 @@
  * on how to contribute to our projects.
  */
 
-#ifndef UTF_TOOLS_H
-#define UTF_TOOLS_H
+#ifndef SPECIFIER_H
+#define SPECIFIER_H
 
 #include <iostream>
 #include <math.h>
@@ -49,41 +49,44 @@
 #include <stdlib.h>
 
 #include "pawlib/onechar.hpp"
-// TODO: how to replace StringPiece?  In PawLIB?
 #include "pawlib/onestring.hpp"
-#include "simplexpress/specifier.hpp"
+#include "simplexpress/char_sets.hpp"
 
 using std::cout;
 using std::endl;
 
-// FIXME: T1278
 namespace simplexpress
 {
-    /*The utf_utils class extends specifier to support Unicode .*/
-    class utf_tools : public specifier
+    /*The specifier class provides an interface over stored character sets*/
+    class specifier : protected char_sets
     {
-
         public:
-        utf_tools(){};
-        static bool s_digit(onechar, int=10);
-        static bool s_greek(onechar, LetterCase=CASE_ANY);
-        static bool s_ipa(onechar);
-        static bool s_latin_ext(onechar, LetterCase=CASE_ANY);
+            specifier(){};
+
+            enum LetterCase
+            {
+                CASE_ANY = 0,
+                CASE_LOWER = 1,
+                CASE_UPPER = 2,
+            };
+
+            static bool s_alphanumeric(onechar, LetterCase=CASE_ANY);
+            static bool s_digit(onechar, int=10);
+            static bool s_latin(onechar, LetterCase=CASE_ANY);
+            static bool s_whitespace(onechar);
     };
 
-    // FIXME: T1278
-    //class utf_utils
-    //{
-    //    public:
-    //        utf_utils(){}
-    //        // TODO virtual?
-    //        static int ch_to_hex(onechar);
-    //        static int str_to_hex(onestring, bool=false);
-    //        static int ch_to_int(onechar);
-    //        static int str_to_int(onestring, bool=false);
-    //    protected:
-    //    private:
-    //};
+    class str_utils
+    {
+        public:
+            str_utils(){}
+            static int ch_to_hex(onechar);
+            static int str_to_hex(onestring, bool=false);
+            static int ch_to_int(onechar);
+            static int str_to_int(onestring, bool=false);
+        protected:
+        private:
+    };
 }
 
 #endif // UTF_TOOLS_H

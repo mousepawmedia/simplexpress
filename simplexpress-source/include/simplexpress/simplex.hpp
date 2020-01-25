@@ -47,17 +47,16 @@
 #include <iostream>
 #include <string>
 
-#include <unicode/unistr.h>
-#include <unicode/stringpiece.h>
-#include <unicode/uchar.h>//want to get rid of these and get rid of uchar and use pawchar
+#include "pawlib/onestring.hpp"
+#include "pawlib/onechar.hpp"
 
-#include "simplexpress/rules.hpp"
 #include "simplexpress/unit.hpp"
 
 using std::vector;
 using std::string;
 
-namespace simplexpress{
+namespace simplexpress
+{
     /*The simplex class is the overall model of Simplexpress.
     A simplex contains a vector(for now) of Units Everything
     entered outside a unit is taken as a literal and must be
@@ -66,6 +65,7 @@ namespace simplexpress{
     {
         public:
             /**The model itself*/
+            // TODO make this a FlexArray?
             std::vector<Unit*> model;
 
             /**To keep track of where we are in the model.*/

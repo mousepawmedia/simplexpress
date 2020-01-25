@@ -1,17 +1,11 @@
 #include <iostream>
 #include <string>
-#include <uchar.h>
 #include <vector>
 
-#include "simplexpress/utf_tools.hpp"
 #include "simplexpress/simplex.hpp"
-#include "simplexpress/rules.hpp"
 
-#include <unicode/unistr.h>
-#include <unicode/stringpiece.h>
-
-
-//REMEMBER TO SET COMPILER: --cflags --libs icu-uc icu-io
+#include "pawlib/onestring.hpp"
+#include "pawlib/onechar.hpp"
 
 using std::vector;
 using std::string;
@@ -19,11 +13,14 @@ using std::string;
 /**change unit class to be named `Simplex`*/
 using simplexpress::Simplex;
 
+// NOTE: here's an ASCII test model: ^l+/-^a+/^d/.png^(24)?/
+// TODO: Make a bunch more
+
 int main()
 {
 
     std::cout << "SIMPLEXpress v0.2\n"
-              << "Copyright (C) 2015 MousePaw Media. All Rights Reserved.\n"
+              << "Copyright (C) 2015-2020 MousePaw Media. All Rights Reserved.\n"
               << "'#exit' or #EXIT to quit.\n"
               << "-----\n" << std::endl;
     string input, model;

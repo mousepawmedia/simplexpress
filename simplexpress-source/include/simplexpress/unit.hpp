@@ -1,8 +1,8 @@
 /** Unit [SIMPLEXpress]
   * Version: 1.0
   *
-  * Last Updated: 12 September 2016
-  * Author: Jarek Thomas
+  * Last Updated: 21 September 2020
+  * Author: Ben D. Lovy, Jarek Thomas
   */
 
 /* LICENSE
@@ -47,9 +47,8 @@
 #include <iostream>
 #include <string>
 
-#include <unicode/unistr.h>
-#include <unicode/stringpiece.h>
-#include <unicode/uchar.h>//want to get rid of these and get rid of uchar and use pawchar
+#include "pawlib/onestring.hpp"
+#include "pawlib/onechar.hpp"
 
 #include "simplexpress/rules.hpp"
 
@@ -63,14 +62,16 @@ namespace simplexpress
     {
         public:
             /**Used for the purpose of parsing
-            through the model. Is set in constructor*/
-            UnicodeString usCheck;
+            through the model. Is set in constructor.
+            The first char is '^', followed by an identifier if present,
+            followed by a case if present*.*/
+            onestring usCheck;
 
             /**Constructor, Takes a unit that has been parsed
             out from Simplex class and based off what is in it
             runs that function.
-            \param UnicodeString, from input from Simplex class.*/
-            explicit Unit(UnicodeString);
+            \param onestring, from input from Simplex class.*/
+            explicit Unit(onestring) : usCheck() {};
 
             /*For checking all the specifiers*/
             Rule rule;
@@ -81,39 +82,39 @@ namespace simplexpress
             /**Function that is run to determine which function to
             run next. e.g. specifiers, sets... will run for each
             "unit" within the model.
-            \param UChar that is passed into the next function to check*/
-            bool type_choice(UChar);
+            \param onechar that is passed into the next function to check*/
+            bool type_choice(onechar);
 
             /**The specifiers from the model that we will
             be checking against.
-            \param UChar, the actual unicode that we are
+            \param onechar, the actual unicode that we are
             checking against the specifiers.*/
-            bool specifiers(UChar);
+            bool specifiers(onechar);
 
             /**Simplex set calls specifiers func, but returns
             true on the first specifier found to be true within
             the set.
-            \param UChar, the unicode we are checking in the set.*/
-            bool sets(UChar ch);
+            \param onechar, the unicode we are checking in the set.*/
+            bool sets(onechar ch);
 
             /**Literal sets, Input against the model has to match
             exactly what is inside the literal set.
-            \param UnicodeString, The UnicodeString we are checking
+            \param onestring, The onestring we are checking
             against the model and must match exactly.*/
-            bool literal_sets(UChar ch);
+            bool literal_sets(onechar ch);
 
             /**Literals, Everything entered outside a unit.
             These are taken as they are and what user is
             checking against them has to match literal exactly.
-            \param UChar that we are checking against the
+            \param onechar that we are checking against the
             literal, must match exactly.*/
-            bool literals(UnicodeString ch);
+            bool literals(onestring ch);
 
             /**Function that is used in match in Simplex Class.
             Checks and returns true or false based off whether
             the match is correct or not.
-            \param UChar that we are checking against the model.*/
-            bool check_model(UChar);
+            \param onechar that we are checking against the model.*/
+            bool check_model(onechar);
     };
 }
 
