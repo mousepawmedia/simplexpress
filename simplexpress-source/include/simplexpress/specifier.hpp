@@ -55,38 +55,31 @@
 using std::cout;
 using std::endl;
 
-namespace simplexpress
+/*The specifier class provides an interface over stored character sets*/
+class specifier : protected char_sets
 {
-    /*The specifier class provides an interface over stored character sets*/
-    class specifier : protected char_sets
+public:
+    specifier() = default;
+    enum LetterCase
     {
-        public:
-            specifier(){};
-
-            enum LetterCase
-            {
-                CASE_ANY = 0,
-                CASE_LOWER = 1,
-                CASE_UPPER = 2,
-            };
-
-            static bool s_alphanumeric(onechar, LetterCase=CASE_ANY);
-            static bool s_digit(onechar, int=10);
-            static bool s_latin(onechar, LetterCase=CASE_ANY);
-            static bool s_whitespace(onechar);
+        CASE_ANY = 0,
+        CASE_LOWER = 1,
+        CASE_UPPER = 2,
     };
-
-    class str_utils
-    {
-        public:
-            str_utils(){}
-            static int ch_to_hex(onechar);
-            static int str_to_hex(onestring, bool=false);
-            static int ch_to_int(onechar);
-            static int str_to_int(onestring, bool=false);
-        protected:
-        private:
-    };
-}
-
+    static bool s_alphanumeric(onechar, LetterCase=CASE_ANY);
+    static bool s_digit(onechar, int=10);
+    static bool s_latin(onechar, LetterCase=CASE_ANY);
+    static bool s_whitespace(onechar);
+};
+class str_utils
+{
+public:
+    str_utils(){}
+    static int ch_to_hex(onechar);
+    static int str_to_hex(onestring, bool=false);
+    static int ch_to_int(onechar);
+    static int str_to_int(onestring, bool=false);
+protected:
+private:
+};
 #endif // UTF_TOOLS_H

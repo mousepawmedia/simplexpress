@@ -8,10 +8,11 @@ the user can easily write powerful expressions.
 
 ## Authors
 
+- Ben D. Lovy
 - Jason C. McDonald
- - Ben D. Lovy
- - Jarek Thomas
- - Bowen Volwiler
+- Jarek Thomas
+- Moshe D. Uminer
+- Bowen Volwiler
 
 ## Dependencies
 

@@ -141,12 +141,14 @@ include_directories(${CPGF_DIR}/include)
 
 # CHANGEME: Include files to compile.
 add_library(${TARGET_NAME} STATIC
+    include/simplexpress/basic_test.hpp
     include/simplexpress/char_sets.hpp
     include/simplexpress/rules.hpp
     include/simplexpress/simplex.hpp
     include/simplexpress/specifier.hpp
     include/simplexpress/unit.hpp
     include/simplexpress/utf_tools.hpp
+    src/basic_test.cpp
     src/char_sets.cpp
     src/rules.cpp
     src/simplex.cpp

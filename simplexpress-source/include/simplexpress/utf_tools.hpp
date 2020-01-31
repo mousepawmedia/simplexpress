@@ -57,33 +57,28 @@ using std::cout;
 using std::endl;
 
 // FIXME: T1278
-namespace simplexpress
+/*The utf_utils class extends specifier to support Unicode .*/
+class utf_tools : public specifier
 {
-    /*The utf_utils class extends specifier to support Unicode .*/
-    class utf_tools : public specifier
-    {
-
-        public:
-        utf_tools(){};
-        static bool s_digit(onechar, int=10);
-        static bool s_greek(onechar, LetterCase=CASE_ANY);
-        static bool s_ipa(onechar);
-        static bool s_latin_ext(onechar, LetterCase=CASE_ANY);
-    };
-
-    // FIXME: T1278
-    //class utf_utils
-    //{
-    //    public:
-    //        utf_utils(){}
-    //        // TODO virtual?
-    //        static int ch_to_hex(onechar);
-    //        static int str_to_hex(onestring, bool=false);
-    //        static int ch_to_int(onechar);
-    //        static int str_to_int(onestring, bool=false);
-    //    protected:
-    //    private:
-    //};
-}
+public:
+    utf_tools = default;
+    static bool s_digit(onechar, int=10);
+    static bool s_greek(onechar, LetterCase=CASE_ANY);
+    static bool s_ipa(onechar);
+    static bool s_latin_ext(onechar, LetterCase=CASE_ANY);
+};
+// FIXME: T1278
+//class utf_utils
+//{
+//public:
+//    utf_utils(){}
+//    // TODO virtual?
+//    static int ch_to_hex(onechar);
+//    static int str_to_hex(onestring, bool=false);
+//    static int ch_to_int(onechar);
+//    static int str_to_int(onestring, bool=false);
+//protected:
+//private:
+//};
 
 #endif // UTF_TOOLS_H
