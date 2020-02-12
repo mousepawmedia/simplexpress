@@ -2,32 +2,30 @@
 #include "simplexpress/unit.hpp"
 #include "simplexpress/rules.hpp"
 
-Simplex::Simplex(string user_model, string model_check)
+// NOTE: I think I want to take model_check out of the constructor
+Simplex::Simplex(onestring user_model)
 {
     parse_model(user_model);
-    match(model_check);
 }
+
 bool Simplex::next()
 {
-    bool return_var = false;
-    if(model_index+1 > model.size())
+    if(model_index+1 >= model.size())
     {
-        return_var = false;
+        return false;
     }
     else
     {
         ++model_index;
-        return_var = true;
+        return true;
     }
-    return return_var;
 }
 
-void Simplex::parse_model(string user_model)
+void Simplex::parse_model(onestring user_model)
 {
     //used to hold the different types
-    std::string literals, in_unit;
+    onestring buffer, literals, in_unit;
     int unit_counter = 0;
-    onestring buffer;
     parse_status Status = NORMAL;
     /*The loop that checks character by character and parses
     it into the type based off user entry.*/
@@ -36,7 +34,7 @@ void Simplex::parse_model(string user_model)
         /*The switch that is used to determine what
         we are doing. e.g. whether we are in a unit or
         a set or just passing in as normal*/
-        switch(user_model[i])
+        switch(*user_model[i].c_str())
         {
         case '^':
             {
@@ -50,7 +48,7 @@ void Simplex::parse_model(string user_model)
                 --unit_counter;
                 if(unit_counter < 0)
                 {
-                    std::cout << "Invalid. Trying to escape when not in anything.\n";
+                    std::cout << "Invalid. Trying to escape when not in a unit.\n";
                 }
                 break;
             }
@@ -105,7 +103,7 @@ void Simplex::parse_model(string user_model)
                 Unit *unit = new Unit(buffer);
                 model.push_back(unit);
                 in_unit.clear();
-                std::cout << user_model[i] << std::endl; // NOTE: I've always used "\n", is endl preferred?
+                std::cout << user_model[i] << "\n";
                 in_unit.push_back('^');
                 Status = IN_UNIT;
             }
@@ -113,17 +111,38 @@ void Simplex::parse_model(string user_model)
     }
 }
 
-bool Simplex::match(string model_check)
+bool Simplex::match(onestring model_check)
 {
-    bool return_var = false;
-    // FIXME: see line 78
-    onestring buffer = onestring(model_check);
-    for(uint16_t i = 0; i < buffer.length(); ++i)
+    onestring buffer = model_check;
+    while(!buffer.empty())
     {
-        return_var = model[model_index]->check_model(buffer[i]);
-        std::cout << "1 it matched, 0 it didn't.\n";
-        std::cout << return_var << std::endl;
-        next();
+        int matched = model[model_index]->check_model(buffer);
+        std::cout << "Matching " << buffer;
+        std::cout << " against " << *model[model_index] << "... ";
+        std::cout << (matched > -1 ? "true" : "false") << "\n";
+
+        // Only advance if we're matching
+        if (matched > -1)
+        {
+            // On a match, remove the matched amount from the front
+            if (static_cast<int>(buffer.length()) > matched)
+            {
+                onestring new_buffer = buffer.substr(matched);
+                buffer = new_buffer;
+            }
+            else
+            {
+                // We consumed the whole string, exit the loop
+                break;
+            }
+            if (!next())
+                break; // we're done
+        }
+        else
+            return false;  // failed a match
     }
-    return return_var;
+    // Reset simplex counter for future matches
+    // NOTE: I think model_index should be a local var, and this method static
+    model_index = 0;
+    return true;
 }

@@ -11,15 +11,15 @@ bool specifier::s_alphanumeric(onechar ch, LetterCase ltrCase)
     {
         case CASE_ANY:
         {
-            return (latin(ch));
+            return latin(ch);
         }
         case CASE_LOWER:
         {
-            return (latin_lower(ch));
+            return latin_lower(ch);
         }
         case CASE_UPPER:
         {
-            return (latin_upper(ch));
+            return latin_upper(ch);
         }
     }
     //If it gets this far, just return false.
@@ -28,7 +28,7 @@ bool specifier::s_alphanumeric(onechar ch, LetterCase ltrCase)
 
 bool specifier::s_digit(onechar ch, int radix)
 {
-    return (digit(ch, radix));
+    return digit(ch, radix);
 }
 
 bool specifier::s_latin(onechar ch, LetterCase ltrCase)
@@ -37,15 +37,15 @@ bool specifier::s_latin(onechar ch, LetterCase ltrCase)
     {
         case CASE_ANY:
         {
-            return (latin(ch));
+            return latin(ch);
         }
         case CASE_LOWER:
         {
-            return (latin_lower(ch));
+            return latin_lower(ch);
         }
         case CASE_UPPER:
         {
-            return (latin_upper(ch));
+            return latin_upper(ch);
         }
     }
     //If it gets this far, just return false.
@@ -54,7 +54,7 @@ bool specifier::s_latin(onechar ch, LetterCase ltrCase)
 
 bool specifier::s_whitespace(onechar ch)
 {
-    return (whitespace(ch));
+    return whitespace(ch);
 }
 
 int str_utils::ch_to_hex(onechar ch)

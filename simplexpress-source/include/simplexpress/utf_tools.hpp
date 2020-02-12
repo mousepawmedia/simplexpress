@@ -61,7 +61,7 @@ using std::endl;
 class utf_tools : public specifier
 {
 public:
-    utf_tools = default;
+    utf_tools() = default;
     static bool s_digit(onechar, int=10);
     static bool s_greek(onechar, LetterCase=CASE_ANY);
     static bool s_ipa(onechar);

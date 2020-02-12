@@ -117,7 +117,7 @@ bool char_sets::digit(onechar ch, int radix)
     {
         /*Allow the digits from 0 to 9 (less the difference between
         10 and radix).*/
-        return (ch >= u8"\u0030" && ch <= (u8"\u0039"-(10-radix)));
+        return ch >= u8"\u0030" && ch <= (u8"\u0039"-(10-radix));
     }
     else if(radix == 12)
     {
@@ -132,8 +132,8 @@ bool char_sets::digit(onechar ch, int radix)
             beyond digits. Perform binary search on this array of Unicode
             character code points.*/
             char upper_ch = toupper(*ch.c_str());
-            return (char_bin_search(arr_special_duodecimal,
-                SPECIAL_DUODECIMAL_CNT, upper_ch) > -1);
+            return char_bin_search(arr_special_duodecimal,
+                SPECIAL_DUODECIMAL_CNT, upper_ch) > -1;
         }
     }
     else if(radix > 10 && radix <= 35)
@@ -152,7 +152,7 @@ bool char_sets::digit(onechar ch, int radix)
             /*Allow for Latin letters sequentially for all unassigned numbers.
             That is, use A- some letter. That end letter is Z minus an offset
             calculated from 26 minus the difference between radix and 10.*/
-            return (ch >= u8"\u0041" && ch <= (u8"\u005A" - (26-(radix-10))));
+            return ch >= u8"\u0041" && ch <= (u8"\u005A" - (26-(radix-10)));
         }
     }
     else
@@ -166,7 +166,7 @@ bool char_sets::digit(onechar ch, int radix)
 
 bool char_sets::greek(onechar ch)
 {
-    return (ch >= u8"\u0370" && ch <= u8"\u03FF");
+    return ch >= u8"\u0370" && ch <= u8"\u03FF";
 }
 
 bool char_sets::greek_lower(onechar ch)
@@ -175,7 +175,7 @@ bool char_sets::greek_lower(onechar ch)
     // FIXME: T1278
     if(greek(ch))
     {
-        r = (char_bin_search(arr_greek_lower, GREEK_LOWER_CNT, *ch.c_str()) > -1);
+        r = char_bin_search(arr_greek_lower, GREEK_LOWER_CNT, *ch.c_str()) > -1;
     }
     return r;
 }
@@ -186,7 +186,7 @@ bool char_sets::greek_upper(onechar ch)
     // FIXME: T1278
     if(greek(ch))
     {
-        r = (char_bin_search(arr_greek_upper, GREEK_UPPER_CNT, *ch.c_str()) > -1);
+        r = char_bin_search(arr_greek_upper, GREEK_UPPER_CNT, *ch.c_str()) > -1;
     }
     return r;
 }
@@ -194,12 +194,12 @@ bool char_sets::greek_upper(onechar ch)
 bool char_sets::latin(onechar ch)
 {
     //We will simply leverage latin_lower() and latin_upper() for this.
-    return (latin_lower(ch) || latin_upper(ch));
+    return latin_lower(ch) || latin_upper(ch);
 }
 
 bool char_sets::latin_ext(onechar ch, bool includeStd)
 {
-    return ((ch >= u8"\u00C0" && ch <= u8"\u024F") || (includeStd && latin(ch)));
+    return (ch >= u8"\u00C0" && ch <= u8"\u024F") || (includeStd && latin(ch));
 }
 
 bool char_sets::latin_ext_letter(onechar ch, bool includeStd)
@@ -207,17 +207,17 @@ bool char_sets::latin_ext_letter(onechar ch, bool includeStd)
     // FIXME: Temporarily ignore unused parameter.
     (void)includeStd;
     //If in latin_ext range and not one of the two non-letter characters...
-    return (latin_ext(ch) && ch != u8"\u00D7" && ch != u8"\u00F7");
+    return latin_ext(ch) && ch != u8"\u00D7" && ch != u8"\u00F7";
 }
 
 bool char_sets::latin_ext_lower(onechar ch, bool includeStd)
 {
-    bool r = (latin_lower(ch) && includeStd);
+    bool r = latin_lower(ch) && includeStd;
     /*If that first test fails, make sure the character is ext_latin...*/
-    if(!r && (latin_ext_letter(ch, false)))
+    if(!r && latin_ext_letter(ch, false))
     {
         //Binary search the lowercase Latin extended letters.
-        r = (char_bin_search(arr_latin_ext_lower, LATIN_EXT_LOWER_CNT, *ch.c_str()) > -1);
+        r = char_bin_search(arr_latin_ext_lower, LATIN_EXT_LOWER_CNT, *ch.c_str()) > -1;
     }
     return r;
 }
@@ -225,60 +225,60 @@ bool char_sets::latin_ext_lower(onechar ch, bool includeStd)
 bool char_sets::latin_ext_upper(onechar ch, bool includeStd)
 {
     //First, see if it is a standard Latin uppercase letter.
-    bool r = (latin_upper(ch) && includeStd);
+    bool r = latin_upper(ch) && includeStd;
     /*If that first test fails, make sure the character is ext_latin...*/
-    if(!r && (latin_ext_letter(ch, false)))
+    if(!r && latin_ext_letter(ch, false))
     {
         //It is now safe to assume, if it isn't lower, it is upper!
-        r = (latin_ext_lower(ch) == false);
+        r = latin_ext_lower(ch) == false;
     }
     return r;
 }
 
 bool char_sets::latin_lower(onechar ch)
 {
-    return (ch >= u8"\u0061" && ch <= u8"\u007A");
+    return ch >= u8"\u0061" && ch <= u8"\u007A";
 }
 
 bool char_sets::latin_upper(onechar ch)
 {
-    return (ch >= u8"\u0041" && ch <= u8"\u005A");
+    return ch >= u8"\u0041" && ch <= u8"\u005A";
 }
 
 bool char_sets::ipa(onechar ch)
 {
     bool r = false;
     //Check for lowercase Latin letter (u8"\u0061"-u8"\u007A").
-    if(latin_lower(ch))
+    if (latin_lower(ch))
     {
         r = true;
     }
     /*Check for IPA Extensions block (u8"\u0250"-u8"\u02AF"),
     Spacing Modifier Letters block (u8"\u02B0"-u8"\u02FF"),
     or Combining Diacritical Marks block (u8"\u0300"-u8"\u036F").*/
-    else if(ch >= u8"\u0250" && ch <= u8"\u0300")
+    else if (ch >= u8"\u0250" && ch <= u8"\u0300")
     {
         r = true;
     }
     /*Check for Phonetic Extensions block (u8"\u1D00"-u8"\u1D7F"),
     or Phonetic Extensions Supplement block (u8"\u1D80"-u8"\u1DBF")*/
-    else if(ch >= u8"\u0D00" && ch <= u8"\u0DBF")
+    else if (ch >= u8"\u0D00" && ch <= u8"\u0DBF")
     {
         r = true;
     }
     //Check for Superscripts and Subscripts block (u8"\u2070"-u8"\u209F")
-    else if(ch >= u8"\u2070" && ch <= u8"\u209F")
+    else if (ch >= u8"\u2070" && ch <= u8"\u209F")
     {
         r = true;
     }
     //Check for Modifier Tone Letters block (u8"\uA700"-u8"\uA71F")
-    else if(ch >= u8"\uA700" && ch <= u8"\uA71F")
+    else if (ch >= u8"\uA700" && ch <= u8"\uA71F")
     {
         r = true;
     }
     //Check if it is one of the other various characters in IPA.
     // FIXME: T1278
-    else if(char_bin_search(arr_ipa_various, IPA_VARIOUS_CNT, *ch.c_str()) > -1)
+    else if (char_bin_search(arr_ipa_various, IPA_VARIOUS_CNT, *ch.c_str()) > -1)
     {
         r = true;
     }
@@ -293,7 +293,12 @@ bool char_sets::whitespace(onechar ch, bool includeVisible)
         return true;
     }
     //If the character is other non-breaking whitespace...
-    if(char_bin_search(arr_whitespace, WHITESPACE_CNT, *ch.c_str()))
+    if (char_bin_search(arr_whitespace, WHITESPACE_CNT, *ch.c_str()) > -1)
+    {
+        return true;
+    }
+    //If the character is other breaking whitespace...
+    if (char_bin_search(arr_whitespace_brk, WHITESPACE_BRK_CNT, *ch.c_str()) > -1)
     {
         return true;
     }
@@ -301,7 +306,7 @@ bool char_sets::whitespace(onechar ch, bool includeVisible)
     else if(includeVisible)
     {
         //Return if the character is a visible whitespace symbol.
-        return (char_bin_search(arr_whitespace_symb, WHITESPACE_SYMB_CNT, *ch.c_str()));
+        return char_bin_search(arr_whitespace_symb, WHITESPACE_SYMB_CNT, *ch.c_str()) > -1;
     }
     //If we get this far, return false.
     return false;

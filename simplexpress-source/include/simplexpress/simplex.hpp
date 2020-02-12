@@ -1,8 +1,8 @@
 /** Simplex [SIMPLEXpress]
   * Version: 1.0
   *
-  * Last Updated: 12 September 2016
-  * Author: Jarek Thomas
+  * Last Updated: 09 February 2020
+  * Author: Ben D. Lovy, Jarek Thomas
   */
 
 /* LICENSE
@@ -61,7 +61,7 @@ entered outside a unit is taken as a literal and must be
 matched exactly.*/
 class Simplex
 {
-public:
+protected:
     /**The model itself*/
     // TODO make this a FlexArray?
     std::vector<Unit*> model;
@@ -82,29 +82,28 @@ public:
     we try to go below 0 then an error is thrown as
     there is nothing to escape.*/
     uint16_t unit_counter = 0;
-    /**Constructor, When a Simplex is created
-    parse_input is called to parse through what
-    the user has defined their model to be.
-    Then it will call match to check everything
-    against the model.
-    \param string, First string is for the user
-    defined model.
-    \param string, Second string is what we are
-    checking against the model.*/
-    Simplex(string,string);
     /**Parses through what the user has defined
     what they want their model to be.
     Uses enumeration to pull out each type of
     model we can have.
     \param string, What the user has defined
     their model to be.*/
-    void parse_model(string);
+    void parse_model(onestring);
+    /**Moves to the next unit or literal in the model.*/
+    bool next();
+public:
+    /**Constructor, When a Simplex is created
+    parse_input is called to parse through what
+    the user has defined their model to be.
+    Then it will call match to check everything
+    against the model.
+    \param string, First string is for the user
+    defined model.*/
+    explicit Simplex(onestring);
     /**Takes the user defined model and matches
     everything that the user wants against the model.
     \param string, What is being checked against
     the model.*/
-    bool match(string);
-    /**Moves to the next unit or literal in the model.*/
-    bool next();
+    bool match(onestring);
 };
 #endif

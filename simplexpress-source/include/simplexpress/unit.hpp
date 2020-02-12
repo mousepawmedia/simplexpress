@@ -1,7 +1,7 @@
 /** Unit [SIMPLEXpress]
   * Version: 1.0
   *
-  * Last Updated: 21 September 2020
+  * Last Updated: 10 February 2020
   * Author: Ben D. Lovy, Jarek Thomas
   */
 
@@ -58,17 +58,23 @@ determines what function is called, it is possible
 to have all types within one model.*/
 class Unit
 {
+protected:
+    /**Various types of modifier*/
+    bool optional = false;
+    bool multiple = false;
+
+    // TODO: enum class Specifier
 public:
     /**Used for the purpose of parsing
     through the model. Is set in constructor.
     The first char is '^', followed by an identifier if present,
-    followed by a case if present*.*/
-    onestring usCheck;
+    followed by a case if present.*/
+    onestring model;
     /**Constructor, Takes a unit that has been parsed
     out from Simplex class and based off what is in it
     runs that function.
     \param onestring, from input from Simplex class.*/
-    explicit Unit(onestring) : usCheck() {};
+    explicit Unit(onestring);
     /*For checking all the specifiers*/
     Rule rule;
     /**keep track of where we are in the model.*/
@@ -98,12 +104,15 @@ public:
     checking against them has to match literal exactly.
     \param onechar that we are checking against the
     literal, must match exactly.*/
-    bool literals(onestring ch);
+    bool literals(onechar ch);
     /**Function that is used in match in Simplex Class.
-    Checks and returns true or false based off whether
-    the match is correct or not.
-    \param onechar that we are checking against the model.*/
-    bool check_model(onechar);
+    Checks and returns number of characters matched or -1.
+    \param onestring that we are checking against the model.*/
+    int check_model(onestring);
+    // TODO: Add int check_model(onestring), return number of characters matched to advance in whole simplex input
+    /** Stream instertion operator overload, for debug purposes
+    */
+   friend std::ostream& operator<<(std::ostream& s, const Unit& u);
 };
 
 #endif // Unit_H_

@@ -97,7 +97,7 @@ public:
     \param optional bool if case must be lower*/
     bool rule_l(onechar, Spec_Case = CASE_ANY);
     /**Specifier for math. Will provide means to do any kind of math
-    from basic algebra to calculus. Will be implemeted later.*/
+    from basic algebra to calculus. Will be implemented later.*/
     bool rule_m();
     /**Specifier for new line
     \param pass in a onechar so knows what to look for*/

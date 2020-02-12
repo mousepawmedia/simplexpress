@@ -1,8 +1,8 @@
 /** char_sets [SIMPLEXpress]
   * Version: 1.0
   *
-  * Last Updated: 21 January 2020
-  * Authors: Jarek Thomas
+  * Last Updated: 11 February 2020
+  * Authors: Ben D. Lovy, Jarek Thomas
   */
 
 /* LICENSE
@@ -140,6 +140,7 @@ public:
     \param whether to include visible space characters
     \return true if in set, else false*/
     //TODO: Change the default on includeVisible based on email responses.
+    // NOTE: what email responses?  True sounds like a good default to me - BDL
     static bool whitespace(onechar, bool = true);
 protected:
     static int char_bin_search(const int[], const int, int);
@@ -151,7 +152,7 @@ protected:
     static const int arr_greek_upper[GREEK_UPPER_CNT];
     static const int IPA_VARIOUS_CNT = 32;
     static const int arr_ipa_various[IPA_VARIOUS_CNT];
-    static const int WHITESPACE_CNT = 24;
+    static const int WHITESPACE_CNT = 25;
     static const int arr_whitespace[WHITESPACE_CNT];
     static const int WHITESPACE_BRK_CNT = 7;
     static const int arr_whitespace_brk[WHITESPACE_BRK_CNT];
