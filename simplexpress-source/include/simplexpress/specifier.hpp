@@ -1,8 +1,8 @@
 /** Specifier [SIMPLEXpress]
-  * Version: 1.0
+  * Version: 0.1
   *
-  * Last Updated: 21 January 2020
   * Author: Ben D. Lovy, Jarek Thomas
+  * Last Updated: 04 April 2020
   */
 
 /* LICENSE
@@ -40,8 +40,8 @@
  * on how to contribute to our projects.
  */
 
-#ifndef SPECIFIER_H
-#define SPECIFIER_H
+#ifndef SIMPLEXPRESS_SPECIFIER_HPP
+#define SIMPLEXPRESS_SPECIFIER_HPP
 
 #include <iostream>
 #include <math.h>
@@ -51,35 +51,60 @@
 #include "pawlib/onechar.hpp"
 #include "pawlib/onestring.hpp"
 #include "simplexpress/char_sets.hpp"
-
-using std::cout;
-using std::endl;
+#include "simplexpress/rules.hpp"
 
 /*The specifier class provides an interface over stored character sets*/
-class specifier : protected char_sets
+class Specifier : protected char_sets
 {
 public:
-    specifier() = default;
-    enum LetterCase
-    {
-        CASE_ANY = 0,
-        CASE_LOWER = 1,
-        CASE_UPPER = 2,
-    };
-    static bool s_alphanumeric(onechar, LetterCase=CASE_ANY);
-    static bool s_digit(onechar, int=10);
-    static bool s_latin(onechar, LetterCase=CASE_ANY);
-    static bool s_whitespace(onechar);
+	Specifier() = default;
+
+	/* All the supported variants of specifier */
+	enum class SpecifierType : char
+	{
+		Any = '.',
+		Alphanumeric = 'a',
+		Classification = 'c',
+		Digit = 'd',
+		// ExtendedLatin = 'e', // FIXME: T1278
+		// Greek = 'g', // FIXME: T1278
+		// IPA = 'i', // FIXME: T1278
+		LatinLetter = 'l',
+		Math = 'm',
+		Newline = 'n',
+		MathOperator = 'o',
+		Punctuation = 'p',
+		CarriageReturn = 'r',
+		Space = 's',
+		Tab = 't',
+		// Unicode = 'u', // FIXME: T1278
+		Whitespace = 'w',
+		Unsupported,
+	};
+
+	static SpecifierType to_specifier_type(onechar);
+
+	static bool s_alphanumeric(onechar, Rule::LetterCase = Rule::LetterCase::Any);
+
+	static bool s_digit(onechar, int=10);
+
+	static bool s_latin(onechar, Rule::LetterCase = Rule::LetterCase::Any);
+
+	static bool s_whitespace(onechar);
 };
+
 class str_utils
 {
 public:
-    str_utils(){}
-    static int ch_to_hex(onechar);
-    static int str_to_hex(onestring, bool=false);
-    static int ch_to_int(onechar);
-    static int str_to_int(onestring, bool=false);
-protected:
-private:
+	str_utils() = default;
+
+	static int ch_to_hex(onechar);
+
+	static int str_to_hex(onestring, bool=false);
+
+	static int ch_to_int(onechar);
+
+	static int str_to_int(onestring, bool=false);
 };
-#endif // UTF_TOOLS_H
+
+#endif

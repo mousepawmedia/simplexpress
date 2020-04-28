@@ -1,7 +1,7 @@
 /** Unit [SIMPLEXpress]
-  * Version: 1.0
+  * Version: 0.1
   *
-  * Last Updated: 10 February 2020
+  * Last Updated: 05 April 2020
   * Author: Ben D. Lovy, Jarek Thomas
   */
 
@@ -40,17 +40,69 @@
  * on how to contribute to our projects.
  */
 
-#ifndef Unit_H_
-#define Unit_H_
-
+#ifndef SIMPLEXPRESS_UNIT_HPP
+#define SIMPLEXPRESS_UNIT_HPP
 
 #include <iostream>
-#include <string>
 
 #include "pawlib/onestring.hpp"
 #include "pawlib/onechar.hpp"
 
+#include "simplexpress/specifier.hpp"
 #include "simplexpress/rules.hpp"
+
+/**The various categories of unit currently implemented*/
+// TODO: Set, Group
+enum class UnitType
+{
+	Literal,
+	Specifier
+};
+
+/**The set of attributes and modifiers that can apply to a Unit*/
+class UnitAttributes
+{
+public:
+	/**Check flags:
+	 * ? for optional
+	 * + for multiple
+	 * * for both optional and multiple*/
+	bool optional;
+	bool multiple;
+
+	/**Is ! flag set*/
+	bool negated;
+
+	/**Which specifier is being matched, or which literal*/
+	onechar matcher;
+
+	/**Type of unit*/
+	UnitType type;
+
+	/**Default constructor*/
+	UnitAttributes();
+
+	/**Full constructor
+	 * \param optional flag
+	 * \param multiple flag
+	 * \param negator flag
+	 * \param onechar for either the specifier or the literal
+	*/
+	UnitAttributes(bool, bool, bool, onechar, UnitType);
+
+	/**Copy constructor
+	 * \param Struct to copy
+	*/
+	UnitAttributes(const UnitAttributes&);
+
+	/**Move constructor\
+	 * \param Struct to move
+	*/
+	UnitAttributes(UnitAttributes&&);
+
+	/**Assignment overload*/
+	UnitAttributes& operator=(const UnitAttributes&);
+};
 
 /*The Unit class is where we check against the model.
 based off what is put in to check against the model
@@ -59,60 +111,66 @@ to have all types within one model.*/
 class Unit
 {
 protected:
-    /**Various types of modifier*/
-    bool optional = false;
-    bool multiple = false;
-
-    // TODO: enum class Specifier
+	UnitAttributes attr;
 public:
-    /**Used for the purpose of parsing
-    through the model. Is set in constructor.
-    The first char is '^', followed by an identifier if present,
-    followed by a case if present.*/
-    onestring model;
-    /**Constructor, Takes a unit that has been parsed
-    out from Simplex class and based off what is in it
-    runs that function.
-    \param onestring, from input from Simplex class.*/
-    explicit Unit(onestring);
-    /*For checking all the specifiers*/
-    Rule rule;
-    /**keep track of where we are in the model.*/
-    int model_index = 0;
-    /**Function that is run to determine which function to
-    run next. e.g. specifiers, sets... will run for each
-    "unit" within the model.
-    \param onechar that is passed into the next function to check*/
-    bool type_choice(onechar);
-    /**The specifiers from the model that we will
-    be checking against.
-    \param onechar, the actual unicode that we are
-    checking against the specifiers.*/
-    bool specifiers(onechar);
-    /**Simplex set calls specifiers func, but returns
-    true on the first specifier found to be true within
-    the set.
-    \param onechar, the unicode we are checking in the set.*/
-    bool sets(onechar ch);
-    /**Literal sets, Input against the model has to match
-    exactly what is inside the literal set.
-    \param onestring, The onestring we are checking
-    against the model and must match exactly.*/
-    bool literal_sets(onechar ch);
-    /**Literals, Everything entered outside a unit.
-    These are taken as they are and what user is
-    checking against them has to match literal exactly.
-    \param onechar that we are checking against the
-    literal, must match exactly.*/
-    bool literals(onechar ch);
-    /**Function that is used in match in Simplex Class.
-    Checks and returns number of characters matched or -1.
-    \param onestring that we are checking against the model.*/
-    int check_model(onestring);
-    // TODO: Add int check_model(onestring), return number of characters matched to advance in whole simplex input
-    /** Stream instertion operator overload, for debug purposes
-    */
-   friend std::ostream& operator<<(std::ostream& s, const Unit& u);
+	/**Used for the purpose of parsing
+	through the model. Is set in constructor.
+	The first char is '^', followed by an identifier if present,
+	followed by a case if present.*/
+	onestring model;
+
+	/**Explicit constructor*/
+	explicit Unit(UnitAttributes);
+
+	/*For checking all the specifiers*/
+	Rule rule;
+
+	/**keep track of where we are in the model.*/
+	int model_index = 0;
+
+	/**Function that is run to determine which function to
+	run next. e.g. specifiers, sets... will run for each
+	"unit" within the model.
+	\param onechar that is passed into the next function to check*/
+	bool type_choice(onechar);
+
+	/**The specifiers from the model that we will
+	be checking against.
+	\param onechar, the actual unicode that we are
+	checking against the specifiers.*/
+	bool specifiers(onechar);
+
+	/**Simplex set calls specifiers func, but returns
+	true on the first specifier found to be true within
+	the set.
+	\param onechar, the unicode we are checking in the set.*/
+	bool sets(onechar ch);
+
+	/**Literal sets, Input against the model has to match
+	exactly what is inside the literal set.
+	\param onestring, The onestring we are checking
+	against the model and must match exactly.*/
+	bool literal_sets(onechar ch);
+
+	/**Literals, Everything entered outside a unit.
+	These are taken as they are and what user is
+	checking against them has to match literal exactly.
+	\param onechar that we are checking against the
+	literal, must match exactly.*/
+	bool literals(onechar ch);
+
+	/**Function that is used in match in Simplex Class.
+	Checks and returns number of characters matched or -1.
+	\param onestring that we are checking against the model.*/
+	int check_model(onestring);
+
+	// TODO: Add int check_model(onestring), return number of characters matched to advance in whole simplex input
+	/** Stream instertion operator overload, for debug purposes
+	*/
+
+   /**Convert to string for testing*/
+   onestring to_string() const;
+   friend std::ostream& operator<<(std::ostream&, const Unit&);
 };
 
 #endif // Unit_H_

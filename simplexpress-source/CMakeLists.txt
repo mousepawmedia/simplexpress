@@ -147,6 +147,8 @@ add_library(${TARGET_NAME} STATIC
     include/simplexpress/simplex.hpp
     include/simplexpress/specifier.hpp
     include/simplexpress/unit.hpp
+    include/simplexpress/unit_parser.hpp
+    include/simplexpress/unit_parser_test.hpp
     include/simplexpress/utf_tools.hpp
     src/basic_test.cpp
     src/char_sets.cpp
@@ -154,6 +156,8 @@ add_library(${TARGET_NAME} STATIC
     src/simplex.cpp
     src/specifier.cpp
     src/unit.cpp
+    src/unit_parser.cpp
+    src/unit_parser_test.cpp
     src/utf_tools.cpp
 )
 

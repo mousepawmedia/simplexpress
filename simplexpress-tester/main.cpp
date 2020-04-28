@@ -45,44 +45,46 @@
 #include "pawlib/iochannel.hpp"
 
 #include "simplexpress/basic_test.hpp"
+#include "simplexpress/unit_parser_test.hpp"
 /** Temporary test code goes in this function ONLY.
   * All test code that is needed long term should be
   * moved to a dedicated Goldilocks Test and TestSuite.
   */
 void test_code()
 {
-    return;
+	return;
 }
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
 
 int main(int argc, char* argv[])
 {
-    //Set up signal handling.
-    ioc.configure_echo(IOEchoMode::cout);
+	//Set up signal handling.
+	ioc.configure_echo(IOEchoMode::cout);
 
-    GoldilocksShell* shell = new GoldilocksShell(">> ");
-    shell->register_suite<TestSuite_Basic>("S-sB00");
+	GoldilocksShell* shell = new GoldilocksShell(">> ");
+	shell->register_suite<TestSuite_Basic>("S-sB00");
+	shell->register_suite<TestSuite_UnitParser>("S-sB01");
 
-    // If we got command-line arguments.
-    if(argc > 1)
-    {
-        return shell->command(argc, argv);
-    }
-    else
-    {
-        ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
-            << "===== SIMPLExpress Tester =====\n" << IOCtrl::endl;
+	// If we got command-line arguments.
+	if(argc > 1)
+	{
+		return shell->command(argc, argv);
+	}
+	else
+	{
+		ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
+			<< "===== SIMPLExpress Tester =====\n" << IOCtrl::endl;
 
-        test_code();
+		test_code();
 
-        // Shift control to the interactive console.
-        shell->interactive();
-    }
+		// Shift control to the interactive console.
+		shell->interactive();
+	}
 
-    // Delete our GoldilocksShell.
-    delete shell;
-    shell = 0;
+	// Delete our GoldilocksShell.
+	delete shell;
+	//shell = 0;
 
-    return 0;
+	return 0;
 }

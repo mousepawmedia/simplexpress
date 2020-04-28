@@ -1,7 +1,7 @@
 /** UTF Tools [SIMPLEXpress]
-  * Version: 1.0
+  * Version: 0.1
   *
-  * Last Updated: 21 January 2020
+  * Last Updated: 04 April 2020
   * Author: Ben D. Lovy, Jason C. McDonald
   */
 
@@ -40,8 +40,8 @@
  * on how to contribute to our projects.
  */
 
-#ifndef UTF_TOOLS_H
-#define UTF_TOOLS_H
+#ifndef SIMPLEXPRESS_UTF_TOOLS_H
+#define SIMPLEXPRESS_UTF_TOOLS_H
 
 #include <iostream>
 #include <math.h>
@@ -49,23 +49,20 @@
 #include <stdlib.h>
 
 #include "pawlib/onechar.hpp"
-// TODO: how to replace StringPiece?  In PawLIB?
 #include "pawlib/onestring.hpp"
 #include "simplexpress/specifier.hpp"
 
-using std::cout;
-using std::endl;
-
 // FIXME: T1278
 /*The utf_utils class extends specifier to support Unicode .*/
-class utf_tools : public specifier
+class utf_tools : public Specifier
 {
 public:
-    utf_tools() = default;
-    static bool s_digit(onechar, int=10);
-    static bool s_greek(onechar, LetterCase=CASE_ANY);
-    static bool s_ipa(onechar);
-    static bool s_latin_ext(onechar, LetterCase=CASE_ANY);
+	utf_tools() = default;
+
+	static bool s_digit(onechar, int=10);
+	static bool s_greek(onechar, Rule::LetterCase=Rule::LetterCase::Any);
+	static bool s_ipa(onechar);
+	static bool s_latin_ext(onechar, Rule::LetterCase=Rule::LetterCase::Any);
 };
 // FIXME: T1278
 //class utf_utils

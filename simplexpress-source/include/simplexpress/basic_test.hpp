@@ -4,6 +4,7 @@
   * Once other tests have been added to SIMPLExpress, this file can
   * be removed.
   *
+  * Last Updated: 07 March 2020
   * Author(s): Ben D. Lovy, Jason C. McDonald
   */
 
@@ -54,553 +55,555 @@
 
 class TestConstructASCIISimplex : public Test
 {
-    onestring model = "^l+/-^a+/-^d/.png^(24)?/";
+	onestring model = "/l+/-/a+/-/d/.png";
+	onestring expected = "[ Unit<specifier>::(l)@0, Unit<literal>::(-)@0, Unit<specifier>::(a)@0, Unit<literal>::(-)@0, Unit<specifier>::(d)@0, Unit<literal>::(.)@0, Unit<literal>::(p)@0, Unit<literal>::(n)@0, Unit<literal>::(g)@0 ]";
 public:
-    TestConstructASCIISimplex() = default;
+	TestConstructASCIISimplex() = default;
 
-    testdoc_t get_title()
-    {
-        return "Construct ASCII Simplex";
-    }
+	testdoc_t get_title()
+	{
+		return "Construct ASCII Simplex";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully construct 8-char model Simplex from an ASCII model";
-    }
-    bool run()
-    {
-        Simplex simplex(model);
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully construct 8-char model Simplex from an ASCII model";
+	}
+	bool run()
+	{
+		Simplex simplex(model);
+		PL_ASSERT_EQUAL(simplex.to_string(), expected);
+		return true;
+	}
 
-    ~TestConstructASCIISimplex(){}
+	~TestConstructASCIISimplex(){}
 };
 
 class TestMatchSingleUnitLiteral : public Test
 {
-    onestring model = "-";
-    onestring input_pass = "-";
-    onestring input_fail = "+";
+	onestring model = "-";
+	onestring input_pass = "-";
+	onestring input_fail = "+";
 public:
-    TestMatchSingleUnitLiteral() = default;
+	TestMatchSingleUnitLiteral() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Literal - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Literal - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single literal";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single literal";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitLiteral(){}
+	~TestMatchSingleUnitLiteral(){}
 };
 
 class TestMatchSingleUnitSpecifierAlphanumeric : public Test
 {
-    onestring model = "^a/";
-    onestring input_pass_one = "h";
-    onestring input_pass_two = "5";
-    onestring input_fail = "^";
+	onestring model = "^a/";
+	onestring input_pass_one = "h";
+	onestring input_pass_two = "5";
+	onestring input_fail = "^";
 public:
-    TestMatchSingleUnitSpecifierAlphanumeric() = default;
+	TestMatchSingleUnitSpecifierAlphanumeric() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Alphanumeric Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Alphanumeric Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single alphanumeric character";
-    }
-    bool run()
-    {
-        Simplex simplex= Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single alphanumeric character";
+	}
+	bool run()
+	{
+		Simplex simplex= Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierAlphanumeric(){}
+	~TestMatchSingleUnitSpecifierAlphanumeric(){}
 };
 
 class TestMatchSingleUnitSpecifierDigit : public Test
 {
-    onestring model = "^d/";
-    onestring input_pass = "5";
-    onestring input_fail = "h";
+	onestring model = "^d/";
+	onestring input_pass = "5";
+	onestring input_fail = "h";
 public:
-    TestMatchSingleUnitSpecifierDigit() = default;
+	TestMatchSingleUnitSpecifierDigit() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Alphanumeric Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Alphanumeric Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single alphanumeric character";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single alphanumeric character";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierDigit(){}
+	~TestMatchSingleUnitSpecifierDigit(){}
 };
 
 class TestMatchSingleUnitSpecifierLatin : public Test
 {
-    onestring model = "^l/";
-    onestring input_pass = "h";
-    onestring input_fail = "5";
+	onestring model = "^l/";
+	onestring input_pass = "h";
+	onestring input_fail = "5";
 public:
-    TestMatchSingleUnitSpecifierLatin() = default;
+	TestMatchSingleUnitSpecifierLatin() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Latin Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Latin Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single latin character";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single latin character";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierLatin(){}
+	~TestMatchSingleUnitSpecifierLatin(){}
 };
 
 class TestMatchSingleUnitSpecifierNewline : public Test
 {
-    onestring model = "^n/";
-    onestring input_pass = "\n";
-    onestring input_fail = "5";
+	onestring model = "^n/";
+	onestring input_pass = "\n";
+	onestring input_fail = "5";
 public:
-    TestMatchSingleUnitSpecifierNewline() = default;
+	TestMatchSingleUnitSpecifierNewline() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Newline Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Newline Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single newline";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single newline";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierNewline(){}
+	~TestMatchSingleUnitSpecifierNewline(){}
 };
 
 class TestMatchSingleUnitSpecifierPunctuation : public Test
 {
-    onestring model = "^p/";
-    onestring input_pass = ".";
-    onestring input_fail = "5";
+	onestring model = "^p/";
+	onestring input_pass = ".";
+	onestring input_fail = "5";
 public:
-    TestMatchSingleUnitSpecifierPunctuation() = default;
+	TestMatchSingleUnitSpecifierPunctuation() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Punctuation Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Punctuation Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single punctuation character";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single punctuation character";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierPunctuation(){}
+	~TestMatchSingleUnitSpecifierPunctuation(){}
 };
 
 class TestMatchSingleUnitSpecifierCarriageReturn : public Test
 {
-    onestring model = "^r/";
-    onestring input_pass = "\r";
-    onestring input_fail = "5";
+	onestring model = "^r/";
+	onestring input_pass = "\r";
+	onestring input_fail = "5";
 public:
-    TestMatchSingleUnitSpecifierCarriageReturn() = default;
+	TestMatchSingleUnitSpecifierCarriageReturn() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Carriage Return Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Carriage Return Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single carriage return";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single carriage return";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierCarriageReturn(){}
+	~TestMatchSingleUnitSpecifierCarriageReturn(){}
 };
 
 class TestMatchSingleUnitSpecifierLiteralSpace : public Test
 {
-    onestring model = "^s/";
-    onestring input_pass = " ";
-    onestring input_fail = "5";
+	onestring model = "^s/";
+	onestring input_pass = " ";
+	onestring input_fail = "5";
 public:
-    TestMatchSingleUnitSpecifierLiteralSpace() = default;
+	TestMatchSingleUnitSpecifierLiteralSpace() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Literal Space Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Literal Space Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single space character";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single space character";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierLiteralSpace(){}
+	~TestMatchSingleUnitSpecifierLiteralSpace(){}
 };
 
 class TestMatchSingleUnitSpecifierTab : public Test
 {
-    onestring model = "^t/";
-    onestring input_pass = "\t";
-    onestring input_fail = "5";
+	onestring model = "^t/";
+	onestring input_pass = "\t";
+	onestring input_fail = "5";
 public:
-    TestMatchSingleUnitSpecifierTab() = default;
+	TestMatchSingleUnitSpecifierTab() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Tab Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Tab Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single tab character";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single tab character";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierTab(){}
+	~TestMatchSingleUnitSpecifierTab(){}
 };
 
 class TestMatchSingleUnitSpecifierWhitespace : public Test
 {
-    onestring model = "^w/";
-    onestring input_pass_one = " ";
-    onestring input_pass_two = "\t";
-    onestring input_pass_three = "\n";
-    onestring input_fail = "5";
+	onestring model = "^w/";
+	onestring input_pass_one = " ";
+	onestring input_pass_two = "\t";
+	onestring input_pass_three = "\n";
+	onestring input_fail = "5";
 public:
-    TestMatchSingleUnitSpecifierWhitespace() = default;
+	TestMatchSingleUnitSpecifierWhitespace() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Whitespace Specifier - Single-Unit Model";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Whitespace Specifier - Single-Unit Model";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a single whitespace character";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_TRUE(simplex.match(input_pass_three));
-        //FIXME: this test seems to try to assert true instead, why?
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a single whitespace character";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_TRUE(simplex.match(input_pass_three));
+		//FIXME: this test seems to try to assert true instead, why?
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSingleUnitSpecifierWhitespace(){}
+	~TestMatchSingleUnitSpecifierWhitespace(){}
 };
 
 class TestMatchMultiUnitLiterals : public Test
 {
-    onestring model = "hi";
-    onestring input_pass = "hi";
-    onestring input_fail = "5j";
+	onestring model = "hi";
+	onestring input_pass = "hi";
+	onestring input_fail = "5j";
 public:
-    TestMatchMultiUnitLiterals() = default;
+	TestMatchMultiUnitLiterals() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Two Literals";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Two Literals";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing two literal characters";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing two literal characters";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchMultiUnitLiterals(){}
+	~TestMatchMultiUnitLiterals(){}
 };
 
 class TestMatchMultiUnitLiteralSpecifier : public Test
 {
-    onestring model = "^d/i";
-    onestring input_pass_one = "4i";
-    onestring input_pass_two = "9i";
-    onestring input_fail_one = "ai";
-    onestring input_fail_two = "32";
+	onestring model = "^d/i";
+	onestring input_pass_one = "4i";
+	onestring input_pass_two = "9i";
+	onestring input_fail_one = "ai";
+	onestring input_fail_two = "32";
 public:
-    TestMatchMultiUnitLiteralSpecifier() = default;
+	TestMatchMultiUnitLiteralSpecifier() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Specifier + Literal";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Specifier + Literal";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing a specifier followed by a literal";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_FALSE(simplex.match(input_fail_one));
-        PL_ASSERT_FALSE(simplex.match(input_fail_two));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing a specifier followed by a literal";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail_one));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
+		return true;
+	}
 
-    ~TestMatchMultiUnitLiteralSpecifier(){}
+	~TestMatchMultiUnitLiteralSpecifier(){}
 };
 
 class TestMatchMultiUnitSpecifiers : public Test
 {
-    onestring model = "^d/^l/";
-    onestring input_pass_one = "4i";
-    onestring input_pass_two = "9i";
-    onestring input_fail_one = "ai";
-    onestring input_fail_two = "32";
+	onestring model = "^d/^l/";
+	onestring input_pass_one = "4i";
+	onestring input_pass_two = "9i";
+	onestring input_fail_one = "ai";
+	onestring input_fail_two = "32";
 public:
-    TestMatchMultiUnitSpecifiers() = default;
+	TestMatchMultiUnitSpecifiers() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Two Specifiers";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Two Specifiers";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing two specifiers";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_FALSE(simplex.match(input_fail_one));
-        PL_ASSERT_FALSE(simplex.match(input_fail_two));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing two specifiers";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail_one));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
+		return true;
+	}
 
-    ~TestMatchMultiUnitSpecifiers(){}
+	~TestMatchMultiUnitSpecifiers(){}
 };
 
 class TestMatchSpecifierMultiplier : public Test
 {
-    onestring model = "^d+/";
-    onestring input_pass_one = "3g";
-    onestring input_pass_two = "65";
-    onestring input_fail = "g";
+	onestring model = "^d+/";
+	onestring input_pass_one = "3g";
+	onestring input_pass_two = "65";
+	onestring input_fail = "g";
 public:
-    TestMatchSpecifierMultiplier() = default;
+	TestMatchSpecifierMultiplier() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Specifier with Multiplier";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Specifier with Multiplier";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing one or more specifier matches";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing one or more specifier matches";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSpecifierMultiplier(){}
+	~TestMatchSpecifierMultiplier(){}
 };
 
 class TestMatchSpecifierOptional : public Test
 {
-    onestring model = "x^d?/";
-    onestring input_pass_one = "x";
-    onestring input_pass_two = "x5";
-    onestring input_fail = "xd";
+	onestring model = "x^d?/";
+	onestring input_pass_one = "x";
+	onestring input_pass_two = "x5";
+	onestring input_fail = "xd";
 public:
-    TestMatchSpecifierOptional() = default;
+	TestMatchSpecifierOptional() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Optional Specifier";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Optional Specifier";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing an optional specifier";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing an optional specifier";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSpecifierOptional(){}
+	~TestMatchSpecifierOptional(){}
 };
 
 class TestMatchSpecifierOptionalMultiple : public Test
 {
-    onestring model = "x^d*/";
-    onestring input_pass_one = "x";
-    onestring input_pass_two = "x5";
-    onestring input_fail = "xd";
+	onestring model = "x^d*/";
+	onestring input_pass_one = "x";
+	onestring input_pass_two = "x5";
+	onestring input_fail = "xd";
 public:
-    TestMatchSpecifierOptionalMultiple() = default;
+	TestMatchSpecifierOptionalMultiple() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match OptionalMultiple Specifier";
-    }
+	testdoc_t get_title()
+	{
+		return "Match OptionalMultiple Specifier";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing an optional specifier";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing an optional specifier";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchSpecifierOptionalMultiple(){}
+	~TestMatchSpecifierOptionalMultiple(){}
 };
 
 class TestMatchAny : public Test
 {
-    onestring model = "^./";
-    onestring input_pass_one = "^";
-    onestring input_pass_two = "6";
+	onestring model = "^./";
+	onestring input_pass_one = "^";
+	onestring input_pass_two = "6";
 public:
-    TestMatchAny() = default;
+	TestMatchAny() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Any Character";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Any Character";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model containing any character";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model containing any character";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		return true;
+	}
 
-    ~TestMatchAny(){}
+	~TestMatchAny(){}
 };
 
 class TestMatchNot : public Test
 {
-    onestring model = "^!d/";
-    onestring input_pass_one = "b";
-    onestring input_pass_two = "^";
-    onestring input_fail = "4";
+	onestring model = "^!d/";
+	onestring input_pass_one = "b";
+	onestring input_pass_two = "^";
+	onestring input_fail = "4";
 public:
-    TestMatchNot() = default;
+	TestMatchNot() = default;
 
-    testdoc_t get_title()
-    {
-        return "Match Negated Specifier";
-    }
+	testdoc_t get_title()
+	{
+		return "Match Negated Specifier";
+	}
 
-    testdoc_t get_docs()
-    {
-        return "Successfully match against a model with a negated specifier";
-    }
-    bool run()
-    {
-        Simplex simplex = Simplex(model);
-        PL_ASSERT_TRUE(simplex.match(input_pass_one));
-        PL_ASSERT_TRUE(simplex.match(input_pass_two));
-        PL_ASSERT_FALSE(simplex.match(input_fail));
-        return true;
-    }
+	testdoc_t get_docs()
+	{
+		return "Successfully match against a model with a negated specifier";
+	}
+	bool run()
+	{
+		Simplex simplex = Simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		return true;
+	}
 
-    ~TestMatchNot(){}
+	~TestMatchNot(){}
 };
 
 // TODO: m specifier (math)
@@ -620,14 +623,14 @@ public:
 class TestSuite_Basic : public TestSuite
 {
 public:
-    TestSuite_Basic() = default;
-    void load_tests();
-    testdoc_t get_title()
-    {
-        return "SIMPLExpress: Basic Sanity Tests";
-    }
-    ~TestSuite_Basic()
-    {}
+	TestSuite_Basic() = default;
+	void load_tests();
+	testdoc_t get_title()
+	{
+		return "SIMPLExpress: Basic Sanity Tests";
+	}
+	~TestSuite_Basic()
+	{}
 };
 
 #endif //SIMPLEXPRESS_BASIC_TESTS_HPP
