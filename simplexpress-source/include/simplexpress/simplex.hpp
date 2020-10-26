@@ -2,7 +2,7 @@
   * Version: 0.1
   *
   * Last Updated: 04 April 2020
-  * Author: Ben D. Lovy, Jarek Thomas
+  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Wilfrantz Dede 
   */
 
 /* LICENSE
@@ -43,9 +43,10 @@
 #ifndef SIMPLEXPRESS_SIMPLEX_HPP
 #define SIMPLEXPRESS_SIMPLEX_HPP
 
-#include <vector>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <vector>
 
 #include "pawlib/onestring.hpp"
 #include "pawlib/onechar.hpp"

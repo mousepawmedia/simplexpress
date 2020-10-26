@@ -2,7 +2,7 @@
   * Version: 0.1
   *
   * Last Updated: 02 April 2020
-  * Author(s): Ben D. Lovy
+  * Author(s): Ben D. Lovy, Anna R. Dunster, Wilfrantz Dede
   */
 
 /* LICENSE
@@ -51,6 +51,9 @@
 #include "simplexpress/unit_parser.hpp"
 #include "simplexpress/unit.hpp"
 
+// S-sB01 //
+
+// S-tB0100
 class TestCharacterParser : public Test
 {
 	onestring pass = "!a";
@@ -64,16 +67,16 @@ class TestCharacterParser : public Test
 public:
 	TestCharacterParser() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Single Character Parser";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match '!' with the character parser";
 	}
-	bool run()
+	bool run() override
 	{
 		PL_ASSERT_EQUAL(
 			UnitParser::negator(pass).to_string(),
@@ -93,6 +96,7 @@ public:
 	~TestCharacterParser() {}
 };
 
+// S-tB0101
 class TestLiteralParser : public Test
 {
 	onestring pass = "a";
@@ -104,20 +108,23 @@ class TestLiteralParser : public Test
 public:
 	TestLiteralParser() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Literal Parser";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Verifies input consists of a single onechar";
 	}
-	bool run()
+	bool run() override
 	{
 		PL_ASSERT_EQUAL(
 			UnitParser::literal(pass).to_string(),
 			expected_pass);
+		PL_ASSERT_EQUAL(
+			UnitParser::literal(pass_two).to_string(),
+			expected_pass_two);
 		PL_ASSERT_EQUAL(
 			UnitParser::literal(fail).to_string(),
 			expected_fail);
@@ -127,6 +134,7 @@ public:
 	~TestLiteralParser() {}
 };
 
+// S-tB0102
 class TestSpecifierParser : public Test
 {
 	onestring pass_one = "c";
@@ -142,16 +150,16 @@ class TestSpecifierParser : public Test
 public:
 	TestSpecifierParser() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Specifier Parser";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Verifies input contains a valid specifier and optional case modifier";
 	}
-	bool run()
+	bool run() override
 	{
 		PL_ASSERT_EQUAL(
 			UnitParser::specifier_parser(pass_one).to_string(),
@@ -174,6 +182,7 @@ public:
 	~TestSpecifierParser() {}
 };
 
+// S-tB0103
 class TestModifierParser : public Test
 {
 	onestring pass_one = "";
@@ -192,16 +201,16 @@ class TestModifierParser : public Test
 public:
 	TestModifierParser() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Modifier Parser";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Verifies input contains exactly one valid modifier";
 	}
-	bool run()
+	bool run() override
 	{
 		PL_ASSERT_EQUAL(
 			UnitParser::modifier(pass_one).to_string(),
@@ -227,6 +236,7 @@ public:
 	~TestModifierParser() {}
 };
 
+// S-tB0104
 class TestVariousUnits : public Test
 {
 	onestring pass = "a";
@@ -244,16 +254,16 @@ class TestVariousUnits : public Test
 public:
 	TestVariousUnits() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "UnitParser::parse()";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Tests UnitParser against various types of inputs";
 	}
-	bool run()
+	bool run() override
 	{
 		PL_ASSERT_EQUAL(
 			Unit(UnitParser(pass).parse().attr).to_string(),
@@ -279,12 +289,109 @@ public:
 	~TestVariousUnits() {}
 };
 
+// S-tB0105
+class TestDigitsParser : public Test
+{
+	onestring pass = "1";
+	onestring pass_two = "1234a";
+	onestring fail = "a";
+	onestring fail_two = "";
+	onestring expected_pass = ParseResult::make_success("1", "").to_string();
+	onestring expected_pass_two = ParseResult::make_success("1234", "a").to_string();
+	onestring expected_fail = ParseResult::make_error("No digits found", "a").to_string();
+	onestring expected_fail_two = ParseResult::make_error("Out of input", "").to_string();
+public:
+	TestDigitsParser() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Digits Parser";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully match digits 0-9 with parser";
+	}
+	bool run() override
+	{
+		// Recognize a single digit
+		PL_ASSERT_EQUAL(
+			UnitParser::digit_parser(pass).to_string(), 
+			expected_pass);
+		// Recognize several digits followed by not a digit
+		PL_ASSERT_EQUAL(
+			UnitParser::digit_parser(pass_two).to_string(),
+			expected_pass_two);
+		// Fail not a digit
+		PL_ASSERT_EQUAL(
+			UnitParser::digit_parser(fail).to_string(),
+			expected_fail);
+		// Fail empty string
+		PL_ASSERT_EQUAL(
+			UnitParser::digit_parser(fail_two).to_string(),
+			expected_fail_two);
+		return true;
+	}
+
+	~TestDigitsParser() {}
+};
+
+// S-tB0106
+
+class TestOperatorParser : public Test
+{
+	onestring pass = "+";
+	onestring pass_two = "^ stuff";
+	onestring fail = "g";
+	onestring fail_two = "";
+	onestring expected_pass = ParseResult::make_success("+", "").to_string();
+	onestring expected_pass_two = ParseResult::make_success("^", " stuff").to_string();
+	onestring expected_fail = ParseResult::make_error("Not a math operator", "g").to_string();
+	onestring expected_fail_two = ParseResult::make_error("Out of input", "").to_string();
+public:
+	TestOperatorParser() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Operator Parser";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully match math operators";
+	}
+
+	bool run() override
+	{
+		// Recognize a single operator
+		PL_ASSERT_EQUAL(
+			UnitParser::operator_parser(pass).to_string(),
+			expected_pass);
+		// Recognize an operator followed by other content
+		PL_ASSERT_EQUAL(
+			UnitParser::operator_parser(pass_two).to_string(),
+			expected_pass_two);
+		// Fail non-operator
+		PL_ASSERT_EQUAL(
+			UnitParser::operator_parser(fail).to_string(),
+			expected_fail);
+		// Fail empty string
+		PL_ASSERT_EQUAL(
+			UnitParser::operator_parser(fail_two).to_string(),
+			expected_fail_two);
+		return true;
+	}
+
+	~TestOperatorParser() {}
+};
+
+
 class TestSuite_UnitParser : public TestSuite
 {
 public:
 	TestSuite_UnitParser() = default;
-	void load_tests();
-	testdoc_t get_title()
+	void load_tests() override;
+	testdoc_t get_title() override
 	{
 		return "SIMPLExpress: Unit Parser Tests";
 	}

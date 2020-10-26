@@ -2,7 +2,7 @@
   * Version: 0.1
   *
   * Last Updated: 04 April 2020
-  * Author: Ben D. Lovy
+  * Author: Ben D. Lovy, Anna R. Dunster, Wilfrantz Dede
   */
 
 /* LICENSE
@@ -43,9 +43,12 @@
 #ifndef SIMPLEXPRESS_UNITPARSER_HPP
 #define SIMPLEXPRESS_UNITPARSER_HPP
 
+#include <sstream>
+
 #include "pawlib/core_types.hpp"
 #include "pawlib/onestring.hpp"
 
+#include "simplexpress/specifier.hpp"
 #include "simplexpress/unit.hpp"
 
 // NOTE: (to self) I'm starting to feel like using some of this for parsing in
@@ -66,7 +69,7 @@ class ParseResult
 	 * \param If matched, the matched portion.  If not, an error message
 	 * \param the unparsed remainder
 	*/
-	ParseResult(tril, onestring, onestring);
+	ParseResult(tril, const onestring&, const onestring&);
 
 public:
 	/**This is the ultimate result of the parse operation*/
@@ -87,20 +90,20 @@ public:
 	 * \param The successfully matched portion
 	 * \param The unparsed remainder.  "" signals completion of the match.
 	*/
-	static ParseResult make_success(onestring, onestring);
+	static ParseResult make_success(const onestring&, const onestring&);
 
 	/**Construct an error result.
 	 * e.g.: ParseResult::make_error("Out of input!", "");
 	 * \param The error message
 	 * \param The unparsed remainder.  "" signals completion of the match.
 	*/
-	static ParseResult make_error(onestring, onestring);
+	static ParseResult make_error(const onestring&, const onestring&);
 
 	/**Perform a parse on an input
 	 * \param const reference to input string
 	 * \param Parser to use.  Must be a function from onestring to ParseResult
 	*/
-   template <typename F>
+	template <typename F>
 	static ParseResult parse(const onestring&, F);
 
 	/**Get the string representation of the result
@@ -117,7 +120,7 @@ class UnitParser
 public:
 	/**Constructor stores passed onestring for parsing
 	 * \param onestring - unit to parse*/
-	explicit UnitParser(onestring);
+	explicit UnitParser(onestring&);
 
 	// Specific characters
 	enum class ReservedCharacter : char
@@ -160,50 +163,60 @@ private:
 	/**Parser for '/'
 	 * \param string to check against
 	*/
-	static ParseResult unit_marker(onestring);
+	static ParseResult unit_marker(const onestring&);
 
 	/**Parser for '!'
 	 * \param string to check against
 	*/
-	static ParseResult negator(onestring);
+	static ParseResult negator(const onestring&);
 
 	/**Parser for '+'
 	 * \param string to check against
 	*/
-	static ParseResult multiple(onestring);
+	static ParseResult multiple(const onestring&);
 
 	/**Parser for '?'
 	 * \param string to check against
 	*/
-	static ParseResult optional(onestring);
+	static ParseResult optional(const onestring&);
 
 	/**Parser for '*'
 	 * \param string to check against
 	*/
-	static ParseResult optional_multiple(onestring);
+	static ParseResult optional_multiple(const onestring&);
 
 	/**Literal parser ensures string only contains a single onechar
 	 * \param string to check against
 	*/
-	static ParseResult literal(onestring);
+	static ParseResult literal(const onestring&);
 
 	/**Specifier parser ensures first character is a valid specifier
 	 * \param string to check against
 	*/
-   static ParseResult specifier_parser(onestring);
+	static ParseResult specifier_parser(const onestring&);
 
-   /**Modifiers returns the modifiers matched, if any.
+	/**Modifiers returns the modifiers matched, if any.
 	* Returns success if end of string found, and none matched
 	* \param string to check against
-   */
-   static ParseResult modifier(onestring);
+	*/
+	static ParseResult modifier(const onestring&);
 
-   /**High-level parser for Unit parsing
-    * */
-   static ParseResult unit(onestring);
+	/**Digit parser returns digits matched, if any.
+	* \param string to check against 
+	*/
+	static ParseResult digit_parser(const onestring&);
 
-   /**High-level parser for Literal parsing
-    * */
+	/**Operator parser returns math operators matched, if any.
+	* \param string to check against
+	*/
+	static ParseResult operator_parser(const onestring&);
+
+	/**High-level parser for Unit parsing
+	* */
+	static ParseResult unit(const onestring&);
+
+	/**High-level parser for Literal parsing
+	* */
 
 	/**Safely chop head off a string in place - helper function
 	 * \param String to remove first character from
@@ -214,6 +227,8 @@ private:
 	friend class TestLiteralParser;
 	friend class TestSpecifierParser;
 	friend class TestModifierParser;
+	friend class TestDigitsParser;
+	friend class TestOperatorParser;
 
 };
 

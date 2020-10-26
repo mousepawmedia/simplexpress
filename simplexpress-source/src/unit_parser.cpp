@@ -1,4 +1,4 @@
-#include "simplexpress/specifier.hpp"
+
 #include "simplexpress/unit_parser.hpp"
 
 // ParseResult
@@ -9,18 +9,18 @@ ParseResult::ParseResult()
   remainder("")
 {}
 
-ParseResult::ParseResult(tril res, onestring str, onestring r)
+ParseResult::ParseResult(tril res, const onestring& str, const onestring& r)
 : result(res),
   s(str),
   remainder(r)
 {}
 
-ParseResult ParseResult::make_success(onestring match, onestring rem)
+ParseResult ParseResult::make_success(const onestring& match, const onestring& rem)
 {
 	return ParseResult(true, match, rem);
 }
 
-ParseResult ParseResult::make_error(onestring err, onestring rem)
+ParseResult ParseResult::make_error(const onestring& err, const onestring& rem)
 {
 	return ParseResult(false, err, rem);
 }
@@ -48,7 +48,7 @@ std::ostream& operator<<(std::ostream& s, const ParseResult& r)
 
 // UnitParser
 
-UnitParser::UnitParser(onestring in) : s(in) {}
+UnitParser::UnitParser(onestring& in) : s(in) {}
 
 void UnitParser::chop(onestring& in)
 {
@@ -273,41 +273,41 @@ UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
 
 // Open/close unit
 
-ParseResult UnitParser::unit_marker(onestring in)
+ParseResult UnitParser::unit_marker(const onestring& in)
 {
 	return character(ReservedCharacter::UnitMarker, in);
 }
 
 // Negator
 
-ParseResult UnitParser::negator(onestring in)
+ParseResult UnitParser::negator(const onestring& in)
 {
 	return character(ReservedCharacter::Negator, in);
 }
 
 // Multiple
 
-ParseResult UnitParser::multiple(onestring in)
+ParseResult UnitParser::multiple(const onestring& in)
 {
 	return character(ReservedCharacter::Multiple, in);
 }
 
 // Optional
 
-ParseResult UnitParser::optional(onestring in)
+ParseResult UnitParser::optional(const onestring& in)
 {
 	return character(ReservedCharacter::Multiple, in);
 }
 
 // Optional Multiple
 
-ParseResult UnitParser::optional_multiple(onestring in)
+ParseResult UnitParser::optional_multiple(const onestring& in)
 {
 	return character(ReservedCharacter::OptionalMultiple, in);
 }
 
 // Literal
-ParseResult UnitParser::literal(onestring in)
+ParseResult UnitParser::literal(const onestring& in)
 {
 	// Matches the first character, whatever it is.  Fails if no input present
 	if (in.length() == 0)
@@ -322,8 +322,8 @@ ParseResult UnitParser::literal(onestring in)
 
 // Specifier
 // NOTE: this is a prime example of why ParseResult<T> is what I want
-// Stringly typed parse results will lead to code bloat and repeated logic
-ParseResult UnitParser::specifier_parser(onestring in)
+// Strongly typed parse results will lead to code bloat and repeated logic
+ParseResult UnitParser::specifier_parser(const onestring& in)
 {
 	onestring remainder = in;
 	if (remainder.length() < 1)
@@ -366,7 +366,7 @@ ParseResult UnitParser::specifier_parser(onestring in)
 
 // Modifiers
 
-ParseResult UnitParser::modifier(onestring in)
+ParseResult UnitParser::modifier(const onestring& in)
 {
 	onestring remainder = in;
 	size_t len = remainder.length();
@@ -402,3 +402,71 @@ ParseResult UnitParser::modifier(onestring in)
 		return ParseResult::make_success(lhs, remainder);
 	}
 }
+
+// Digits
+
+ParseResult UnitParser::digit_parser(const onestring& in)
+{
+	// If no input, then there are no digits.
+	if (in.length() == 0)
+	{
+		return ParseResult::make_error("Out of input", "");
+	}
+
+	onestring remainder = in;
+	onestring lhs = "";
+
+	/** Check characters one at a time until one is not a digit. If it's a
+	 * digit, we store it in the left side as a result and remove 
+	 * it from the remaining input to check. If it's not a digit, and we 
+	 * have a result, then we return the digits, and whatever after that 
+	 * isn't a digit. If it's not a digit, and nothing has been stored as a
+	 * result, then no digits were found and parsing digits failed.
+	 */
+
+	while (remainder.length() > 0)
+	{
+		if(Rule::rule_d(remainder.at(0))) {
+			lhs.append(remainder.at(0));
+			chop(remainder);
+		} else if(!Rule::rule_d(remainder.at(0)) && lhs.length() > 0) {
+			return ParseResult::make_success(lhs, remainder);
+		} else if(!Rule::rule_d(remainder.at(0)) && lhs.length() == 0) {
+			return ParseResult::make_error("No digits found", remainder);
+		}
+	}
+
+	// If we run out of data to parse without encountering something that isn't
+	// a digit, then we return success on the entire input.
+
+	return ParseResult::make_success(lhs, remainder);
+
+}
+
+// Operators 
+
+ParseResult UnitParser::operator_parser(const onestring& in)
+{
+	// If no input, then there is no operator.
+	if (in.length() == 0)
+	{
+		return ParseResult::make_error("Out of input", "");
+	}
+
+	onestring remainder = in;
+	onestring lhs = "";
+
+	// Check if first character of input is a math operator, and return success
+	// with the parsed operator and remainder. Otherwise, return error. 
+
+	if(Rule::rule_o(remainder.at(0))) {
+		lhs.append(remainder.at(0));
+		chop(remainder);
+		return ParseResult::make_success(lhs, remainder);
+	} else {
+		return ParseResult::make_error("Not a math operator", in);
+	}
+
+
+}
+
