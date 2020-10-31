@@ -50,6 +50,10 @@ Specifier::SpecifierType Specifier::to_specifier_type(onechar ch)
 	{
 		return SpecifierType::Whitespace;
 	}
+	else if (ch == '.')
+	{
+		return SpecifierType::Any;
+	}
 	else
 	{
 		return SpecifierType::Unsupported;

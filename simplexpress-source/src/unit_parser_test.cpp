@@ -9,4 +9,5 @@ void TestSuite_UnitParser::load_tests()
 	register_test("S-tB0104", new TestVariousUnits());
 	register_test("S-tB0105", new TestDigitsParser());
 	register_test("S-tB0106", new TestOperatorParser());
+	register_test("S-tB0107", new TestAlphanumericParser());
 }

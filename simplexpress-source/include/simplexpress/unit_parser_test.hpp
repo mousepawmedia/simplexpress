@@ -57,11 +57,11 @@
 class TestCharacterParser : public Test
 {
 	onestring pass = "!a";
-	onestring pass_two = "/";
+	onestring pass_two = "^";
 	onestring fail = "a";
 	onestring fail_two = "";
 	onestring expected_pass = ParseResult::make_success('!', "a").to_string();
-	onestring expected_pass_two = ParseResult::make_success('/', "").to_string();
+	onestring expected_pass_two = ParseResult::make_success('^', "").to_string();
 	onestring expected_fail = ParseResult::make_error("Expecting !, got a", "a").to_string();
 	onestring expected_fail_two = ParseResult::make_error("Out of input", "").to_string();
 public:
@@ -240,11 +240,11 @@ public:
 class TestVariousUnits : public Test
 {
 	onestring pass = "a";
-	onestring pass_two = "/l/";
-	onestring pass_three = "/a+/";
-	onestring pass_four = "/d*/";
+	onestring pass_two = "^l/";
+	onestring pass_three = "^a+/";
+	onestring pass_four = "^d*/";
 	onestring pass_five = "!q";
-	onestring pass_six = "/!d/";
+	onestring pass_six = "^!d/";
 	Unit expected_pass = Unit(UnitAttributes(false, false, false, 'a', UnitType::Literal));
 	Unit expected_pass_two = Unit(UnitAttributes(false, false, false, 'l', UnitType::Specifier));
 	Unit expected_pass_three = Unit(UnitAttributes(false, true, false, 'a', UnitType::Specifier));
@@ -385,6 +385,67 @@ public:
 	~TestOperatorParser() {}
 };
 
+// S-tB0107
+
+class TestAlphanumericParser : public Test
+{
+	onestring pass = "abc";
+	onestring pass_two = "123";
+	onestring pass_three = "abc123";
+	onestring pass_four = "abc@#$";
+	onestring fail = "#$%";
+	onestring fail_two = "";
+	onestring expected_pass = ParseResult::make_success("abc", "").to_string();
+	onestring expected_pass_two = ParseResult::make_success("123", "").to_string();
+	onestring expected_pass_three = ParseResult::make_success("abc123", "").to_string();
+	onestring expected_pass_four = ParseResult::make_success("abc", "@#$").to_string();
+	onestring expected_fail = ParseResult::make_error("No alphanumeric characters found", "#$%").to_string();
+	onestring expected_fail_two = ParseResult::make_error("Out of input", "").to_string();
+public:
+	TestAlphanumericParser() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Alphanumeric Parser";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully match alphanumeric characters";
+	}
+
+	bool run() override
+	{
+		// Recognize alphabetical characters
+		PL_ASSERT_EQUAL(
+			UnitParser::alphanumeric_parser(pass).to_string(),
+			expected_pass);
+		// Recognize numerical characters
+		PL_ASSERT_EQUAL(
+			UnitParser::alphanumeric_parser(pass_two).to_string(),
+			expected_pass_two);
+		// Recognize both
+		PL_ASSERT_EQUAL(
+			UnitParser::alphanumeric_parser(pass_three).to_string(),
+			expected_pass_three);
+		// Recognize only the alphanumeric followed by other content
+		PL_ASSERT_EQUAL(
+			UnitParser::alphanumeric_parser(pass_four).to_string(),
+			expected_pass_four);
+		// Fail non-alphanumeric
+		PL_ASSERT_EQUAL(
+			UnitParser::alphanumeric_parser(fail).to_string(),
+			expected_fail);
+		// Fail empty string
+		PL_ASSERT_EQUAL(
+			UnitParser::alphanumeric_parser(fail_two).to_string(),
+			expected_fail_two);
+		return true;
+	}
+
+	~TestAlphanumericParser() {}
+
+};
 
 class TestSuite_UnitParser : public TestSuite
 {

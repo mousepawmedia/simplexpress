@@ -2,7 +2,7 @@
   * Version: 0.1
   *
   * Last Updated: 05 April 2020
-  * Author: Ben D. Lovy, Jarek Thomas
+  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
   */
 
 /* LICENSE
@@ -123,21 +123,19 @@ public:
 	explicit Unit(UnitAttributes);
 
 	/*For checking all the specifiers*/
-	Rule rule;
+	// Rule rule;
 
 	/**keep track of where we are in the model.*/
 	int model_index = 0;
 
-	/**Function that is run to determine which function to
-	run next. e.g. specifiers, sets... will run for each
-	"unit" within the model.
-	\param onechar that is passed into the next function to check*/
-	bool type_choice(onechar);
+	/**Checks current onechar against model for match.
+	 * \param onechar that is being checked
+	 */
+	bool model_matches(onechar);
 
-	/**The specifiers from the model that we will
-	be checking against.
-	\param onechar, the actual unicode that we are
-	checking against the specifiers.*/
+	/**Checks matcher and current onechar against specifier list, returns true 
+	 * if match exists
+	 * \param onechar: the actual unicode to check against the specifiers.*/
 	bool specifiers(onechar);
 
 	/**Simplex set calls specifiers func, but returns
@@ -159,9 +157,9 @@ public:
 	literal, must match exactly.*/
 	bool literals(onechar ch);
 
-	/**Function that is used in match in Simplex Class.
-	Checks and returns number of characters matched or -1.
-	\param onestring that we are checking against the model.*/
+	/**Used by Simplex class to generate match boolean.
+	 * Checks and returns number of characters matched or -1.
+	 * \param onestring that we are checking against the model.*/
 	int check_model(onestring);
 
 	// TODO: Add int check_model(onestring), return number of characters matched to advance in whole simplex input

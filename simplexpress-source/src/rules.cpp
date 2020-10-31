@@ -207,3 +207,16 @@ bool Rule::rule_w(onechar ch)
 {
 	return Specifier::s_whitespace(ch);
 }
+
+bool Rule::rule_z(onechar ch)
+{
+	bool any = true;
+	/*switch statement to determine what to fail.*/
+	switch(*ch.c_str()){
+		case '\n':
+		case '\r':
+			any = false;
+			break;
+	}
+	return any;
+}

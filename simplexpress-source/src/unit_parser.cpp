@@ -152,7 +152,7 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 		}
 
 		// Check end of unit
-		ParseResult check_end = ParseResult::parse(remainder, unit_marker);
+		ParseResult check_end = ParseResult::parse(remainder, unit_end);
 		remainder = check_end.remainder;
 		if (!check_end.result)
 		{
@@ -265,17 +265,26 @@ UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
 		return ReservedCharacter::Optional;
 	else if (ch == '*')
 		return ReservedCharacter::OptionalMultiple;
-	else if (ch == '/')
+	else if (ch == '^')
 		return ReservedCharacter::UnitMarker;
+	else if (ch == '/')
+		return ReservedCharacter::UnitEnd;
 	else
 		return ReservedCharacter::Unrecognized;
 }
 
-// Open/close unit
+// Open unit
 
 ParseResult UnitParser::unit_marker(const onestring& in)
 {
 	return character(ReservedCharacter::UnitMarker, in);
+}
+
+// Close unit
+
+ParseResult UnitParser::unit_end(const onestring& in)
+{
+	return character(ReservedCharacter::UnitEnd, in);
 }
 
 // Negator
@@ -464,9 +473,50 @@ ParseResult UnitParser::operator_parser(const onestring& in)
 		chop(remainder);
 		return ParseResult::make_success(lhs, remainder);
 	} else {
-		return ParseResult::make_error("Not a math operator", in);
+		return ParseResult::make_error("Not a math operator", remainder);
 	}
 
 
 }
 
+// Alphanumeric
+
+ParseResult UnitParser::alphanumeric_parser(const onestring& in)
+{
+	// If no input, then there is no alphanumeric character.
+	if (in.length() == 0)
+	{
+		return ParseResult::make_error("Out of input", "");
+	}
+
+	onestring remainder = in;
+	onestring lhs = "";
+
+	/** Check characters one at a time until one is not an alphanumeric 
+	 * character. If it is, we store it in the left side as a result and remove 
+	 * it from the remaining input to check. If it's not, and we have a result, 
+	 * then we return the matched characters, and whatever after that that isn't 
+	 * matched. If it's not an alphanumeric character, and nothing has been 
+	 * stored as a result, then no matches were found and parsing alphanumeric 
+	 * characters failed.
+	 */
+
+	while (remainder.length() > 0)
+	{
+		if(Rule::rule_a(remainder.at(0))) {
+			lhs.append(remainder.at(0));
+			chop(remainder);
+		} else if(!Rule::rule_a(remainder.at(0)) && lhs.length() > 0) {
+			return ParseResult::make_success(lhs, remainder);
+		} else if(!Rule::rule_a(remainder.at(0)) && lhs.length() == 0) {
+			return ParseResult::make_error("No alphanumeric characters found", remainder);
+		}
+	}
+
+	// If we run out of data to parse without encountering something that isn't
+	// an alphanumeric character, then we return success on the entire input.
+
+	return ParseResult::make_success(lhs, remainder);
+
+
+}

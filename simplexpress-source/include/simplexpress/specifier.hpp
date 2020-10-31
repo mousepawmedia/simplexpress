@@ -1,7 +1,7 @@
 /** Specifier [SIMPLEXpress]
   * Version: 0.1
   *
-  * Author: Ben D. Lovy, Jarek Thomas
+  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
   * Last Updated: 04 April 2020
   */
 

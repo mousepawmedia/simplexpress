@@ -5,7 +5,7 @@
   * be removed.
   *
   * Last Updated: 07 March 2020
-  * Author(s): Ben D. Lovy, Jason C. McDonald
+  * Author(s): Ben D. Lovy, Jason C. McDonald, Anna R. Dunster
   */
 
 /* LICENSE
@@ -53,23 +53,24 @@
 
 #include "simplexpress/simplex.hpp"
 
+// S-tB0000
 class TestConstructASCIISimplex : public Test
 {
-	onestring model = "/l+/-/a+/-/d/.png";
+	onestring model = "^l+/-^a+/-^d/.png";
 	onestring expected = "[ Unit<specifier>::(l)@0, Unit<literal>::(-)@0, Unit<specifier>::(a)@0, Unit<literal>::(-)@0, Unit<specifier>::(d)@0, Unit<literal>::(.)@0, Unit<literal>::(p)@0, Unit<literal>::(n)@0, Unit<literal>::(g)@0 ]";
 public:
 	TestConstructASCIISimplex() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Construct ASCII Simplex";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully construct 8-char model Simplex from an ASCII model";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex(model);
 		PL_ASSERT_EQUAL(simplex.to_string(), expected);
@@ -79,6 +80,7 @@ public:
 	~TestConstructASCIISimplex(){}
 };
 
+// S-tB0001
 class TestMatchSingleUnitLiteral : public Test
 {
 	onestring model = "-";
@@ -87,26 +89,28 @@ class TestMatchSingleUnitLiteral : public Test
 public:
 	TestMatchSingleUnitLiteral() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Literal - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single literal";
 	}
-	bool run()
+	bool run() override
 	{
-		Simplex simplex = Simplex(model);
-		PL_ASSERT_TRUE(simplex.match(input_pass));
+		Simplex simplex(model);
 		PL_ASSERT_FALSE(simplex.match(input_fail));
+		PL_ASSERT_TRUE(simplex.match(input_pass));
+		
 		return true;
 	}
 
 	~TestMatchSingleUnitLiteral(){}
 };
 
+// S-tB0002
 class TestMatchSingleUnitSpecifierAlphanumeric : public Test
 {
 	onestring model = "^a/";
@@ -116,18 +120,18 @@ class TestMatchSingleUnitSpecifierAlphanumeric : public Test
 public:
 	TestMatchSingleUnitSpecifierAlphanumeric() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Alphanumeric Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single alphanumeric character";
 	}
-	bool run()
+	bool run() override
 	{
-		Simplex simplex= Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
@@ -137,6 +141,7 @@ public:
 	~TestMatchSingleUnitSpecifierAlphanumeric(){}
 };
 
+// S-tB0003
 class TestMatchSingleUnitSpecifierDigit : public Test
 {
 	onestring model = "^d/";
@@ -145,16 +150,16 @@ class TestMatchSingleUnitSpecifierDigit : public Test
 public:
 	TestMatchSingleUnitSpecifierDigit() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
-		return "Match Alphanumeric Specifier - Single-Unit Model";
+		return "Match Digit Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single alphanumeric character";
+		return "Successfully match against a model containing a single digit character";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -165,6 +170,7 @@ public:
 	~TestMatchSingleUnitSpecifierDigit(){}
 };
 
+// S-tB0004
 class TestMatchSingleUnitSpecifierLatin : public Test
 {
 	onestring model = "^l/";
@@ -173,16 +179,16 @@ class TestMatchSingleUnitSpecifierLatin : public Test
 public:
 	TestMatchSingleUnitSpecifierLatin() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Latin Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single latin character";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -193,6 +199,7 @@ public:
 	~TestMatchSingleUnitSpecifierLatin(){}
 };
 
+// S-tB0005
 class TestMatchSingleUnitSpecifierNewline : public Test
 {
 	onestring model = "^n/";
@@ -201,16 +208,16 @@ class TestMatchSingleUnitSpecifierNewline : public Test
 public:
 	TestMatchSingleUnitSpecifierNewline() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Newline Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single newline";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -221,6 +228,7 @@ public:
 	~TestMatchSingleUnitSpecifierNewline(){}
 };
 
+// S-tB0006
 class TestMatchSingleUnitSpecifierPunctuation : public Test
 {
 	onestring model = "^p/";
@@ -229,16 +237,16 @@ class TestMatchSingleUnitSpecifierPunctuation : public Test
 public:
 	TestMatchSingleUnitSpecifierPunctuation() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Punctuation Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single punctuation character";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -249,6 +257,7 @@ public:
 	~TestMatchSingleUnitSpecifierPunctuation(){}
 };
 
+// S-tB0007
 class TestMatchSingleUnitSpecifierCarriageReturn : public Test
 {
 	onestring model = "^r/";
@@ -257,16 +266,16 @@ class TestMatchSingleUnitSpecifierCarriageReturn : public Test
 public:
 	TestMatchSingleUnitSpecifierCarriageReturn() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Carriage Return Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single carriage return";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -277,6 +286,7 @@ public:
 	~TestMatchSingleUnitSpecifierCarriageReturn(){}
 };
 
+// S-tB0008
 class TestMatchSingleUnitSpecifierLiteralSpace : public Test
 {
 	onestring model = "^s/";
@@ -285,16 +295,16 @@ class TestMatchSingleUnitSpecifierLiteralSpace : public Test
 public:
 	TestMatchSingleUnitSpecifierLiteralSpace() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Literal Space Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single space character";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -305,6 +315,7 @@ public:
 	~TestMatchSingleUnitSpecifierLiteralSpace(){}
 };
 
+// S-tB0009
 class TestMatchSingleUnitSpecifierTab : public Test
 {
 	onestring model = "^t/";
@@ -313,16 +324,16 @@ class TestMatchSingleUnitSpecifierTab : public Test
 public:
 	TestMatchSingleUnitSpecifierTab() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Tab Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single tab character";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -333,6 +344,7 @@ public:
 	~TestMatchSingleUnitSpecifierTab(){}
 };
 
+// S-tB0010
 class TestMatchSingleUnitSpecifierWhitespace : public Test
 {
 	onestring model = "^w/";
@@ -343,16 +355,16 @@ class TestMatchSingleUnitSpecifierWhitespace : public Test
 public:
 	TestMatchSingleUnitSpecifierWhitespace() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Whitespace Specifier - Single-Unit Model";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single whitespace character";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
@@ -366,6 +378,7 @@ public:
 	~TestMatchSingleUnitSpecifierWhitespace(){}
 };
 
+// S-tB0011
 class TestMatchMultiUnitLiterals : public Test
 {
 	onestring model = "hi";
@@ -374,16 +387,16 @@ class TestMatchMultiUnitLiterals : public Test
 public:
 	TestMatchMultiUnitLiterals() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Two Literals";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing two literal characters";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
@@ -394,6 +407,7 @@ public:
 	~TestMatchMultiUnitLiterals(){}
 };
 
+// S-tB0012
 class TestMatchMultiUnitLiteralSpecifier : public Test
 {
 	onestring model = "^d/i";
@@ -404,16 +418,16 @@ class TestMatchMultiUnitLiteralSpecifier : public Test
 public:
 	TestMatchMultiUnitLiteralSpecifier() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Specifier + Literal";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a specifier followed by a literal";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
@@ -426,6 +440,7 @@ public:
 	~TestMatchMultiUnitLiteralSpecifier(){}
 };
 
+// S-tB0013
 class TestMatchMultiUnitSpecifiers : public Test
 {
 	onestring model = "^d/^l/";
@@ -436,16 +451,16 @@ class TestMatchMultiUnitSpecifiers : public Test
 public:
 	TestMatchMultiUnitSpecifiers() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Two Specifiers";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing two specifiers";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
@@ -458,6 +473,7 @@ public:
 	~TestMatchMultiUnitSpecifiers(){}
 };
 
+// S-tB0014
 class TestMatchSpecifierMultiplier : public Test
 {
 	onestring model = "^d+/";
@@ -467,18 +483,18 @@ class TestMatchSpecifierMultiplier : public Test
 public:
 	TestMatchSpecifierMultiplier() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Specifier with Multiplier";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing one or more specifier matches";
 	}
-	bool run()
+	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
@@ -488,6 +504,7 @@ public:
 	~TestMatchSpecifierMultiplier(){}
 };
 
+// S-tB0015
 class TestMatchSpecifierOptional : public Test
 {
 	onestring model = "x^d?/";
@@ -497,16 +514,16 @@ class TestMatchSpecifierOptional : public Test
 public:
 	TestMatchSpecifierOptional() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Optional Specifier";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing an optional specifier";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
@@ -518,25 +535,26 @@ public:
 	~TestMatchSpecifierOptional(){}
 };
 
+// S-tB0016
 class TestMatchSpecifierOptionalMultiple : public Test
 {
 	onestring model = "x^d*/";
 	onestring input_pass_one = "x";
-	onestring input_pass_two = "x5";
+	onestring input_pass_two = "x55";
 	onestring input_fail = "xd";
 public:
 	TestMatchSpecifierOptionalMultiple() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match OptionalMultiple Specifier";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing an optional specifier";
+		return "Successfully match against a model containing an optional multiple specifier";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
@@ -548,34 +566,38 @@ public:
 	~TestMatchSpecifierOptionalMultiple(){}
 };
 
+// S-tB0017
 class TestMatchAny : public Test
 {
 	onestring model = "^./";
 	onestring input_pass_one = "^";
 	onestring input_pass_two = "6";
+	onestring input_fail = "\n";
 public:
 	TestMatchAny() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Any Character";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing any character";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
 	}
 
 	~TestMatchAny(){}
 };
 
+// S-tB0018
 class TestMatchNot : public Test
 {
 	onestring model = "^!d/";
@@ -585,16 +607,16 @@ class TestMatchNot : public Test
 public:
 	TestMatchNot() = default;
 
-	testdoc_t get_title()
+	testdoc_t get_title() override
 	{
 		return "Match Negated Specifier";
 	}
 
-	testdoc_t get_docs()
+	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model with a negated specifier";
 	}
-	bool run()
+	bool run() override
 	{
 		Simplex simplex = Simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
@@ -624,8 +646,8 @@ class TestSuite_Basic : public TestSuite
 {
 public:
 	TestSuite_Basic() = default;
-	void load_tests();
-	testdoc_t get_title()
+	void load_tests() override;
+	testdoc_t get_title() override
 	{
 		return "SIMPLExpress: Basic Sanity Tests";
 	}

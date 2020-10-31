@@ -60,57 +60,64 @@ std::ostream& operator<<(std::ostream& s, const UnitType& r)
 	return s;
 }
 
-Unit::Unit(UnitAttributes a) : attr(a) {}
+Unit::Unit(UnitAttributes a) : attr(a), model(a.matcher) {}
 
-/*for now these just return false till a later time*/
 bool Unit::specifiers(onechar ch)
 {
-	//Variable that we return
 	bool return_var = false;
+	Rule::LetterCase sCase;
 
-	/*Which case we are going to be looking for.*/
-	Rule::LetterCase sCase = Rule::to_letter_case(model.at(2).c_str()[0]);
+	/* Which case we are going to be looking for.*/
+	if (model.length() >= 2)
+	{
+		sCase = Rule::to_letter_case(model.at(2).c_str()[0]);
+	}
+	else
+	{
+		sCase = Rule::LetterCase::Any;
+	}
 
 	/* Determine specifier */
-	Specifier::SpecifierType specifier = Specifier::to_specifier_type(model.at(1).c_str()[0]);
+	Specifier::SpecifierType specifier = Specifier::to_specifier_type(model.at(model_index)); 
 
+	/* Checks input character against selected specifier */
 	switch(specifier)
 	{
 		case Specifier::SpecifierType::Alphanumeric:
-			return_var = rule.rule_a(ch, sCase);
+			return_var = Rule::rule_a(ch, sCase);
 			break;
 		case Specifier::SpecifierType::Digit:
-			return_var = rule.rule_d(ch);
+			return_var = Rule::rule_d(ch);
 			break;
 		case Specifier::SpecifierType::LatinLetter:
-			return_var = rule.rule_l(ch, sCase);
+			return_var = Rule::rule_l(ch, sCase);
 			break;
 		case Specifier::SpecifierType::Math:
 			return_var = false;
 			break;
 		case Specifier::SpecifierType::Newline:
-			return_var = rule.rule_n(ch);
+			return_var = Rule::rule_n(ch);
 			break;
 		case Specifier::SpecifierType::MathOperator:
-			return_var = rule.rule_o(ch);
+			return_var = Rule::rule_o(ch);
 			break;
 		case Specifier::SpecifierType::Punctuation:
-			return_var = rule.rule_p(ch);
+			return_var = Rule::rule_p(ch);
 			break;
 		case Specifier::SpecifierType::CarriageReturn:
-			return_var = rule.rule_r(ch);
+			return_var = Rule::rule_r(ch);
 			break;
 		case Specifier::SpecifierType::Space:
-			return_var = rule.rule_s(ch);
+			return_var = Rule::rule_s(ch);
 			break;
 		case Specifier::SpecifierType::Tab:
-			return_var = rule.rule_t(ch);
+			return_var = Rule::rule_t(ch);
 			break;
 		case Specifier::SpecifierType::Whitespace:
-			return_var = rule.rule_w(ch);
+			return_var = Rule::rule_w(ch);
 			break;
 		case Specifier::SpecifierType::Any:
-			return_var = true;
+			return_var = Rule::rule_z(ch);
 			break;
 		default:
 			std::cout << "Invalid specifier.\n";
@@ -123,7 +130,7 @@ bool Unit::literals(onechar ch)
 {
 	/*has to match Unicode character exactly
 	otherwise its false*/
-	return ch == model[0];
+	return ch == model[model_index];
 }
 
 bool Unit::literal_sets(onechar ch)
@@ -134,13 +141,16 @@ bool Unit::literal_sets(onechar ch)
 	return return_var;
 }
 
-bool Unit::type_choice(onechar ch)
+bool Unit::model_matches(onechar ch)
 {
 	bool return_var = false;
-	if(model[0] == '^')
+	if (attr.type == UnitType::Specifier) 
 	{
+		// Run if this unit is a specifier.
+
 		// NOTE: This does not feel like the recommended way to switch on a onechar
 		// FIXME: handle error of not having something after it
+		// Should have a function to check for sets, return enum? 
 		switch(model.at(1).c_str()[0])
 		{
 		case '<':
@@ -156,6 +166,7 @@ bool Unit::type_choice(onechar ch)
 	}
 	else
 	{
+		// Otherwise run as a literal.
 		return_var = literals(ch);
 	}
 	return return_var;
@@ -163,38 +174,60 @@ bool Unit::type_choice(onechar ch)
 
 int Unit::check_model(onestring s)
 {
+	// Negated handler
+	if (attr.negated)
+	{
+		if (model_matches(s.at(0)))
+			return -1;
+		else
+			return 1;
+	}
+
 	// Optional handler
 	if (attr.optional)
 	{
+		// If empty, pass
 		if (s.empty())
 			return 0;
 		else
+		{
+		// Otherwise check for a match
+		if (model_matches(s.at(0)))
+			return 1;
+		else
 			return -1;
+		}
 	}
 
+	// Multiple handler
 	if (attr.multiple)
 	{
-			// iterate until failure
-			int ret = 0;
-
-			for (size_t i = 0; i < s.length(); i++)
-			{
-				if (type_choice(s.at(i)))
-					ret += 1;
-				else
-					break;
-			}
-
-			return ret;
+		// If no matches, return -1
+		if (!model_matches(s.at(0)))
+		{
+			return -1;
+		}
+		// Otherwise, iterate until failure
+		int ret = 0;
+		for (size_t i = 0; i < s.length(); i++)
+		{
+			if (model_matches(s.at(i)))
+				ret += 1;
+			else
+				break;
+		}
+		return ret;
 	}
+
+	// Otherwise check single character
 	else
 	{
-		bool result = type_choice(s.at(0));
-		if (result > 0)
+		if (model_matches(s.at(0)))
 			return 1;
 		else
 			return -1;
 	}
+	// If no matches, return -1
 	return -1;
 }
 

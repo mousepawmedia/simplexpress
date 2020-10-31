@@ -1,7 +1,7 @@
 #include "simplexpress/simplex.hpp"
 #include "simplexpress/rules.hpp"
 
-Simplex::Simplex(onestring user_model)
+Simplex::Simplex(const onestring& user_model)
 {
 	parse_model(user_model);
 }
@@ -19,17 +19,17 @@ bool Simplex::next()
 	}
 }
 
-void Simplex::parse_model(onestring user_model)
+void Simplex::parse_model(const onestring& user_model)
 {
 	onestring remainder = user_model;
 	// If it's empty, return - empty simplex
 	if (remainder.empty())
 		return;
 
-	// If not, continually loop through remainder
-	// calling the unit parser
+	// If not, continually loop through remainder calling the unit parser
 	while (!remainder.empty())
 	{
+		// TODO find a way to make VSCode ignore identifier undefined
 		auto [attr, l] = UnitParser(remainder).parse();
 		model.push_back(new Unit(attr));
 		if (remainder.length() - l <= 0)
@@ -44,6 +44,7 @@ bool Simplex::match(onestring model_check)
 	onestring buffer = model_check;
 	while(!buffer.empty())
 	{
+		// Checks how long to keep checking for match
 		int matched = model[model_index]->check_model(buffer);
 		std::cout << "Matching " << buffer;
 		std::cout << " against " << *model[model_index] << "... ";

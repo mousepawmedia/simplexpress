@@ -129,7 +129,8 @@ public:
 		Negator = '!',
 		Optional = '?',
 		OptionalMultiple = '*',
-		UnitMarker = '/',
+		UnitMarker = '^',
+		UnitEnd = '/',
 		Unrecognized
 	};
 
@@ -147,6 +148,7 @@ public:
 	/**Get parsed unit attributes.
 	 * Returns the attributes and the size of the unit in onechars*/
 	ParsedAttributes parse() const;
+
 private:
 	/**Input string being parsed*/
 	onestring s;
@@ -160,10 +162,16 @@ private:
 	*/
 	static ParseResult character(ReservedCharacter, onestring);
 
-	/**Parser for '/'
+	/**Parser for '^'
 	 * \param string to check against
 	*/
 	static ParseResult unit_marker(const onestring&);
+
+	/**Parser for '/'
+	 * \param string to check against
+	*/
+
+	static ParseResult unit_end(const onestring&);
 
 	/**Parser for '!'
 	 * \param string to check against
@@ -211,6 +219,12 @@ private:
 	*/
 	static ParseResult operator_parser(const onestring&);
 
+	/**Alphanumeric parser returns alphanumeric characters matched, if any.
+	* \param string to check against
+	*/
+
+	static ParseResult alphanumeric_parser(const onestring&);
+
 	/**High-level parser for Unit parsing
 	* */
 	static ParseResult unit(const onestring&);
@@ -229,6 +243,7 @@ private:
 	friend class TestModifierParser;
 	friend class TestDigitsParser;
 	friend class TestOperatorParser;
+	friend class TestAlphanumericParser;
 
 };
 

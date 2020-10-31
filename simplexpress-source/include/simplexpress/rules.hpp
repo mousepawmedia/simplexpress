@@ -2,7 +2,7 @@
   * Version: 0.1
   *
   * Last Updated: 04 April 2020
-  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
+  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Graham Mix
   */
 
 /* LICENSE
@@ -145,5 +145,9 @@ public:
 	/**Specifier for whitespace
 	\param pass in onechar so knows what to look for*/
 	bool static rule_w(onechar);
+
+	/**Specifier for Any: fails newline and return
+	\param pass in onechar to check */
+	bool static rule_z(onechar);
 };
 #endif
