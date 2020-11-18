@@ -1,7 +1,7 @@
 /** Unit [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 05 April 2020
+  * Last Updated: 06 November 2020
   * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
   */
 
@@ -45,13 +45,13 @@
 
 #include <iostream>
 
-#include "pawlib/onestring.hpp"
 #include "pawlib/onechar.hpp"
+#include "pawlib/onestring.hpp"
 
-#include "simplexpress/specifier.hpp"
 #include "simplexpress/rules.hpp"
+#include "simplexpress/specifier.hpp"
 
-/**The various categories of unit currently implemented*/
+/**The various categories of unit currently implemented. */
 // TODO: Set, Group
 enum class UnitType
 {
@@ -59,7 +59,7 @@ enum class UnitType
 	Specifier
 };
 
-/**The set of attributes and modifiers that can apply to a Unit*/
+/**The set of attributes and modifiers that can apply to a Unit. */
 class UnitAttributes
 {
 public:
@@ -87,50 +87,44 @@ public:
 	 * \param multiple flag
 	 * \param negator flag
 	 * \param onechar for either the specifier or the literal
-	*/
+	 */
 	UnitAttributes(bool, bool, bool, onechar, UnitType);
 
 	/**Copy constructor
 	 * \param Struct to copy
-	*/
+	 */
 	UnitAttributes(const UnitAttributes&);
 
 	/**Move constructor\
 	 * \param Struct to move
-	*/
+	 */
 	UnitAttributes(UnitAttributes&&);
 
 	/**Assignment overload*/
 	UnitAttributes& operator=(const UnitAttributes&);
 };
 
-/*The Unit class is where we check against the model.
-based off what is put in to check against the model
-determines what function is called, it is possible
-to have all types within one model.*/
+/**The Unit class is where we check against the model. Depending on what is 
+ * put in to check against, the model determines what function is called. It is 
+ * possible to have all types within one model.*/
 class Unit
 {
 protected:
 	UnitAttributes attr;
 public:
-	/**Used for the purpose of parsing
-	through the model. Is set in constructor.
-	The first char is '^', followed by an identifier if present,
-	followed by a case if present.*/
+	/**Used for the purpose of parsing through the model. Is set in 
+	 * constructor. Includes an identifier if present, followed by a case 
+	 * if present. */
 	onestring model;
 
 	/**Explicit constructor*/
 	explicit Unit(UnitAttributes);
 
-	/*For checking all the specifiers*/
-	// Rule rule;
-
-	/**keep track of where we are in the model.*/
+	/**Keep track of where we are in the model. */
 	int model_index = 0;
 
 	/**Checks current onechar against model for match.
-	 * \param onechar that is being checked
-	 */
+	 * \param onechar that is being checked */
 	bool model_matches(onechar);
 
 	/**Checks matcher and current onechar against specifier list, returns true 
@@ -138,23 +132,19 @@ public:
 	 * \param onechar: the actual unicode to check against the specifiers.*/
 	bool specifiers(onechar);
 
-	/**Simplex set calls specifiers func, but returns
-	true on the first specifier found to be true within
-	the set.
-	\param onechar, the unicode we are checking in the set.*/
+	/**Simplex set calls specifiers func, but returns true on the first 
+	 * specifier found to be true within the set.
+	 * \param onechar: the unicode we are checking in the set.*/
 	bool sets(onechar ch);
 
-	/**Literal sets, Input against the model has to match
-	exactly what is inside the literal set.
-	\param onestring, The onestring we are checking
-	against the model and must match exactly.*/
+	/**Literal sets, Input against the model has to match exactly what is 
+	 * inside the literal set.
+	 * \param onestring: the onestring we are checking for a literal match */
 	bool literal_sets(onechar ch);
 
-	/**Literals, Everything entered outside a unit.
-	These are taken as they are and what user is
-	checking against them has to match literal exactly.
-	\param onechar that we are checking against the
-	literal, must match exactly.*/
+	/**Literals, Everything entered outside a unit. These are taken as they 
+	 * are and what user is checking against them has to match literal exactly.
+	 * \param onechar that we are checking for a literal match exactly.*/
 	bool literals(onechar ch);
 
 	/**Used by Simplex class to generate match boolean.
@@ -162,13 +152,9 @@ public:
 	 * \param onestring that we are checking against the model.*/
 	int check_model(onestring);
 
-	// TODO: Add int check_model(onestring), return number of characters matched to advance in whole simplex input
-	/** Stream instertion operator overload, for debug purposes
-	*/
-
-   /**Convert to string for testing*/
-   onestring to_string() const;
-   friend std::ostream& operator<<(std::ostream&, const Unit&);
+	/**Convert to string for testing*/
+	onestring to_string() const;
+	friend std::ostream& operator<<(std::ostream&, const Unit&);
 };
 
 #endif // Unit_H_

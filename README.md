@@ -2,7 +2,7 @@
 
 **SIMPLEXpress** is a simple-to-use alternative to regular expressions.
 Instead of requiring the user to memorize dozens of special characters with
-multiple uses and complex rules, SIMPLEXpress hard-reserved two characters
+multiple uses and complex rules, SIMPLEXpress hard-reserves two characters
 and leaves the rest for literal use. Using a few simple syntactic rules,
 the user can easily write powerful expressions.
 
@@ -13,6 +13,7 @@ the user can easily write powerful expressions.
 - Jarek Thomas
 - Moshe D. Uminer
 - Bowen Volwiler
+- Anna R. Dunster
 
 ## Dependencies
 

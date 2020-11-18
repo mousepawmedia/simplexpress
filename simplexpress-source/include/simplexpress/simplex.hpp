@@ -1,7 +1,7 @@
 /** Simplex [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 04 April 2020
+  * Last Updated: 18 November 2020
   * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Wilfrantz Dede 
   */
 
@@ -48,34 +48,30 @@
 #include <string>
 #include <vector>
 
-#include "pawlib/onestring.hpp"
 #include "pawlib/onechar.hpp"
+#include "pawlib/onestring.hpp"
 
 #include "simplexpress/unit.hpp"
 #include "simplexpress/unit_parser.hpp"
 
-using std::vector;
 
 /**The simplex class is the overall model of Simplexpress. A simplex contains 
  * a vector (for now) of Units. Everything entered outside a Unit is taken as a 
- * literal and must be matched exactly.
- */
+ * literal and must be matched exactly.*/
 class Simplex
 {
 	/**Parser for a whole simplex - consists of zero or more Units*/
 	static ParseResult simplex_parser(onestring);
 
 protected:
-	/**The model itself*/
-	// TODO make this a FlexArray?
+	/**The model itself, an array of Unit objects.*/
 	std::vector<Unit*> model;
 
 	/**To keep track of where we are in the model.*/
 	unsigned int model_index = 0;
 
 	/**Enumeration to roughly determine how we are interpreting as we 
-	 * parse through the model.
-	 */
+	 * parse through the model.*/
 	enum parse_status
 	{
 		NORMAL = 0,
@@ -87,14 +83,12 @@ protected:
 	/**Used to keep track of whether we are in a unit or not. If we encounter 
 	 * a `^` then we add 1 and if we encounter a `/` then we subtract 1. If 
 	 * we try to go below 0 then an error is thrown as there is nothing 
-	 * to escape.
-	 */
+	 * to escape.*/
 	uint16_t unit_counter = 0;
 
 	/**Parses through the user defined model.
 	 * Uses enumeration to pull out each type of model we can have.
-	 * \param onestring: user definition of model
-	 */
+	 * \param user_model onestring user definition of model*/
 	void parse_model(const onestring&);
 
 	/**Moves to the next unit or literal in the model.*/
@@ -104,14 +98,12 @@ public:
 	/**Constructor, When a Simplex is created, parse_input is called to parse 
 	 * through the user defined model. Then it will call match to check 
 	 * everything against the model.
-	 * \param onestring: user definition of model
-	 */
+	 * \param user_model onestring user definition of model*/
 	explicit Simplex(const onestring&);
 
 	/**Takes the user defined model and matches user input to parse against 
 	 * the model.
-	 * \param onestring: user input to check
-	 */
+	 * \param model_check onestring user input to check*/
 	bool match(onestring);
 
 	/**Convert to string for testing*/

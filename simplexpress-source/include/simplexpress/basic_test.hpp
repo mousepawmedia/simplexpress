@@ -53,11 +53,17 @@
 
 #include "simplexpress/simplex.hpp"
 
-// S-tB0000
+// X-sB00 //
+
+// X-tB0000
 class TestConstructASCIISimplex : public Test
 {
 	onestring model = "^l+/-^a+/-^d/.png";
-	onestring expected = "[ Unit<specifier>::(l)@0, Unit<literal>::(-)@0, Unit<specifier>::(a)@0, Unit<literal>::(-)@0, Unit<specifier>::(d)@0, Unit<literal>::(.)@0, Unit<literal>::(p)@0, Unit<literal>::(n)@0, Unit<literal>::(g)@0 ]";
+	onestring expected = 
+		"[ Unit<specifier>::(l)@0, Unit<literal>::(-)@0, "
+		"Unit<specifier>::(a)@0, Unit<literal>::(-)@0, Unit<specifier>::(d)@0, "
+		"Unit<literal>::(.)@0, Unit<literal>::(p)@0, Unit<literal>::(n)@0, "
+		"Unit<literal>::(g)@0 ]";
 public:
 	TestConstructASCIISimplex() = default;
 
@@ -80,7 +86,7 @@ public:
 	~TestConstructASCIISimplex(){}
 };
 
-// S-tB0001
+// X-tB0001
 class TestMatchSingleUnitLiteral : public Test
 {
 	onestring model = "-";
@@ -110,7 +116,7 @@ public:
 	~TestMatchSingleUnitLiteral(){}
 };
 
-// S-tB0002
+// X-tB0002
 class TestMatchSingleUnitSpecifierAlphanumeric : public Test
 {
 	onestring model = "^a/";
@@ -127,7 +133,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single alphanumeric character";
+		return "Successfully match against a model containing a single "
+			"alphanumeric character";
 	}
 	bool run() override
 	{
@@ -141,7 +148,7 @@ public:
 	~TestMatchSingleUnitSpecifierAlphanumeric(){}
 };
 
-// S-tB0003
+// X-tB0003
 class TestMatchSingleUnitSpecifierDigit : public Test
 {
 	onestring model = "^d/";
@@ -157,7 +164,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single digit character";
+		return "Successfully match against a model containing a single digit "
+			"character";
 	}
 	bool run() override
 	{
@@ -170,7 +178,7 @@ public:
 	~TestMatchSingleUnitSpecifierDigit(){}
 };
 
-// S-tB0004
+// X-tB0004
 class TestMatchSingleUnitSpecifierLatin : public Test
 {
 	onestring model = "^l/";
@@ -186,7 +194,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single latin character";
+		return "Successfully match against a model containing a single latin "
+			"character";
 	}
 	bool run() override
 	{
@@ -199,7 +208,7 @@ public:
 	~TestMatchSingleUnitSpecifierLatin(){}
 };
 
-// S-tB0005
+// X-tB0005
 class TestMatchSingleUnitSpecifierNewline : public Test
 {
 	onestring model = "^n/";
@@ -228,7 +237,7 @@ public:
 	~TestMatchSingleUnitSpecifierNewline(){}
 };
 
-// S-tB0006
+// X-tB0006
 class TestMatchSingleUnitSpecifierPunctuation : public Test
 {
 	onestring model = "^p/";
@@ -244,7 +253,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single punctuation character";
+		return "Successfully match against a model containing a single "
+			"punctuation character";
 	}
 	bool run() override
 	{
@@ -257,7 +267,7 @@ public:
 	~TestMatchSingleUnitSpecifierPunctuation(){}
 };
 
-// S-tB0007
+// X-tB0007
 class TestMatchSingleUnitSpecifierCarriageReturn : public Test
 {
 	onestring model = "^r/";
@@ -273,7 +283,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single carriage return";
+		return "Successfully match against a model containing a single "
+			"carriage return";
 	}
 	bool run() override
 	{
@@ -286,7 +297,7 @@ public:
 	~TestMatchSingleUnitSpecifierCarriageReturn(){}
 };
 
-// S-tB0008
+// X-tB0008
 class TestMatchSingleUnitSpecifierLiteralSpace : public Test
 {
 	onestring model = "^s/";
@@ -302,7 +313,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single space character";
+		return "Successfully match against a model containing a single space "
+			"character";
 	}
 	bool run() override
 	{
@@ -315,7 +327,7 @@ public:
 	~TestMatchSingleUnitSpecifierLiteralSpace(){}
 };
 
-// S-tB0009
+// X-tB0009
 class TestMatchSingleUnitSpecifierTab : public Test
 {
 	onestring model = "^t/";
@@ -331,7 +343,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single tab character";
+		return "Successfully match against a model containing a single tab "
+			"character";
 	}
 	bool run() override
 	{
@@ -344,7 +357,7 @@ public:
 	~TestMatchSingleUnitSpecifierTab(){}
 };
 
-// S-tB0010
+// X-tB0010
 class TestMatchSingleUnitSpecifierWhitespace : public Test
 {
 	onestring model = "^w/";
@@ -362,7 +375,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a single whitespace character";
+		return "Successfully match against a model containing a single "
+			"whitespace character";
 	}
 	bool run() override
 	{
@@ -370,7 +384,6 @@ public:
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_TRUE(simplex.match(input_pass_three));
-		//FIXME: this test seems to try to assert true instead, why?
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
 	}
@@ -378,7 +391,7 @@ public:
 	~TestMatchSingleUnitSpecifierWhitespace(){}
 };
 
-// S-tB0011
+// X-tB0011
 class TestMatchMultiUnitLiterals : public Test
 {
 	onestring model = "hi";
@@ -394,7 +407,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing two literal characters";
+		return "Successfully match against a model containing two literal "
+			"characters";
 	}
 	bool run() override
 	{
@@ -407,7 +421,7 @@ public:
 	~TestMatchMultiUnitLiterals(){}
 };
 
-// S-tB0012
+// X-tB0012
 class TestMatchMultiUnitLiteralSpecifier : public Test
 {
 	onestring model = "^d/i";
@@ -425,7 +439,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing a specifier followed by a literal";
+		return "Successfully match against a model containing a specifier "
+			"followed by a literal";
 	}
 	bool run() override
 	{
@@ -440,7 +455,7 @@ public:
 	~TestMatchMultiUnitLiteralSpecifier(){}
 };
 
-// S-tB0013
+// X-tB0013
 class TestMatchMultiUnitSpecifiers : public Test
 {
 	onestring model = "^d/^l/";
@@ -473,7 +488,7 @@ public:
 	~TestMatchMultiUnitSpecifiers(){}
 };
 
-// S-tB0014
+// X-tB0014
 class TestMatchSpecifierMultiplier : public Test
 {
 	onestring model = "^d+/";
@@ -490,7 +505,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing one or more specifier matches";
+		return "Successfully match against a model containing a multiplier "
+			"specifier";
 	}
 	bool run() override
 	{
@@ -504,7 +520,7 @@ public:
 	~TestMatchSpecifierMultiplier(){}
 };
 
-// S-tB0015
+// X-tB0015
 class TestMatchSpecifierOptional : public Test
 {
 	onestring model = "x^d?/";
@@ -521,7 +537,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing an optional specifier";
+		return "Successfully match against a model containing an optional "
+			"specifier";
 	}
 	bool run() override
 	{
@@ -535,7 +552,7 @@ public:
 	~TestMatchSpecifierOptional(){}
 };
 
-// S-tB0016
+// X-tB0016
 class TestMatchSpecifierOptionalMultiple : public Test
 {
 	onestring model = "x^d*/";
@@ -552,7 +569,8 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing an optional multiple specifier";
+		return "Successfully match against a model containing an optional "
+			"multiple specifier";
 	}
 	bool run() override
 	{
@@ -566,7 +584,7 @@ public:
 	~TestMatchSpecifierOptionalMultiple(){}
 };
 
-// S-tB0017
+// X-tB0017
 class TestMatchAny : public Test
 {
 	onestring model = "^./";
@@ -597,7 +615,7 @@ public:
 	~TestMatchAny(){}
 };
 
-// S-tB0018
+// X-tB0018
 class TestMatchNot : public Test
 {
 	onestring model = "^!d/";

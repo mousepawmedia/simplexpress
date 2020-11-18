@@ -63,8 +63,8 @@ int main(int argc, char* argv[])
 	ioc.configure_echo(IOEchoMode::cout);
 
 	GoldilocksShell* shell = new GoldilocksShell(">> ");
-	shell->register_suite<TestSuite_Basic>("S-sB00");
-	shell->register_suite<TestSuite_UnitParser>("S-sB01");
+	shell->register_suite<TestSuite_Basic>("X-sB00");
+	shell->register_suite<TestSuite_UnitParser>("X-sB01");
 
 	// If we got command-line arguments.
 	if(argc > 1)

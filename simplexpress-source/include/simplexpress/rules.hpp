@@ -1,7 +1,7 @@
 /** Rules [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 17 November 2020
+  * Last Updated: 18 November 2020
   * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Graham Mix
   */
 
@@ -51,9 +51,8 @@
 
 using std::vector;
 
-/*The Rule class specifies what each rule we want is suppose to do. As the rules
- * expand or change it is easy to go in and change one rule or add one without 
- * having to change much code at all 
+/**The Rule class specifies what each rule we want is suppose to do. As the rules
+ * expand or change it is easy to go in and change or add one rule at a time.
  */
 class Rule
 {
@@ -69,81 +68,82 @@ public:
 	static LetterCase to_letter_case(onechar);
 
 	Rule() = default;
-	/*Below are all the rules for each specifier. Theses are called from
-	Unit::rule_choice based off what the user enters for a model in a switch statement*/
+	/**Below are all the rules for each specifier. These are called from other
+	 * functions and classes, based off the user entered model. */
 
 	/**Specifier for alphanumeric.
-	\param pass in a onechar so it know what to search for
-	\param optional bool if case must be lower
-	\param optional bool if case must be upper*/
+	 * \param ch onechar to check for a match
+	 * \param letterCase LetterCase (optional) to check for upper or lower */
 	bool static rule_a(onechar, LetterCase = LetterCase::Any);
 
-	/** Specifier for Classification. Will be able to run different
-	language supports through unicode. Will be implemented later*/
+	/**Specifier for Classification. Will be able to run different
+	 * language supports through unicode. Will be implemented later */
 	bool static rule_c();
 
-	/**Specifier for a digit. For now only takes 0-9 as possible digits
-	will expand later to include hex and larger numbers.
-	\param Pass in a onechar so it knows what it is searching for
-	\param Required int to check if truly number*/
+	/**Specifier for a digit. Matches 0-9 as possible digits.
+	 * Can expand later to include hex and larger numbers.
+	 * \param ch onechar to check for a match */
 	bool static rule_d(onechar);
 
+	/**Specifier for digits outside of base 10.
+	 * // NOT IMPLEMENTED //
+	 * \param ch onechar to check for a match 
+	 * \param radix int for base system being used */
+	bool static rule_d(onechar, int);
+
 	/**Specifier for extended Latin.
-	\param pass in a onechar so it know what to search for
-	\param optional bool if case must be lower
-	\param optional bool if case must be upper*/
+	 * \param ch onechar to check for a match
+	 * \param letterCase LetterCase (optional) to check for upper or lower */
 	bool static rule_e(onechar, LetterCase = LetterCase::Any);
 
 	/**Specifier for Greek.
-	\param pass in onechar so knows what to look for
-	\param optional bool  if case must be lower
-	\param optional bool if case must be upper*/
+	 * \param ch onechar to check for a match
+	 * \param letterCase LetterCase (optional) to check for upper or lower */
 	bool static rule_g(onechar, LetterCase = LetterCase::Any);
 
-	/**Specifier for ipa
-	\param Pass in onechar so knows wha to search for*/
+	/**Specifier for IPA.
+	 * \param ch onechar to check for a match */
 	bool static rule_i(onechar);
 
-	/**Specifier for Latin
-	\param Pass in onechar so knows what to search for
-	\param optional bool if case must be upper
-	\param optional bool if case must be lower*/
+	/**Specifier for Latin.
+	 * \param ch onechar to check for a match
+	 * \param letterCase LetterCase (optional) to check for upper or lower */
 	bool static rule_l(onechar, LetterCase = LetterCase::Any);
 
 	/**Specifier for new line
-	\param pass in a onechar so knows what to look for*/
+	 * \param ch onechar to check for a match */
 	bool static rule_n(onechar);
 
-	/**Specifier for math operators
-	\param pass in onechar so knows what to search for*/
+	/**Specifier for math operators.
+	 * \param ch onechar to check for a match */
 	bool static rule_o(onechar);
 
-	/**Specifier for punctuation
-	\param pass in onechar so knows what to search for*/
+	/**Specifier for punctuation.
+	 * \param ch onechar to check for a match */
 	bool static rule_p(onechar);
 
-	/**Specifier for carriage return
-	\param pass in onechar so knows what to search for*/
+	/**Specifier for carriage return.
+	 * \param ch onechar to check for a match */
 	bool static rule_r(onechar);
 
-	/**Specifier for a literal space
-	\param pass in a onechar so knows what to look for*/
+	/**Specifier for a literal space.
+	 * \param ch onechar to check for a match */
 	bool static rule_s(onechar);
 
-	/**Specifier for tab
-	\param pass in a onechar so knows what to search for*/
+	/**Specifier for tab.
+	 * \param ch onechar to check for a match */
 	bool static rule_t(onechar);
 
-	/**Specifier for Unicode. This is full unicode support
-	\param pass in onechar so knows what to look for*/
+	/**Specifier for Unicode. This is full unicode support.
+	 * \param ch onechar to check for a match */
 	bool static rule_u(onechar);
 
-	/**Specifier for whitespace
-	\param pass in onechar so knows what to look for*/
+	/**Specifier for whitespace.
+	 * \param ch onechar to check for a match */
 	bool static rule_w(onechar);
 
-	/**Specifier for Any: fails newline and return
-	\param pass in onechar to check */
+	/**Specifier for Any: fails newline and return.
+	 * \param ch onechar to check for a match */
 	bool static rule_z(onechar);
 };
 #endif

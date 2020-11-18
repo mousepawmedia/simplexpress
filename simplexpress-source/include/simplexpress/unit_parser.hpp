@@ -1,7 +1,7 @@
-/** Unit parser[SIMPLEXpress]
+/** Unit parser [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 04 April 2020
+  * Last Updated: 06 November 2020
   * Author: Ben D. Lovy, Anna R. Dunster, Wilfrantz Dede
   */
 
@@ -57,27 +57,27 @@
 std::ostream& operator<<(std::ostream& s, const UnitType& r);
 
 /**Each parser returns a Parse Result.
- * To use this struct, define a parser function that returns a ParseResult
- * Call `ParseResult::parse(myString, myParser)` and use the resulting object to dispatch logic.
- * This will modify `input` in place on a match.
-*/
+ * To use this struct, define a parser function that returns a ParseResult.
+ * Call `ParseResult::parse(myString, myParser)` and use the resulting object 
+ * to dispatch logic. Returns match and remainder of string.
+ */
 class ParseResult
 {
 	/**Explicit constructor.
 	 * Consumers need to use either make_success or make_error
-	 * \param either true or false
-	 * \param If matched, the matched portion.  If not, an error message
-	 * \param the unparsed remainder
-	*/
+	 * \param tril: either true or false
+	 * \param onestring: the matched portion, or the error message if none
+	 * \param onestring: unparsed remainder
+	 */
 	ParseResult(tril, const onestring&, const onestring&);
 
 public:
 	/**This is the ultimate result of the parse operation*/
 	tril result = maybe;
 
-	/**For a success, this the successful match.
+	/**For a success, this the matched part of the input. 
 	 * For an Error, this is an error message. If empty, unknown.
-	*/
+	 */
 	onestring s = "";
 
 	/**This is the unparsed remainder, set in constructor.*/
@@ -86,28 +86,27 @@ public:
 	/**The default constructor returns an Error with an empty message*/
 	ParseResult();
 
-	   /**Construct a successful match result
-	 * \param The successfully matched portion
-	 * \param The unparsed remainder.  "" signals completion of the match.
-	*/
+	/**Construct a successful match result
+	 * \param onestring: the successfully matched portion
+	 * \param onestring: the unparsed remainder, or "" if complete
+	 */
 	static ParseResult make_success(const onestring&, const onestring&);
 
 	/**Construct an error result.
 	 * e.g.: ParseResult::make_error("Out of input!", "");
-	 * \param The error message
-	 * \param The unparsed remainder.  "" signals completion of the match.
-	*/
+	 * \param onestring: the error message
+	 * \param onestring: the unparsed remainder, or "" if complete
+	 */
 	static ParseResult make_error(const onestring&, const onestring&);
 
-	/**Perform a parse on an input
-	 * \param const reference to input string
-	 * \param Parser to use.  Must be a function from onestring to ParseResult
-	*/
+	/**Perform a parse on an input.
+	 * \param onestring: reference to input string
+	 * \param Parser to use. Must be a function from onestring to ParseResult
+	 */
 	template <typename F>
 	static ParseResult parse(const onestring&, F);
 
-	/**Get the string representation of the result
-	*/
+	/**Get the string representation of the result */
 	onestring to_string() const;
 
 	friend std::ostream& operator<<(std::ostream& s, const ParseResult& r);
@@ -118,8 +117,8 @@ public:
 class UnitParser
 {
 public:
-	/**Constructor stores passed onestring for parsing
-	 * \param onestring - unit to parse*/
+	/**Constructor stores passed onestring for parsing.
+	 * \param onestring: unit to parse*/
 	explicit UnitParser(onestring&);
 
 	// Specific characters
@@ -157,84 +156,67 @@ private:
 	inline static const onestring success_base = "Matched ";
 
 	/**Match a specific character at beginning of string
-	 * \param reserved character to check for
-	 * \param string to check against
-	*/
+	 * \param ReservedCharacter to check for
+	 * \param onestring to check */
 	static ParseResult character(ReservedCharacter, onestring);
 
-	/**Parser for '^'
-	 * \param string to check against
-	*/
+	/**Parser to check if initial character signals beginning of a unit.
+	 * \param onestring to check */
 	static ParseResult unit_marker(const onestring&);
 
-	/**Parser for '/'
-	 * \param string to check against
-	*/
-
+	/**Parser to check if initial character signals end of a unit.
+	 * \param onestring to check */
 	static ParseResult unit_end(const onestring&);
 
-	/**Parser for '!'
-	 * \param string to check against
-	*/
+	/**Parser to check if initial character signals negation specifier.
+	 * \param onestring to check */
 	static ParseResult negator(const onestring&);
 
-	/**Parser for '+'
-	 * \param string to check against
-	*/
+	/**Parser to check if initial character signals multiple specifier.
+	 * \param onestring to check */
 	static ParseResult multiple(const onestring&);
 
-	/**Parser for '?'
-	 * \param string to check against
-	*/
+	/**Parser to check if initial character signals optional specifier.
+	 * \param onestring to check */
 	static ParseResult optional(const onestring&);
 
-	/**Parser for '*'
-	 * \param string to check against
-	*/
+	/**Parser to check if initial character signals optional multiple specifier.
+	 * \param onestring to check */
 	static ParseResult optional_multiple(const onestring&);
 
-	/**Literal parser ensures string only contains a single onechar
-	 * \param string to check against
-	*/
+	/**Literal parser ensures onestring only contains a single onechar.
+	 * \param onestring to check */
 	static ParseResult literal(const onestring&);
 
-	/**Specifier parser ensures first character is a valid specifier
-	 * \param string to check against
-	*/
+	/**Specifier parser ensures first character is a valid specifier.
+	 * \param onestring to check */
 	static ParseResult specifier_parser(const onestring&);
 
 	/**Modifiers returns the modifiers matched, if any.
-	* Returns success if end of string found, and none matched
-	* \param string to check against
-	*/
+	 * Returns success if end of string found, and none matched.
+	 * \param onestring to check */
 	static ParseResult modifier(const onestring&);
 
 	/**Digit parser returns digits matched, if any.
-	* \param string to check against 
-	*/
+	 * \param onestring to check */
 	static ParseResult digit_parser(const onestring&);
 
 	/**Operator parser returns math operators matched, if any.
-	* \param string to check against
-	*/
+	 * \param onestring to check */
 	static ParseResult operator_parser(const onestring&);
 
 	/**Alphanumeric parser returns alphanumeric characters matched, if any.
-	* \param string to check against
-	*/
-
+	 * \param onestring to check */
 	static ParseResult alphanumeric_parser(const onestring&);
 
-	/**High-level parser for Unit parsing
-	* */
+	/**High-level parser for Unit parsing*/
 	static ParseResult unit(const onestring&);
 
-	/**High-level parser for Literal parsing
-	* */
+	/**High-level parser for Literal parsing*/
 
-	/**Safely chop head off a string in place - helper function
-	 * \param String to remove first character from
-	*/
+	/**Helper function to safely chop head off a onestring in place.
+	 * \param onestring to remove first character from
+	 */
 	static void chop(onestring&);
 
 	friend class TestCharacterParser;

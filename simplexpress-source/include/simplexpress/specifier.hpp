@@ -53,7 +53,8 @@
 #include "simplexpress/char_sets.hpp"
 #include "simplexpress/rules.hpp"
 
-/*The specifier class provides an interface over stored character sets*/
+/**The specifier class is used to match the specifier characters in unit 
+ * models and interface that information to other classes and functions. */
 class Specifier : protected char_sets
 {
 public:
@@ -99,11 +100,11 @@ public:
 
 	static int ch_to_hex(onechar);
 
-	static int str_to_hex(onestring, bool=false);
+	static int str_to_hex(onestring, bool = false);
 
 	static int ch_to_int(onechar);
 
-	static int str_to_int(onestring, bool=false);
+	static int str_to_int(onestring, bool = false);
 };
 
 #endif

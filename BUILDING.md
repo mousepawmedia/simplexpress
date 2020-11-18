@@ -49,11 +49,9 @@ symbolic link `tester` or `tester_debug` in the root of this repository.
 
 ## IDE Support
 
-SIMPLEXpress was written and built in CodeBlocks and VSCode. The CodeBlocks
-projects (`*.cbp`) in this repository are pre-configured to build using the
-Makefile/CMake build system. The configuration files in `.vscode/` are
-pre-configured to provide the best IDE experience, and allow building and
-debugging.
+SIMPLEXpress was written and built in VSCode. The configuration files in
+`.vscode/` are pre-configured to provide the best IDE experience, and allow
+building and debugging.
 
 ## Source Directories
 
