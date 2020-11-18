@@ -1,4 +1,4 @@
-#include  "simplexpress/rules.hpp"
+#include "simplexpress/rules.hpp"
 #include "simplexpress/specifier.hpp"
 
 Rule::LetterCase Rule::to_letter_case(onechar ch)
@@ -113,13 +113,6 @@ bool Rule::rule_l(onechar ch, Rule::LetterCase letterCase)
 			letrCase = LetterCase::Upper;
 			return Specifier::s_latin(ch, letrCase);
 	}
-}
-
-/*Math. This allows for math operations, will be implemented at a future time
-for now returns false.*/
-bool Rule::rule_m()
-{
-	return false;
 }
 
 //New Line

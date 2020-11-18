@@ -1,8 +1,8 @@
 /** Specifier [SIMPLEXpress]
   * Version: 0.1
   *
+  * Last Updated: 17 November 2020
   * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
-  * Last Updated: 04 April 2020
   */
 
 /* LICENSE
@@ -70,7 +70,6 @@ public:
 		// Greek = 'g', // FIXME: T1278
 		// IPA = 'i', // FIXME: T1278
 		LatinLetter = 'l',
-		Math = 'm',
 		Newline = 'n',
 		MathOperator = 'o',
 		Punctuation = 'p',

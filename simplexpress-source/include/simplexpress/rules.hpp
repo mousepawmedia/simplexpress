@@ -1,7 +1,7 @@
 /** Rules [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 04 April 2020
+  * Last Updated: 17 November 2020
   * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Graham Mix
   */
 
@@ -109,10 +109,6 @@ public:
 	\param optional bool if case must be upper
 	\param optional bool if case must be lower*/
 	bool static rule_l(onechar, LetterCase = LetterCase::Any);
-
-	/**Specifier for math. Will provide means to do any kind of math
-	from basic algebra to calculus. Will be implemented later.*/
-	bool static rule_m();
 
 	/**Specifier for new line
 	\param pass in a onechar so knows what to look for*/

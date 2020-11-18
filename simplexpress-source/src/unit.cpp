@@ -92,9 +92,6 @@ bool Unit::specifiers(onechar ch)
 		case Specifier::SpecifierType::LatinLetter:
 			return_var = Rule::rule_l(ch, sCase);
 			break;
-		case Specifier::SpecifierType::Math:
-			return_var = false;
-			break;
 		case Specifier::SpecifierType::Newline:
 			return_var = Rule::rule_n(ch);
 			break;

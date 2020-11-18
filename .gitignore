@@ -11,12 +11,14 @@
 **/obj
 **/lib
 **/libs
+**/build
+**/build_temp
 simplexpress/
 !simplexpress-source/include/simplexpress
 docs/build
+**/_build
 *.depend
 *.layout
-**/build_temp
 *.config
 !default.config
 codealike.json

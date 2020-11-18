@@ -4,7 +4,7 @@
   * Once other tests have been added to SIMPLExpress, this file can
   * be removed.
   *
-  * Last Updated: 07 March 2020
+  * Last Updated: 17 November 2020
   * Author(s): Ben D. Lovy, Jason C. McDonald, Anna R. Dunster
   */
 
@@ -627,8 +627,6 @@ public:
 
 	~TestMatchNot(){}
 };
-
-// TODO: m specifier (math)
 
 // TODO: o specifier (math operator)
 

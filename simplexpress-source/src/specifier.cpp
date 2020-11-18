@@ -18,10 +18,6 @@ Specifier::SpecifierType Specifier::to_specifier_type(onechar ch)
 	{
 		return SpecifierType::LatinLetter;
 	}
-	else if (ch == 'm')
-	{
-		return SpecifierType::Math;
-	}
 	else if (ch == 'n')
 	{
 		return SpecifierType::Newline;
