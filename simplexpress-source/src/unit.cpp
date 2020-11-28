@@ -78,7 +78,7 @@ bool Unit::specifiers(onechar ch)
 	}
 
 	/* Determine specifier */
-	Specifier::SpecifierType specifier = Specifier::to_specifier_type(model.at(model_index)); 
+	Specifier::SpecifierType specifier = Specifier::to_specifier_type(model.at(model_index));
 
 	/* Checks input character against selected specifier */
 	switch(specifier)
@@ -141,13 +141,13 @@ bool Unit::literal_sets(onechar ch)
 bool Unit::model_matches(onechar ch)
 {
 	bool return_var = false;
-	if (attr.type == UnitType::Specifier) 
+	if (attr.type == UnitType::Specifier)
 	{
 		// Run if this unit is a specifier.
 
 		// NOTE: This does not feel like the recommended way to switch on a onechar
 		// FIXME: handle error of not having something after it
-		// Should have a function to check for sets, return enum? 
+		// Should have a function to check for sets, return enum?
 		switch(model.at(1).c_str()[0])
 		{
 		case '<':
@@ -174,44 +174,66 @@ int Unit::check_model(onestring s)
 	// Negated handler
 	if (attr.negated)
 	{
-		if (model_matches(s.at(0)))
+		if (model_matches(s.at(0))){
 			return -1;
-		else
+		} else {
 			return 1;
+		}
+	}
+
+	// Optional and multiple
+	if (attr.optional && attr.multiple)
+	{
+		// If empty, pass
+		if (s.empty()){
+			return 0;
+		} else {
+			// Iterate until failure
+			int ret = 0;
+			for (size_t i = 0; i < s.length(); i++)
+			{
+				if (model_matches(s.at(i))){
+					ret += 1;
+				} else {
+					break;
+				}
+		}
+		return ret;
+		}
 	}
 
 	// Optional handler
-	if (attr.optional)
+	else if (attr.optional)
 	{
 		// If empty, pass
-		if (s.empty())
+		if (s.empty()){
 			return 0;
-		else
-		{
-		// Otherwise check for a match
-		if (model_matches(s.at(0)))
-			return 1;
-		else
-			return -1;
+		} else {
+			// Otherwise check for a match
+			if (model_matches(s.at(0))){
+				return 1;
+			} else {
+				return -1;
+			}
 		}
 	}
 
 	// Multiple handler
-	if (attr.multiple)
+	else if (attr.multiple)
 	{
 		// If no matches, return -1
-		if (!model_matches(s.at(0)))
-		{
+		if (!model_matches(s.at(0))) {
 			return -1;
 		}
 		// Otherwise, iterate until failure
 		int ret = 0;
 		for (size_t i = 0; i < s.length(); i++)
 		{
-			if (model_matches(s.at(i)))
+			if (model_matches(s.at(i))){
 				ret += 1;
-			else
+			} else {
 				break;
+			}
 		}
 		return ret;
 	}
@@ -219,10 +241,11 @@ int Unit::check_model(onestring s)
 	// Otherwise check single character
 	else
 	{
-		if (model_matches(s.at(0)))
+		if (model_matches(s.at(0))){
 			return 1;
-		else
+		} else {
 			return -1;
+		}
 	}
 	// If no matches, return -1
 	return -1;

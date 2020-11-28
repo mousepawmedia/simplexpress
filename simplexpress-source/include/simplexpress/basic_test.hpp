@@ -4,7 +4,7 @@
   * Once other tests have been added to SIMPLExpress, this file can
   * be removed.
   *
-  * Last Updated: 17 November 2020
+  * Last Updated: 23 November 2020
   * Author(s): Ben D. Lovy, Jason C. McDonald, Anna R. Dunster
   */
 
@@ -59,7 +59,7 @@
 class TestConstructASCIISimplex : public Test
 {
 	onestring model = "^l+/-^a+/-^d/.png";
-	onestring expected = 
+	onestring expected =
 		"[ Unit<specifier>::(l)@0, Unit<literal>::(-)@0, "
 		"Unit<specifier>::(a)@0, Unit<literal>::(-)@0, Unit<specifier>::(d)@0, "
 		"Unit<literal>::(.)@0, Unit<literal>::(p)@0, Unit<literal>::(n)@0, "
@@ -92,6 +92,7 @@ class TestMatchSingleUnitLiteral : public Test
 	onestring model = "-";
 	onestring input_pass = "-";
 	onestring input_fail = "+";
+	onestring input_fail_two = "--";
 public:
 	TestMatchSingleUnitLiteral() = default;
 
@@ -107,9 +108,9 @@ public:
 	bool run() override
 	{
 		Simplex simplex(model);
-		PL_ASSERT_FALSE(simplex.match(input_fail));
 		PL_ASSERT_TRUE(simplex.match(input_pass));
-		
+		PL_ASSERT_FALSE(simplex.match(input_fail));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
 		return true;
 	}
 
@@ -122,7 +123,8 @@ class TestMatchSingleUnitSpecifierAlphanumeric : public Test
 	onestring model = "^a/";
 	onestring input_pass_one = "h";
 	onestring input_pass_two = "5";
-	onestring input_fail = "^";
+	onestring input_fail_one = "^";
+	onestring input_fail_two = "h5";
 public:
 	TestMatchSingleUnitSpecifierAlphanumeric() = default;
 
@@ -141,7 +143,8 @@ public:
 		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
-		PL_ASSERT_FALSE(simplex.match(input_fail));
+		PL_ASSERT_FALSE(simplex.match(input_fail_one));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
 		return true;
 	}
 
@@ -169,7 +172,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
@@ -199,7 +202,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
@@ -228,7 +231,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
@@ -242,7 +245,9 @@ class TestMatchSingleUnitSpecifierPunctuation : public Test
 {
 	onestring model = "^p/";
 	onestring input_pass = ".";
+	onestring input_pass_two = "!";
 	onestring input_fail = "5";
+	onestring input_fail_two = "*";
 public:
 	TestMatchSingleUnitSpecifierPunctuation() = default;
 
@@ -258,9 +263,11 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
 		return true;
 	}
 
@@ -288,7 +295,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
@@ -318,7 +325,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
@@ -348,7 +355,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		return true;
@@ -380,7 +387,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_TRUE(simplex.match(input_pass_three));
@@ -397,6 +404,7 @@ class TestMatchMultiUnitLiterals : public Test
 	onestring model = "hi";
 	onestring input_pass = "hi";
 	onestring input_fail = "5j";
+	onestring input_fail_two = "hi34";
 public:
 	TestMatchMultiUnitLiterals() = default;
 
@@ -412,9 +420,10 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
 		return true;
 	}
 
@@ -444,7 +453,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail_one));
@@ -463,6 +472,7 @@ class TestMatchMultiUnitSpecifiers : public Test
 	onestring input_pass_two = "9i";
 	onestring input_fail_one = "ai";
 	onestring input_fail_two = "32";
+	onestring input_fail_three = "3a7";
 public:
 	TestMatchMultiUnitSpecifiers() = default;
 
@@ -477,7 +487,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail_one));
@@ -492,9 +502,10 @@ public:
 class TestMatchSpecifierMultiplier : public Test
 {
 	onestring model = "^d+/";
-	onestring input_pass_one = "3g";
+	onestring input_pass_one = "3";
 	onestring input_pass_two = "65";
 	onestring input_fail = "g";
+	onestring input_fail_two = "65abc";
 public:
 	TestMatchSpecifierMultiplier() = default;
 
@@ -514,6 +525,7 @@ public:
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
 		return true;
 	}
 
@@ -542,7 +554,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
@@ -557,8 +569,10 @@ class TestMatchSpecifierOptionalMultiple : public Test
 {
 	onestring model = "x^d*/";
 	onestring input_pass_one = "x";
-	onestring input_pass_two = "x55";
+	onestring input_pass_two = "x5";
+	onestring input_pass_three = "x12";
 	onestring input_fail = "xd";
+	onestring input_fail_two = "x45c";
 public:
 	TestMatchSpecifierOptionalMultiple() = default;
 
@@ -574,10 +588,12 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_TRUE(simplex.match(input_pass_three));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
 		return true;
 	}
 
@@ -590,7 +606,7 @@ class TestMatchAny : public Test
 	onestring model = "^./";
 	onestring input_pass_one = "^";
 	onestring input_pass_two = "6";
-	onestring input_fail = "\n";
+	onestring input_fail = "";
 public:
 	TestMatchAny() = default;
 
@@ -605,7 +621,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
@@ -636,7 +652,7 @@ public:
 	}
 	bool run() override
 	{
-		Simplex simplex = Simplex(model);
+		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
@@ -657,6 +673,45 @@ public:
 // TODO: Line beginning/end
 
 // TODO: Number or Range
+
+// X-tB0050
+class TestStaticMatch : public Test
+{
+	onestring model = "^d/";
+	onestring input_pass = "5";
+	onestring input_fail = "d";
+	onestring input_fail2 = "12345";
+public:
+	TestStaticMatch() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Static Match";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Test success of the Static Match Functions";
+	}
+	bool run() override
+	{
+		// Test using onestring variables
+		PL_ASSERT_TRUE(Simplex::match(input_pass, model));
+		PL_ASSERT_FALSE(Simplex::match(input_fail, model));
+		PL_ASSERT_FALSE(Simplex::match(input_fail, model));
+		// Test using string literals
+		PL_ASSERT_TRUE(Simplex::match("5", model));
+		PL_ASSERT_FALSE(Simplex::match("d", model));
+		PL_ASSERT_TRUE(Simplex::match(input_pass, "^d/"));
+		PL_ASSERT_TRUE(Simplex::match("5", "^d/"));
+		return true;
+	}
+
+	~TestStaticMatch(){}
+};
+
+// X-tB0051
+// more complicated multi unit tests
 
 class TestSuite_Basic : public TestSuite
 {

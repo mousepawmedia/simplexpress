@@ -13,13 +13,13 @@
 
     "[c]": {
         "editor.detectIndentation": false,
-        "editor.insertSpaces": true,
+        "editor.insertSpaces": false,
         "editor.tabSize": 4,
     },
 
     "[cpp]": {
         "editor.detectIndentation": false,
-        "editor.insertSpaces": true,
+        "editor.insertSpaces": false,
         "editor.tabSize": 4,
     },
 
@@ -90,5 +90,5 @@
     "restructuredtext.builtDocumentationPath": "${workspaceRoot}/docs/build/html",
     "C_Cpp.intelliSenseEngineFallback": "Enabled",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
-    "restructuredtext.workspaceRoot": "${workspaceRoot}"
+    "restructuredtext.workspaceRoot": "${workspaceRoot}",
 }

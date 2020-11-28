@@ -1,7 +1,7 @@
 /** Unit [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 06 November 2020
+  * Last Updated: 23 November 2020
   * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
   */
 
@@ -104,16 +104,16 @@ public:
 	UnitAttributes& operator=(const UnitAttributes&);
 };
 
-/**The Unit class is where we check against the model. Depending on what is 
- * put in to check against, the model determines what function is called. It is 
+/**The Unit class is where we check against the model. Depending on what is
+ * put in to check against, the model determines what function is called. It is
  * possible to have all types within one model.*/
 class Unit
 {
-protected:
-	UnitAttributes attr;
 public:
-	/**Used for the purpose of parsing through the model. Is set in 
-	 * constructor. Includes an identifier if present, followed by a case 
+	UnitAttributes attr;
+
+	/**Used for the purpose of parsing through the model. Is set in
+	 * constructor. Includes an identifier if present, followed by a case
 	 * if present. */
 	onestring model;
 
@@ -127,22 +127,22 @@ public:
 	 * \param onechar that is being checked */
 	bool model_matches(onechar);
 
-	/**Checks matcher and current onechar against specifier list, returns true 
+	/**Checks matcher and current onechar against specifier list, returns true
 	 * if match exists
 	 * \param onechar: the actual unicode to check against the specifiers.*/
 	bool specifiers(onechar);
 
-	/**Simplex set calls specifiers func, but returns true on the first 
+	/**Simplex set calls specifiers func, but returns true on the first
 	 * specifier found to be true within the set.
 	 * \param onechar: the unicode we are checking in the set.*/
 	bool sets(onechar ch);
 
-	/**Literal sets, Input against the model has to match exactly what is 
+	/**Literal sets, Input against the model has to match exactly what is
 	 * inside the literal set.
 	 * \param onestring: the onestring we are checking for a literal match */
 	bool literal_sets(onechar ch);
 
-	/**Literals, Everything entered outside a unit. These are taken as they 
+	/**Literals, Everything entered outside a unit. These are taken as they
 	 * are and what user is checking against them has to match literal exactly.
 	 * \param onechar that we are checking for a literal match exactly.*/
 	bool literals(onechar ch);

@@ -1,8 +1,8 @@
 /** Simplex [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 18 November 2020
-  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Wilfrantz Dede 
+  * Last Updated: 23 November 2020
+  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Wilfrantz Dede
   */
 
 /* LICENSE
@@ -48,6 +48,7 @@
 #include <string>
 #include <vector>
 
+#include "pawlib/flex_array.hpp"
 #include "pawlib/onechar.hpp"
 #include "pawlib/onestring.hpp"
 
@@ -55,9 +56,9 @@
 #include "simplexpress/unit_parser.hpp"
 
 
-/**The simplex class is the overall model of Simplexpress. A simplex contains 
- * a vector (for now) of Units. Everything entered outside a Unit is taken as a 
- * literal and must be matched exactly.*/
+/**The simplex class is the overall model of Simplexpress. A simplex contains an
+ * array of Units. Everything entered outside a Unit is taken as a literal and
+ * must be matched exactly.*/
 class Simplex
 {
 	/**Parser for a whole simplex - consists of zero or more Units*/
@@ -65,12 +66,12 @@ class Simplex
 
 protected:
 	/**The model itself, an array of Unit objects.*/
-	std::vector<Unit*> model;
+	FlexArray<Unit*> model;
 
 	/**To keep track of where we are in the model.*/
 	unsigned int model_index = 0;
 
-	/**Enumeration to roughly determine how we are interpreting as we 
+	/**Enumeration to roughly determine how we are interpreting as we
 	 * parse through the model.*/
 	enum parse_status
 	{
@@ -80,31 +81,52 @@ protected:
 		SPACE_CONVERT = 3
 	};
 
-	/**Used to keep track of whether we are in a unit or not. If we encounter 
-	 * a `^` then we add 1 and if we encounter a `/` then we subtract 1. If 
-	 * we try to go below 0 then an error is thrown as there is nothing 
+	/**Used to keep track of whether we are in a unit or not. If we encounter
+	 * a `^` then we add 1 and if we encounter a `/` then we subtract 1. If
+	 * we try to go below 0 then an error is thrown as there is nothing
 	 * to escape.*/
 	uint16_t unit_counter = 0;
 
-	/**Parses through the user defined model.
+	/**Parses through the user defined model to generate Unit array.
 	 * Uses enumeration to pull out each type of model we can have.
-	 * \param user_model onestring user definition of model*/
-	void parse_model(const onestring&);
+	 * \param user_model onestring user definition of model
+	 * \param model_array array to contain the Units.*/
+	void static parse_model(const onestring&, FlexArray<Unit*>&);
 
-	/**Moves to the next unit or literal in the model.*/
-	bool next();
+	/**Checks whether there are additional units in the model.
+	 * \param model_index int the current index
+	 * \param model_array the Unit array*/
+	bool static next(unsigned int&, FlexArray<Unit*>&);
 
 public:
-	/**Constructor, When a Simplex is created, parse_input is called to parse 
-	 * through the user defined model. Then it will call match to check 
+	/**Constructor, When a Simplex is created, parse_input is called to parse
+	 * through the user defined model. Then it will call match to check
 	 * everything against the model.
 	 * \param user_model onestring user definition of model*/
 	explicit Simplex(const onestring&);
 
-	/**Takes the user defined model and matches user input to parse against 
+	/**Takes the user defined model and matches user input to parse against
 	 * the model.
 	 * \param model_check onestring user input to check*/
-	bool match(onestring);
+	bool match(onestring&);
+
+	/**Static version to use with an input model rather than repeat use object.
+	 * \param model_check onestring user input to check
+	 * \param input_model onestring model to check against*/
+	bool static match(onestring&, const onestring&);
+
+	/**Static match function that actually does the work using variables passed
+	 * from other versions of match
+	 * \param model_check onestring user input to check
+	 * \param model_array array of Units that is the model to check*/
+	bool static match(onestring&, FlexArray<Unit*>&);
+
+	/** Static match conversion from string literal
+	 * \param model_check user input to check
+	 * \param input_model model to check against*/
+	bool static match(const char*, const onestring&);
+	bool static match(onestring&, const char*);
+	bool static match(const char*, const char*);
 
 	/**Convert to string for testing*/
 	onestring to_string() const;
