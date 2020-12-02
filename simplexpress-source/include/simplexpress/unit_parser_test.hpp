@@ -1,7 +1,7 @@
 /** Unit Parser Tests (SIMPLExpress)
   * Version: 0.1
   *
-  * Last Updated: 06 November 2020
+  * Last Updated: 02 Decemeber 2020
   * Author(s): Ben D. Lovy, Anna R. Dunster, Wilfrantz Dede
   */
 
@@ -61,11 +61,11 @@ class TestCharacterParser : public Test
 	onestring fail = "a";
 	onestring fail_two = "";
 	onestring expected_pass = ParseResult::make_success('!', "a").to_string();
-	onestring expected_pass_two = 
+	onestring expected_pass_two =
 		ParseResult::make_success('^', "").to_string();
-	onestring expected_fail = 
+	onestring expected_fail =
 		ParseResult::make_error("Expecting !, got a", "a").to_string();
-	onestring expected_fail_two = 
+	onestring expected_fail_two =
 		ParseResult::make_error("Out of input", "").to_string();
 public:
 	TestCharacterParser() = default;
@@ -106,9 +106,9 @@ class TestLiteralParser : public Test
 	onestring pass_two = "a1";
 	onestring fail = "";
 	onestring expected_pass = ParseResult::make_success('a', "").to_string();
-	onestring expected_pass_two = 
+	onestring expected_pass_two =
 		ParseResult::make_success('a', "1").to_string();
-	onestring expected_fail = 
+	onestring expected_fail =
 		ParseResult::make_error("Out of input!", "").to_string();
 public:
 	TestLiteralParser() = default;
@@ -147,15 +147,15 @@ class TestSpecifierParser : public Test
 	onestring pass_three = "sh";
 	onestring fail = "q";
 	onestring fail_two = "";
-	onestring expected_pass_one = 
+	onestring expected_pass_one =
 		ParseResult::make_success('c', "").to_string();
-	onestring expected_pass_two = 
+	onestring expected_pass_two =
 		ParseResult::make_success("lu", "x").to_string();
-	onestring expected_pass_three = 
+	onestring expected_pass_three =
 		ParseResult::make_success("s", "h").to_string();
-	onestring expected_fail = 
+	onestring expected_fail =
 		ParseResult::make_error("Unknown specifier!", "q").to_string();
-	onestring expected_fail_two = 
+	onestring expected_fail_two =
 		ParseResult::make_error("Out of input", "").to_string();
 public:
 	TestSpecifierParser() = default;
@@ -203,17 +203,17 @@ class TestModifierParser : public Test
 	// Checking for end of unit isn't this parser's job
 	onestring pass_five = "+*";
 	onestring fail = "a";
-	onestring expected_pass_one = 
+	onestring expected_pass_one =
 		ParseResult::make_success("", "").to_string();
-	onestring expected_pass_two = 
+	onestring expected_pass_two =
 		ParseResult::make_success('*', "/").to_string();
-	onestring expected_pass_three = 
+	onestring expected_pass_three =
 		ParseResult::make_success('+', "/").to_string();
-	onestring expected_pass_four = 
+	onestring expected_pass_four =
 		ParseResult::make_success('?', "/").to_string();
-	onestring expected_pass_five = 
+	onestring expected_pass_five =
 		ParseResult::make_success('+', "*").to_string();
-	onestring expected_fail = 
+	onestring expected_fail =
 		ParseResult::make_error("Invalid modifier: a", "a").to_string();
 public:
 	TestModifierParser() = default;
@@ -262,18 +262,18 @@ class TestVariousUnits : public Test
 	onestring pass_four = "^d*/";
 	onestring pass_five = "!q";
 	onestring pass_six = "^!d/";
-	Unit expected_pass = 
-		Unit(UnitAttributes(false, false, false, 'a', UnitType::Literal));
-	Unit expected_pass_two = 
-		Unit(UnitAttributes(false, false, false, 'l', UnitType::Specifier));
-	Unit expected_pass_three = 
-		Unit(UnitAttributes(false, true, false, 'a', UnitType::Specifier));
-	Unit expected_pass_four = 
-		Unit(UnitAttributes(true, true, false, 'd', UnitType::Specifier));
-	Unit expected_pass_five = 
-		Unit(UnitAttributes(false, false, true, 'q', UnitType::Literal));
-	Unit expected_pass_six = 
-		Unit(UnitAttributes(false, false, true, 'd', UnitType::Specifier));
+	Unit expected_pass =
+		Unit(UnitAttributes(false, false, false, false, 'a', UnitType::Literal));
+	Unit expected_pass_two =
+		Unit(UnitAttributes(false, false, false, false, 'l', UnitType::Specifier));
+	Unit expected_pass_three =
+		Unit(UnitAttributes(false, true, false, false, 'a', UnitType::Specifier));
+	Unit expected_pass_four =
+		Unit(UnitAttributes(true, true, false, false, 'd', UnitType::Specifier));
+	Unit expected_pass_five =
+		Unit(UnitAttributes(false, false, false, true, 'q', UnitType::Literal));
+	Unit expected_pass_six =
+		Unit(UnitAttributes(false, false, false, true, 'd', UnitType::Specifier));
 public:
 	TestVariousUnits() = default;
 
@@ -320,11 +320,11 @@ class TestDigitsParser : public Test
 	onestring fail = "a";
 	onestring fail_two = "";
 	onestring expected_pass = ParseResult::make_success("1", "").to_string();
-	onestring expected_pass_two = 
+	onestring expected_pass_two =
 		ParseResult::make_success("1234", "a").to_string();
-	onestring expected_fail = 
+	onestring expected_fail =
 		ParseResult::make_error("No digits found", "a").to_string();
-	onestring expected_fail_two = 
+	onestring expected_fail_two =
 		ParseResult::make_error("Out of input", "").to_string();
 public:
 	TestDigitsParser() = default;
@@ -342,7 +342,7 @@ public:
 	{
 		// Recognize a single digit
 		PL_ASSERT_EQUAL(
-			UnitParser::digit_parser(pass).to_string(), 
+			UnitParser::digit_parser(pass).to_string(),
 			expected_pass);
 		// Recognize several digits followed by not a digit
 		PL_ASSERT_EQUAL(
@@ -370,11 +370,11 @@ class TestOperatorParser : public Test
 	onestring fail = "g";
 	onestring fail_two = "";
 	onestring expected_pass = ParseResult::make_success("+", "").to_string();
-	onestring expected_pass_two = 
+	onestring expected_pass_two =
 		ParseResult::make_success("^", " stuff").to_string();
-	onestring expected_fail = 
+	onestring expected_fail =
 		ParseResult::make_error("Not a math operator", "g").to_string();
-	onestring expected_fail_two = 
+	onestring expected_fail_two =
 		ParseResult::make_error("Out of input", "").to_string();
 public:
 	TestOperatorParser() = default;
@@ -423,15 +423,15 @@ class TestAlphanumericParser : public Test
 	onestring fail = "#$%";
 	onestring fail_two = "";
 	onestring expected_pass = ParseResult::make_success("abc", "").to_string();
-	onestring expected_pass_two = 
+	onestring expected_pass_two =
 		ParseResult::make_success("123", "").to_string();
-	onestring expected_pass_three = 
+	onestring expected_pass_three =
 		ParseResult::make_success("abc123", "").to_string();
-	onestring expected_pass_four = 
+	onestring expected_pass_four =
 		ParseResult::make_success("abc", "@#$").to_string();
-	onestring expected_fail = 
+	onestring expected_fail =
 		ParseResult::make_error("No alphanumeric characters found", "#$%").to_string();
-	onestring expected_fail_two = 
+	onestring expected_fail_two =
 		ParseResult::make_error("Out of input", "").to_string();
 public:
 	TestAlphanumericParser() = default;

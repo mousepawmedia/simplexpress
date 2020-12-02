@@ -21,5 +21,6 @@ void TestSuite_Basic::load_tests()
 	register_test("X-tB0016", new TestMatchSpecifierOptionalMultiple());
 	register_test("X-tB0017", new TestMatchAny());
 	register_test("X-tB0018", new TestMatchNot());
+	register_test("X-tB0019", new TestMatchWithSnag());
 	register_test("X-tB0050", new TestStaticMatch());
 }

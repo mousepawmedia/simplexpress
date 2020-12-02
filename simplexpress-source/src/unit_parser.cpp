@@ -78,13 +78,22 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 	size_t ret_len = 0;
 
 	onestring remainder = s;
-	// Before entering the loop, check if the whole thing is a unit or literal
+	/** Before entering the loop, check if the whole thing is a literal,
+	/ * unit or snag unit */
 	ParseResult check_unit_open = ParseResult::parse(remainder, unit_marker);
-	remainder = check_unit_open.remainder;
+	ParseResult check_unit_snag = ParseResult::parse(remainder, unit_snag);
 
-	if (check_unit_open.result)
+	bool unit = (check_unit_open.result || check_unit_snag.result);
+	if (check_unit_open.result) {
+		remainder = check_unit_open.remainder;
+	} else if (check_unit_snag.result) {
+		remainder = check_unit_snag.remainder;
+		ret.snag = true;
+	}
+
+	if (unit)
 	{
-		// we found a unit - KEEP THIS HERE
+		// We found a unit
 		ret.type = UnitType::Specifier;
 		// Add the open unit character to the matched count
 		++ret_len;
@@ -257,20 +266,23 @@ ParseResult UnitParser::character(ReservedCharacter rc, onestring in)
 
 UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
 {
-	if (ch == '+')
+	if (ch == '+'){
 		return ReservedCharacter::Multiple;
-	else if (ch == '!')
+	} else if (ch == '!'){
 		return ReservedCharacter::Negator;
-	else if (ch == '?')
+	} else if (ch == '?'){
 		return ReservedCharacter::Optional;
-	else if (ch == '*')
+	} else if (ch == '*'){
 		return ReservedCharacter::OptionalMultiple;
-	else if (ch == '^')
+	} else if (ch == '^'){
 		return ReservedCharacter::UnitMarker;
-	else if (ch == '/')
+	} else if (ch == '~'){
+		return ReservedCharacter::UnitSnag;
+	} else if (ch == '/'){
 		return ReservedCharacter::UnitEnd;
-	else
+	} else{
 		return ReservedCharacter::Unrecognized;
+	}
 }
 
 // Open unit
@@ -278,6 +290,13 @@ UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
 ParseResult UnitParser::unit_marker(const onestring& in)
 {
 	return character(ReservedCharacter::UnitMarker, in);
+}
+
+// Open snag unit
+
+ParseResult UnitParser::unit_snag(const onestring& in)
+{
+	return character(ReservedCharacter::UnitSnag, in);
 }
 
 // Close unit
@@ -426,9 +445,9 @@ ParseResult UnitParser::digit_parser(const onestring& in)
 	onestring lhs = "";
 
 	/** Check characters one at a time until one is not a digit. If it's a
-	 * digit, we store it in the left side as a result and remove 
-	 * it from the remaining input to check. If it's not a digit, and we 
-	 * have a result, then we return the digits, and whatever after that 
+	 * digit, we store it in the left side as a result and remove
+	 * it from the remaining input to check. If it's not a digit, and we
+	 * have a result, then we return the digits, and whatever after that
 	 * isn't a digit. If it's not a digit, and nothing has been stored as a
 	 * result, then no digits were found and parsing digits failed.
 	 */
@@ -452,7 +471,7 @@ ParseResult UnitParser::digit_parser(const onestring& in)
 
 }
 
-// Operators 
+// Operators
 
 ParseResult UnitParser::operator_parser(const onestring& in)
 {
@@ -466,7 +485,7 @@ ParseResult UnitParser::operator_parser(const onestring& in)
 	onestring lhs = "";
 
 	// Check if first character of input is a math operator, and return success
-	// with the parsed operator and remainder. Otherwise, return error. 
+	// with the parsed operator and remainder. Otherwise, return error.
 
 	if(Rule::rule_o(remainder.at(0))) {
 		lhs.append(remainder.at(0));
@@ -492,12 +511,12 @@ ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 	onestring remainder = in;
 	onestring lhs = "";
 
-	/** Check characters one at a time until one is not an alphanumeric 
-	 * character. If it is, we store it in the left side as a result and remove 
-	 * it from the remaining input to check. If it's not, and we have a result, 
-	 * then we return the matched characters, and whatever after that that isn't 
-	 * matched. If it's not an alphanumeric character, and nothing has been 
-	 * stored as a result, then no matches were found and parsing alphanumeric 
+	/** Check characters one at a time until one is not an alphanumeric
+	 * character. If it is, we store it in the left side as a result and remove
+	 * it from the remaining input to check. If it's not, and we have a result,
+	 * then we return the matched characters, and whatever after that that isn't
+	 * matched. If it's not an alphanumeric character, and nothing has been
+	 * stored as a result, then no matches were found and parsing alphanumeric
 	 * characters failed.
 	 */
 

@@ -4,7 +4,7 @@
   * Once other tests have been added to SIMPLExpress, this file can
   * be removed.
   *
-  * Last Updated: 23 November 2020
+  * Last Updated: 02 Decemeber 2020
   * Author(s): Ben D. Lovy, Jason C. McDonald, Anna R. Dunster
   */
 
@@ -58,12 +58,18 @@
 // X-tB0000
 class TestConstructASCIISimplex : public Test
 {
-	onestring model = "^l+/-^a+/-^d/.png";
+	onestring model = "~l+/-^a+/-^d/.png";
 	onestring expected =
-		"[ Unit<specifier>::(l)@0, Unit<literal>::(-)@0, "
-		"Unit<specifier>::(a)@0, Unit<literal>::(-)@0, Unit<specifier>::(d)@0, "
-		"Unit<literal>::(.)@0, Unit<literal>::(p)@0, Unit<literal>::(n)@0, "
-		"Unit<literal>::(g)@0 ]";
+		"[ Unit<specifier>::(l)::(+~), "
+		"Unit<literal>::(-)::(), "
+		"Unit<specifier>::(a)::(+), "
+		"Unit<literal>::(-)::(), "
+		"Unit<specifier>::(d)::(), "
+		"Unit<literal>::(.)::(), "
+		"Unit<literal>::(p)::(), "
+		"Unit<literal>::(n)::(), "
+		"Unit<literal>::(g)::() ]";
+
 public:
 	TestConstructASCIISimplex() = default;
 
@@ -424,6 +430,8 @@ public:
 		PL_ASSERT_TRUE(simplex.match(input_pass));
 		PL_ASSERT_FALSE(simplex.match(input_fail));
 		PL_ASSERT_FALSE(simplex.match(input_fail_two));
+		PL_ASSERT_TRUE(simplex.match("HI", "HI"));
+		PL_ASSERT_FALSE(simplex.match("HI", "hi"));
 		return true;
 	}
 
@@ -660,6 +668,32 @@ public:
 	}
 
 	~TestMatchNot(){}
+};
+
+// X-tB0019
+class TestMatchWithSnag : public Test
+{
+public:
+	TestMatchWithSnag() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Match Using Snag Units";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Match various inputs using snag marker instead of unit marker";
+	}
+
+	bool run() override
+	{
+		PL_ASSERT_TRUE(Simplex::match("1", "~d/"));
+		PL_ASSERT_FALSE(Simplex::match("seven", "~d/"));
+		return true;
+	}
+
+	~TestMatchWithSnag(){}
 };
 
 // TODO: o specifier (math operator)

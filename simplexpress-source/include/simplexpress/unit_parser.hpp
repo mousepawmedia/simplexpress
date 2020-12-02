@@ -1,7 +1,7 @@
 /** Unit parser [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 06 November 2020
+  * Last Updated: 02 Decemeber 2020
   * Author: Ben D. Lovy, Anna R. Dunster, Wilfrantz Dede
   */
 
@@ -58,7 +58,7 @@ std::ostream& operator<<(std::ostream& s, const UnitType& r);
 
 /**Each parser returns a Parse Result.
  * To use this struct, define a parser function that returns a ParseResult.
- * Call `ParseResult::parse(myString, myParser)` and use the resulting object 
+ * Call `ParseResult::parse(myString, myParser)` and use the resulting object
  * to dispatch logic. Returns match and remainder of string.
  */
 class ParseResult
@@ -75,7 +75,7 @@ public:
 	/**This is the ultimate result of the parse operation*/
 	tril result = maybe;
 
-	/**For a success, this the matched part of the input. 
+	/**For a success, this the matched part of the input.
 	 * For an Error, this is an error message. If empty, unknown.
 	 */
 	onestring s = "";
@@ -129,6 +129,7 @@ public:
 		Optional = '?',
 		OptionalMultiple = '*',
 		UnitMarker = '^',
+		UnitSnag = '~',
 		UnitEnd = '/',
 		Unrecognized
 	};
@@ -156,58 +157,62 @@ private:
 	inline static const onestring success_base = "Matched ";
 
 	/**Match a specific character at beginning of string
-	 * \param ReservedCharacter to check for
-	 * \param onestring to check */
-	static ParseResult character(ReservedCharacter, onestring);
+	 * \param rc ReservedCharacter to check for
+	 * \param in onestring to check */
+	static ParseResult character(ReservedCharacter rc, onestring in);
 
 	/**Parser to check if initial character signals beginning of a unit.
-	 * \param onestring to check */
-	static ParseResult unit_marker(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult unit_marker(const onestring& in);
+
+	/**Parser to check if initial character signals beginning of a snag unit.
+	 * \param in onestring to check */
+	static ParseResult unit_snag(const onestring& in);
 
 	/**Parser to check if initial character signals end of a unit.
-	 * \param onestring to check */
-	static ParseResult unit_end(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult unit_end(const onestring& in);
 
 	/**Parser to check if initial character signals negation specifier.
-	 * \param onestring to check */
-	static ParseResult negator(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult negator(const onestring& in);
 
 	/**Parser to check if initial character signals multiple specifier.
-	 * \param onestring to check */
-	static ParseResult multiple(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult multiple(const onestring& in);
 
 	/**Parser to check if initial character signals optional specifier.
-	 * \param onestring to check */
-	static ParseResult optional(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult optional(const onestring& in);
 
 	/**Parser to check if initial character signals optional multiple specifier.
-	 * \param onestring to check */
-	static ParseResult optional_multiple(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult optional_multiple(const onestring& in);
 
 	/**Literal parser ensures onestring only contains a single onechar.
-	 * \param onestring to check */
-	static ParseResult literal(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult literal(const onestring& in);
 
 	/**Specifier parser ensures first character is a valid specifier.
-	 * \param onestring to check */
-	static ParseResult specifier_parser(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult specifier_parser(const onestring& in);
 
 	/**Modifiers returns the modifiers matched, if any.
 	 * Returns success if end of string found, and none matched.
-	 * \param onestring to check */
-	static ParseResult modifier(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult modifier(const onestring& in);
 
 	/**Digit parser returns digits matched, if any.
-	 * \param onestring to check */
-	static ParseResult digit_parser(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult digit_parser(const onestring& in);
 
 	/**Operator parser returns math operators matched, if any.
-	 * \param onestring to check */
-	static ParseResult operator_parser(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult operator_parser(const onestring& in);
 
 	/**Alphanumeric parser returns alphanumeric characters matched, if any.
-	 * \param onestring to check */
-	static ParseResult alphanumeric_parser(const onestring&);
+	 * \param in onestring to check */
+	static ParseResult alphanumeric_parser(const onestring& in);
 
 	/**High-level parser for Unit parsing*/
 	static ParseResult unit(const onestring&);

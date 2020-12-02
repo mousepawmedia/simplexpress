@@ -1,7 +1,7 @@
 /** Unit [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 23 November 2020
+  * Last Updated: 02 Decemeber 2020
   * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
   */
 
@@ -70,6 +70,9 @@ public:
 	bool optional;
 	bool multiple;
 
+	/** ~ for snag group*/
+	bool snag;
+
 	/**Is ! flag set*/
 	bool negated;
 
@@ -83,19 +86,22 @@ public:
 	UnitAttributes();
 
 	/**Full constructor
-	 * \param optional flag
-	 * \param multiple flag
-	 * \param negator flag
-	 * \param onechar for either the specifier or the literal
+	 * \param optional bool flag
+	 * \param multiple bool flag
+	 * \param snag bool flag
+	 * \param negator bool flag
+	 * \param match onechar for either the specifier or the literal
+	 * \param type UnitType
 	 */
-	UnitAttributes(bool, bool, bool, onechar, UnitType);
+	UnitAttributes(bool optional, bool multiple, bool snag, bool negator,
+				   onechar match, UnitType type);
 
 	/**Copy constructor
 	 * \param Struct to copy
 	 */
 	UnitAttributes(const UnitAttributes&);
 
-	/**Move constructor\
+	/**Move constructor
 	 * \param Struct to move
 	 */
 	UnitAttributes(UnitAttributes&&);

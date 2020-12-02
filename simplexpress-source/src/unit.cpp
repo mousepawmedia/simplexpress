@@ -7,22 +7,27 @@
 UnitAttributes::UnitAttributes()
 : optional(false),
   multiple(false),
+  snag(false),
   negated(false),
   matcher('\0'),
   type(UnitType::Literal)
 {}
 
-UnitAttributes::UnitAttributes(bool o, bool m, bool n, onechar match, UnitType t)
-: optional(o),
-  multiple(m),
-  negated(n),
+UnitAttributes::UnitAttributes(
+	bool optional, bool multiple, bool snag, bool negated,
+	onechar match, UnitType type)
+: optional(optional),
+  multiple(multiple),
+  snag(snag),
+  negated(negated),
   matcher(match),
-  type(t)
+  type(type)
 {}
 
 UnitAttributes::UnitAttributes(const UnitAttributes& attr)
 : optional(attr.optional),
   multiple(attr.multiple),
+  snag(attr.snag),
   negated(attr.negated),
   matcher(attr.matcher),
   type(attr.type)
@@ -31,18 +36,20 @@ UnitAttributes::UnitAttributes(const UnitAttributes& attr)
 UnitAttributes::UnitAttributes(UnitAttributes&& attr)
 : optional(attr.optional),
   multiple(attr.multiple),
+  snag(attr.snag),
   negated(attr.negated),
   matcher(attr.matcher),
   type(attr.type)
 {}
 
-UnitAttributes& UnitAttributes::operator=(const UnitAttributes& a)
+UnitAttributes& UnitAttributes::operator=(const UnitAttributes& attr)
 {
-	optional = a.optional;
-	multiple = a.multiple;
-	negated = a.negated;
-	matcher = a.matcher;
-	type = a.type;
+	optional = attr.optional;
+	multiple = attr.multiple;
+	snag = attr.snag;
+	negated = attr.negated;
+	matcher = attr.matcher;
+	type = attr.type;
 	return *this;
 }
 
@@ -258,8 +265,10 @@ onestring Unit::to_string() const
 	return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& s, const Unit& u)
+std::ostream& operator<<(std::ostream& s, const Unit& unit)
 {
-	s << "Unit<" << u.attr.type << ">::(" << u.attr.matcher << ")@"<< u.model_index;
+	s << "Unit<" << unit.attr.type << ">::(" << unit.attr.matcher << ")::("
+		<< (unit.attr.optional ? "?" : "") << (unit.attr.multiple ? "+" : "" )
+		<< (unit.attr.snag ? "~" : "") << (unit.attr.negated ? "!" : "") << ")";
 	return s;
 }
