@@ -1,9 +1,10 @@
 /** Simplex [SIMPLEXpress]
-  * Version: 0.1
-  *
-  * Last Updated: 23 November 2020
-  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Wilfrantz Dede
-  */
+ * Version: 0.1
+ *
+ * Authors: Wilfrantz Dede, Anna R. Dunster, Muhammad Adeel Hussain,
+ *          Ben D. Lovy, Jarek Thomas
+ *
+ */
 
 /* LICENSE
  * Copyright (c) 2016 MousePaw Media.
@@ -51,10 +52,8 @@
 #include "pawlib/flex_array.hpp"
 #include "pawlib/onechar.hpp"
 #include "pawlib/onestring.hpp"
-
 #include "simplexpress/unit.hpp"
 #include "simplexpress/unit_parser.hpp"
-
 
 /**The simplex class is the overall model of Simplexpress. A simplex contains an
  * array of Units. Everything entered outside a Unit is taken as a literal and
@@ -68,17 +67,13 @@ protected:
 	/**The model itself, an array of Unit objects.*/
 	FlexArray<Unit*> model;
 
-	/**To keep track of where we are in the model.*/
-	unsigned int model_index = 0;
-
 	/**Enumeration to roughly determine how we are interpreting as we
 	 * parse through the model.*/
-	enum parse_status
-	{
-		NORMAL = 0,
-		IN_UNIT = 1,
-		ESCAPED = 2,
-		SPACE_CONVERT = 3
+	enum class parse_status {
+		normal = 0,
+		in_unit = 1,
+		escaped = 2,
+		space_convert = 3
 	};
 
 	/**Used to keep track of whether we are in a unit or not. If we encounter
@@ -93,40 +88,65 @@ protected:
 	 * \param model_array array to contain the Units.*/
 	void static parse_model(const onestring&, FlexArray<Unit*>&);
 
-	/**Checks whether there are additional units in the model.
+	/**Checks whether there are additional Units in the model.
 	 * \param model_index int the current index
-	 * \param model_array the Unit array*/
-	bool static next(unsigned int&, FlexArray<Unit*>&);
+	 * \param model_array the Unit array
+	 * \return true if additional Units present, false if last Unit in model*/
+	bool static next(unsigned int& model_index,
+					 const FlexArray<Unit*>& model_array);
+
+	/**Checks if all additional Units in model are optional, in case no matches
+	 * are present for optional Units on the end of a model.
+	 * \param model_index int the current index
+	 * \param model_array the Unit array
+	 * \return false if any non-optional Units exist in remainder of model*/
+	bool static check_optional(unsigned int& model_index,
+							   const FlexArray<Unit*>& model_array);
 
 public:
 	/**Constructor, When a Simplex is created, parse_input is called to parse
 	 * through the user defined model. Then it will call match to check
 	 * everything against the model.
 	 * \param user_model onestring user definition of model*/
-	explicit Simplex(const onestring&);
+	explicit Simplex(const onestring& user_model);
 
 	/**Takes the user defined model and matches user input to parse against
 	 * the model.
-	 * \param model_check onestring user input to check*/
-	bool match(onestring&);
+	 * \param model_check onestring user input to check
+	 * \return true if input is an exact match for expression in internal model*/
+	bool match(onestring& model_check);
 
 	/**Static version to use with an input model rather than repeat use object.
 	 * \param model_check onestring user input to check
-	 * \param input_model onestring model to check against*/
-	bool static match(onestring&, const onestring&);
+	 * \param input_model onestring model to check against
+	 * \return true if input is an exact match for expression in input model*/
+	bool static match(onestring& model_check, const onestring& input_model);
 
-	/**Static match function that actually does the work using variables passed
-	 * from other versions of match
+	/**Internal static match function that actually does the work using
+	 * variables passed from other versions of match
 	 * \param model_check onestring user input to check
-	 * \param model_array array of Units that is the model to check*/
-	bool static match(onestring&, FlexArray<Unit*>&);
+	 * \param model_array array of Units that is the model to check
+	 * \return true if input is an exact match for expression in input model*/
+	bool static match(onestring& model_check, FlexArray<Unit*>& model_array);
 
-	/** Static match conversion from string literal
+	/** Static match conversion from various string literals
 	 * \param model_check user input to check
-	 * \param input_model model to check against*/
-	bool static match(const char*, const onestring&);
-	bool static match(onestring&, const char*);
-	bool static match(const char*, const char*);
+	 * \param input_model model to check against
+	 * \return true if input is an exact match for expression in input model*/
+	bool static match(const char* model_check, const onestring& input_model);
+	bool static match(onestring& model_check, const char* input_model);
+	bool static match(const char* model_check, const char* input_model);
+
+	/** Used by match() to not be too greedy
+	 * \param buffer onestring to digest
+	 * \param total_matched int of possible matches
+	 * \param starting_index int of starting index in model
+	 * \param model_array array of Units, the working model
+	 * \return number of matches to consume without invalidating later Units*/
+	int static generosity(const onestring buffer,
+						  const int total_matched,
+						  const int starting_index,
+						  const FlexArray<Unit*>& model_array);
 
 	/**Convert to string for testing*/
 	onestring to_string() const;

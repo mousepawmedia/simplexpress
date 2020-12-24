@@ -22,5 +22,7 @@ void TestSuite_Basic::load_tests()
 	register_test("X-tB0017", new TestMatchAny());
 	register_test("X-tB0018", new TestMatchNot());
 	register_test("X-tB0019", new TestMatchWithSnag());
+	register_test("X-tB0020", new TestNegativeMultiple());
 	register_test("X-tB0050", new TestStaticMatch());
+	register_test("X-tB0051", new TestGreedyLogic());
 }

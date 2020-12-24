@@ -1,8 +1,8 @@
 /** Unit [SIMPLEXpress]
   * Version: 0.1
   *
-  * Last Updated: 02 Decemeber 2020
-  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
+  * Author: Anna R. Dunster, Ben D. Lovy, Jarek Thomas
+  *
   */
 
 /* LICENSE
@@ -154,8 +154,10 @@ public:
 	bool literals(onechar ch);
 
 	/**Used by Simplex class to generate match boolean.
-	 * Checks and returns number of characters matched or -1.
-	 * \param onestring that we are checking against the model.*/
+	 * \param onestring that we are checking against the model.
+	 * \return number of characters that match the current Unit in the model,
+	 *         0 for no matches on an optional Unit, or -1 for no matches on a
+	 *         non-optional Unit*/
 	int check_model(onestring);
 
 	/**Convert to string for testing*/

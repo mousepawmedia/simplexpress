@@ -23,6 +23,12 @@
         "editor.tabSize": 4,
     },
 
+    "[restructuredtext]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+    },
+
     "files.associations": {
         "array": "cpp",
         "type_traits": "cpp",

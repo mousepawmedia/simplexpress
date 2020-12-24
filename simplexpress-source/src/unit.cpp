@@ -1,46 +1,38 @@
 #include "simplexpress/unit.hpp"
+
 #include "simplexpress/rules.hpp"
 #include "simplexpress/simplex.hpp"
 
 // UnitAttributes
 
 UnitAttributes::UnitAttributes()
-: optional(false),
-  multiple(false),
-  snag(false),
-  negated(false),
-  matcher('\0'),
+: optional(false), multiple(false), snag(false), negated(false), matcher('\0'),
   type(UnitType::Literal)
-{}
+{
+}
 
-UnitAttributes::UnitAttributes(
-	bool optional, bool multiple, bool snag, bool negated,
-	onechar match, UnitType type)
-: optional(optional),
-  multiple(multiple),
-  snag(snag),
-  negated(negated),
-  matcher(match),
-  type(type)
-{}
+UnitAttributes::UnitAttributes(bool optional,
+							   bool multiple,
+							   bool snag,
+							   bool negated,
+							   onechar match,
+							   UnitType type)
+: optional(optional), multiple(multiple), snag(snag), negated(negated),
+  matcher(match), type(type)
+{
+}
 
 UnitAttributes::UnitAttributes(const UnitAttributes& attr)
-: optional(attr.optional),
-  multiple(attr.multiple),
-  snag(attr.snag),
-  negated(attr.negated),
-  matcher(attr.matcher),
-  type(attr.type)
-{}
+: optional(attr.optional), multiple(attr.multiple), snag(attr.snag),
+  negated(attr.negated), matcher(attr.matcher), type(attr.type)
+{
+}
 
 UnitAttributes::UnitAttributes(UnitAttributes&& attr)
-: optional(attr.optional),
-  multiple(attr.multiple),
-  snag(attr.snag),
-  negated(attr.negated),
-  matcher(attr.matcher),
-  type(attr.type)
-{}
+: optional(attr.optional), multiple(attr.multiple), snag(attr.snag),
+  negated(attr.negated), matcher(attr.matcher), type(attr.type)
+{
+}
 
 UnitAttributes& UnitAttributes::operator=(const UnitAttributes& attr)
 {
@@ -55,8 +47,7 @@ UnitAttributes& UnitAttributes::operator=(const UnitAttributes& attr)
 
 std::ostream& operator<<(std::ostream& s, const UnitType& r)
 {
-	switch (r)
-	{
+	switch (r) {
 		case UnitType::Literal:
 			s << "literal";
 			break;
@@ -75,21 +66,18 @@ bool Unit::specifiers(onechar ch)
 	Rule::LetterCase sCase;
 
 	/* Which case we are going to be looking for.*/
-	if (model.length() >= 2)
-	{
+	if (model.length() >= 2) {
 		sCase = Rule::to_letter_case(model.at(2).c_str()[0]);
-	}
-	else
-	{
+	} else {
 		sCase = Rule::LetterCase::Any;
 	}
 
 	/* Determine specifier */
-	Specifier::SpecifierType specifier = Specifier::to_specifier_type(model.at(model_index));
+	Specifier::SpecifierType specifier =
+		Specifier::to_specifier_type(model.at(model_index));
 
 	/* Checks input character against selected specifier */
-	switch(specifier)
-	{
+	switch (specifier) {
 		case Specifier::SpecifierType::Alphanumeric:
 			return_var = Rule::rule_a(ch, sCase);
 			break;
@@ -148,28 +136,25 @@ bool Unit::literal_sets(onechar ch)
 bool Unit::model_matches(onechar ch)
 {
 	bool return_var = false;
-	if (attr.type == UnitType::Specifier)
-	{
+	if (attr.type == UnitType::Specifier) {
 		// Run if this unit is a specifier.
 
-		// NOTE: This does not feel like the recommended way to switch on a onechar
+		// NOTE: This does not feel like the recommended way to switch on a
+		// onechar
 		// FIXME: handle error of not having something after it
 		// Should have a function to check for sets, return enum?
-		switch(model.at(1).c_str()[0])
-		{
-		case '<':
-			//literal_sets(ch);
-			break;
-		case '[':
-			//sets(ch);
-			break;
-		default:
-			return_var = specifiers(ch);
-			break;
+		switch (model.at(1).c_str()[0]) {
+			case '<':
+				// literal_sets(ch);
+				break;
+			case '[':
+				// sets(ch);
+				break;
+			default:
+				return_var = specifiers(ch);
+				break;
 		}
-	}
-	else
-	{
+	} else {
 		// Otherwise run as a literal.
 		return_var = literals(ch);
 	}
@@ -179,9 +164,48 @@ bool Unit::model_matches(onechar ch)
 int Unit::check_model(onestring s)
 {
 	// Negated handler
-	if (attr.negated)
-	{
-		if (model_matches(s.at(0))){
+	if (attr.negated) {
+		// Negative, optional, and multiple
+		if (attr.optional && attr.multiple) {
+			// Iterate until failure. If empty, pass.
+			int ret = 0;
+			for (size_t i = 0; i < s.length(); ++i) {
+				if (!model_matches(s.at(i))) {
+					ret += 1;
+				} else {
+					break;
+				}
+			}
+			return ret;
+		}
+		// Negative optional
+		else if (attr.optional) {
+			// Check for a match. If empty or no (negative) matches, pass.
+			if (!model_matches(s.at(0))) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		// Negative multiple
+		else if (attr.multiple) {
+			// If no matches, return -1 to fail match.
+			if (model_matches(s.at(0))) {
+				return -1;
+			}
+			// Otherwise, iterate until failure.
+			int ret = 0;
+			for (size_t i = 0; i < s.length(); ++i) {
+				if (!model_matches(s.at(i))) {
+					ret += 1;
+				} else {
+					break;
+				}
+			}
+			return ret;
+		}
+		// Only Negative
+		if (model_matches(s.at(0))) {
 			return -1;
 		} else {
 			return 1;
@@ -189,54 +213,39 @@ int Unit::check_model(onestring s)
 	}
 
 	// Optional and multiple
-	if (attr.optional && attr.multiple)
-	{
-		// If empty, pass
-		if (s.empty()){
-			return 0;
-		} else {
-			// Iterate until failure
-			int ret = 0;
-			for (size_t i = 0; i < s.length(); i++)
-			{
-				if (model_matches(s.at(i))){
-					ret += 1;
-				} else {
-					break;
-				}
+	else if (attr.optional && attr.multiple) {
+		// Iterate until failure. If empty, pass.
+		int ret = 0;
+		for (size_t i = 0; i < s.length(); ++i) {
+			if (model_matches(s.at(i))) {
+				ret += 1;
+			} else {
+				break;
+			}
 		}
 		return ret;
-		}
 	}
 
 	// Optional handler
-	else if (attr.optional)
-	{
-		// If empty, pass
-		if (s.empty()){
-			return 0;
+	else if (attr.optional) {
+		// Check for a match. If empty or no matches, pass.
+		if (model_matches(s.at(0))) {
+			return 1;
 		} else {
-			// Otherwise check for a match
-			if (model_matches(s.at(0))){
-				return 1;
-			} else {
-				return -1;
-			}
+			return 0;
 		}
 	}
 
 	// Multiple handler
-	else if (attr.multiple)
-	{
-		// If no matches, return -1
+	else if (attr.multiple) {
+		// If no matches, return -1 to fail match.
 		if (!model_matches(s.at(0))) {
 			return -1;
 		}
-		// Otherwise, iterate until failure
+		// Otherwise, iterate until failure.
 		int ret = 0;
-		for (size_t i = 0; i < s.length(); i++)
-		{
-			if (model_matches(s.at(i))){
+		for (size_t i = 0; i < s.length(); i++) {
+			if (model_matches(s.at(i))) {
 				ret += 1;
 			} else {
 				break;
@@ -246,16 +255,13 @@ int Unit::check_model(onestring s)
 	}
 
 	// Otherwise check single character
-	else
-	{
-		if (model_matches(s.at(0))){
+	else {
+		if (model_matches(s.at(0))) {
 			return 1;
 		} else {
 			return -1;
 		}
 	}
-	// If no matches, return -1
-	return -1;
 }
 
 onestring Unit::to_string() const
@@ -268,7 +274,7 @@ onestring Unit::to_string() const
 std::ostream& operator<<(std::ostream& s, const Unit& unit)
 {
 	s << "Unit<" << unit.attr.type << ">::(" << unit.attr.matcher << ")::("
-		<< (unit.attr.optional ? "?" : "") << (unit.attr.multiple ? "+" : "" )
-		<< (unit.attr.snag ? "~" : "") << (unit.attr.negated ? "!" : "") << ")";
+	  << (unit.attr.optional ? "?" : "") << (unit.attr.multiple ? "+" : "")
+	  << (unit.attr.snag ? "~" : "") << (unit.attr.negated ? "!" : "") << ")";
 	return s;
 }

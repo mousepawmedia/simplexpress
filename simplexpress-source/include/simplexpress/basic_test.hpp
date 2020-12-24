@@ -1,12 +1,10 @@
 /** Basic Sanity Tests (SIMPLExpress)
-  * Version: 0.1
-  *
-  * Once other tests have been added to SIMPLExpress, this file can
-  * be removed.
-  *
-  * Last Updated: 02 Decemeber 2020
-  * Author(s): Ben D. Lovy, Jason C. McDonald, Anna R. Dunster
-  */
+ * Version: 0.1
+ *
+ * Tests for the basic integral functions of the Simplex and its functions.
+ *
+ * Author(s): Anna R. Dunster, Ben D. Lovy, Jason C. McDonald
+ */
 
 /* LICENSE
  * Copyright (c) 2020 MousePaw Media.
@@ -50,7 +48,6 @@
 
 #include "pawlib/goldilocks.hpp"
 #include "pawlib/iochannel.hpp"
-
 #include "simplexpress/simplex.hpp"
 
 // X-sB00 //
@@ -59,28 +56,25 @@
 class TestConstructASCIISimplex : public Test
 {
 	onestring model = "~l+/-^a+/-^d/.png";
-	onestring expected =
-		"[ Unit<specifier>::(l)::(+~), "
-		"Unit<literal>::(-)::(), "
-		"Unit<specifier>::(a)::(+), "
-		"Unit<literal>::(-)::(), "
-		"Unit<specifier>::(d)::(), "
-		"Unit<literal>::(.)::(), "
-		"Unit<literal>::(p)::(), "
-		"Unit<literal>::(n)::(), "
-		"Unit<literal>::(g)::() ]";
+	onestring expected = "[ Unit<specifier>::(l)::(+~), "
+						 "Unit<literal>::(-)::(), "
+						 "Unit<specifier>::(a)::(+), "
+						 "Unit<literal>::(-)::(), "
+						 "Unit<specifier>::(d)::(), "
+						 "Unit<literal>::(.)::(), "
+						 "Unit<literal>::(p)::(), "
+						 "Unit<literal>::(n)::(), "
+						 "Unit<literal>::(g)::() ]";
 
 public:
 	TestConstructASCIISimplex() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Construct ASCII Simplex";
-	}
+	testdoc_t get_title() override { return "Construct ASCII Simplex"; }
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully construct 8-char model Simplex from an ASCII model";
+		return "Successfully construct 8-char model Simplex from an ASCII "
+			   "model";
 	}
 	bool run() override
 	{
@@ -89,7 +83,7 @@ public:
 		return true;
 	}
 
-	~TestConstructASCIISimplex(){}
+	~TestConstructASCIISimplex() = default;
 };
 
 // X-tB0001
@@ -99,6 +93,7 @@ class TestMatchSingleUnitLiteral : public Test
 	onestring input_pass = "-";
 	onestring input_fail = "+";
 	onestring input_fail_two = "--";
+
 public:
 	TestMatchSingleUnitLiteral() = default;
 
@@ -120,7 +115,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitLiteral(){}
+	~TestMatchSingleUnitLiteral() = default;
 };
 
 // X-tB0002
@@ -131,6 +126,7 @@ class TestMatchSingleUnitSpecifierAlphanumeric : public Test
 	onestring input_pass_two = "5";
 	onestring input_fail_one = "^";
 	onestring input_fail_two = "h5";
+
 public:
 	TestMatchSingleUnitSpecifierAlphanumeric() = default;
 
@@ -142,7 +138,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single "
-			"alphanumeric character";
+			   "alphanumeric character";
 	}
 	bool run() override
 	{
@@ -154,7 +150,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierAlphanumeric(){}
+	~TestMatchSingleUnitSpecifierAlphanumeric() = default;
 };
 
 // X-tB0003
@@ -163,6 +159,7 @@ class TestMatchSingleUnitSpecifierDigit : public Test
 	onestring model = "^d/";
 	onestring input_pass = "5";
 	onestring input_fail = "h";
+
 public:
 	TestMatchSingleUnitSpecifierDigit() = default;
 
@@ -174,7 +171,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single digit "
-			"character";
+			   "character";
 	}
 	bool run() override
 	{
@@ -184,7 +181,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierDigit(){}
+	~TestMatchSingleUnitSpecifierDigit() = default;
 };
 
 // X-tB0004
@@ -193,6 +190,7 @@ class TestMatchSingleUnitSpecifierLatin : public Test
 	onestring model = "^l/";
 	onestring input_pass = "h";
 	onestring input_fail = "5";
+
 public:
 	TestMatchSingleUnitSpecifierLatin() = default;
 
@@ -204,7 +202,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single latin "
-			"character";
+			   "character";
 	}
 	bool run() override
 	{
@@ -214,7 +212,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierLatin(){}
+	~TestMatchSingleUnitSpecifierLatin() = default;
 };
 
 // X-tB0005
@@ -223,6 +221,7 @@ class TestMatchSingleUnitSpecifierNewline : public Test
 	onestring model = "^n/";
 	onestring input_pass = "\n";
 	onestring input_fail = "5";
+
 public:
 	TestMatchSingleUnitSpecifierNewline() = default;
 
@@ -243,7 +242,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierNewline(){}
+	~TestMatchSingleUnitSpecifierNewline() = default;
 };
 
 // X-tB0006
@@ -254,6 +253,7 @@ class TestMatchSingleUnitSpecifierPunctuation : public Test
 	onestring input_pass_two = "!";
 	onestring input_fail = "5";
 	onestring input_fail_two = "*";
+
 public:
 	TestMatchSingleUnitSpecifierPunctuation() = default;
 
@@ -265,7 +265,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single "
-			"punctuation character";
+			   "punctuation character";
 	}
 	bool run() override
 	{
@@ -277,7 +277,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierPunctuation(){}
+	~TestMatchSingleUnitSpecifierPunctuation() = default;
 };
 
 // X-tB0007
@@ -286,6 +286,7 @@ class TestMatchSingleUnitSpecifierCarriageReturn : public Test
 	onestring model = "^r/";
 	onestring input_pass = "\r";
 	onestring input_fail = "5";
+
 public:
 	TestMatchSingleUnitSpecifierCarriageReturn() = default;
 
@@ -297,7 +298,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single "
-			"carriage return";
+			   "carriage return";
 	}
 	bool run() override
 	{
@@ -307,7 +308,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierCarriageReturn(){}
+	~TestMatchSingleUnitSpecifierCarriageReturn() = default;
 };
 
 // X-tB0008
@@ -316,6 +317,7 @@ class TestMatchSingleUnitSpecifierLiteralSpace : public Test
 	onestring model = "^s/";
 	onestring input_pass = " ";
 	onestring input_fail = "5";
+
 public:
 	TestMatchSingleUnitSpecifierLiteralSpace() = default;
 
@@ -327,7 +329,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single space "
-			"character";
+			   "character";
 	}
 	bool run() override
 	{
@@ -337,7 +339,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierLiteralSpace(){}
+	~TestMatchSingleUnitSpecifierLiteralSpace() = default;
 };
 
 // X-tB0009
@@ -346,6 +348,7 @@ class TestMatchSingleUnitSpecifierTab : public Test
 	onestring model = "^t/";
 	onestring input_pass = "\t";
 	onestring input_fail = "5";
+
 public:
 	TestMatchSingleUnitSpecifierTab() = default;
 
@@ -357,7 +360,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single tab "
-			"character";
+			   "character";
 	}
 	bool run() override
 	{
@@ -367,7 +370,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierTab(){}
+	~TestMatchSingleUnitSpecifierTab() = default;
 };
 
 // X-tB0010
@@ -378,6 +381,7 @@ class TestMatchSingleUnitSpecifierWhitespace : public Test
 	onestring input_pass_two = "\t";
 	onestring input_pass_three = "\n";
 	onestring input_fail = "5";
+
 public:
 	TestMatchSingleUnitSpecifierWhitespace() = default;
 
@@ -389,7 +393,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a single "
-			"whitespace character";
+			   "whitespace character";
 	}
 	bool run() override
 	{
@@ -401,7 +405,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSingleUnitSpecifierWhitespace(){}
+	~TestMatchSingleUnitSpecifierWhitespace() = default;
 };
 
 // X-tB0011
@@ -411,18 +415,16 @@ class TestMatchMultiUnitLiterals : public Test
 	onestring input_pass = "hi";
 	onestring input_fail = "5j";
 	onestring input_fail_two = "hi34";
+
 public:
 	TestMatchMultiUnitLiterals() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Two Literals";
-	}
+	testdoc_t get_title() override { return "Match Two Literals"; }
 
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing two literal "
-			"characters";
+			   "characters";
 	}
 	bool run() override
 	{
@@ -435,7 +437,7 @@ public:
 		return true;
 	}
 
-	~TestMatchMultiUnitLiterals(){}
+	~TestMatchMultiUnitLiterals() = default;
 };
 
 // X-tB0012
@@ -446,18 +448,16 @@ class TestMatchMultiUnitLiteralSpecifier : public Test
 	onestring input_pass_two = "9i";
 	onestring input_fail_one = "ai";
 	onestring input_fail_two = "32";
+
 public:
 	TestMatchMultiUnitLiteralSpecifier() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Specifier + Literal";
-	}
+	testdoc_t get_title() override { return "Match Specifier + Literal"; }
 
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a specifier "
-			"followed by a literal";
+			   "followed by a literal";
 	}
 	bool run() override
 	{
@@ -469,7 +469,7 @@ public:
 		return true;
 	}
 
-	~TestMatchMultiUnitLiteralSpecifier(){}
+	~TestMatchMultiUnitLiteralSpecifier() = default;
 };
 
 // X-tB0013
@@ -481,13 +481,11 @@ class TestMatchMultiUnitSpecifiers : public Test
 	onestring input_fail_one = "ai";
 	onestring input_fail_two = "32";
 	onestring input_fail_three = "3a7";
+
 public:
 	TestMatchMultiUnitSpecifiers() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Two Specifiers";
-	}
+	testdoc_t get_title() override { return "Match Two Specifiers"; }
 
 	testdoc_t get_docs() override
 	{
@@ -503,7 +501,7 @@ public:
 		return true;
 	}
 
-	~TestMatchMultiUnitSpecifiers(){}
+	~TestMatchMultiUnitSpecifiers() = default;
 };
 
 // X-tB0014
@@ -514,18 +512,16 @@ class TestMatchSpecifierMultiplier : public Test
 	onestring input_pass_two = "65";
 	onestring input_fail = "g";
 	onestring input_fail_two = "65abc";
+
 public:
 	TestMatchSpecifierMultiplier() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Specifier with Multiplier";
-	}
+	testdoc_t get_title() override { return "Match Specifier with Multiplier"; }
 
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing a multiplier "
-			"specifier";
+			   "specifier";
 	}
 	bool run() override
 	{
@@ -537,7 +533,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSpecifierMultiplier(){}
+	~TestMatchSpecifierMultiplier() = default;
 };
 
 // X-tB0015
@@ -547,18 +543,16 @@ class TestMatchSpecifierOptional : public Test
 	onestring input_pass_one = "x";
 	onestring input_pass_two = "x5";
 	onestring input_fail = "xd";
+
 public:
 	TestMatchSpecifierOptional() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Optional Specifier";
-	}
+	testdoc_t get_title() override { return "Match Optional Specifier"; }
 
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing an optional "
-			"specifier";
+			   "specifier";
 	}
 	bool run() override
 	{
@@ -569,7 +563,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSpecifierOptional(){}
+	~TestMatchSpecifierOptional() = default;
 };
 
 // X-tB0016
@@ -581,6 +575,7 @@ class TestMatchSpecifierOptionalMultiple : public Test
 	onestring input_pass_three = "x12";
 	onestring input_fail = "xd";
 	onestring input_fail_two = "x45c";
+
 public:
 	TestMatchSpecifierOptionalMultiple() = default;
 
@@ -592,7 +587,7 @@ public:
 	testdoc_t get_docs() override
 	{
 		return "Successfully match against a model containing an optional "
-			"multiple specifier";
+			   "multiple specifier";
 	}
 	bool run() override
 	{
@@ -605,7 +600,7 @@ public:
 		return true;
 	}
 
-	~TestMatchSpecifierOptionalMultiple(){}
+	~TestMatchSpecifierOptionalMultiple() = default;
 };
 
 // X-tB0017
@@ -615,13 +610,11 @@ class TestMatchAny : public Test
 	onestring input_pass_one = "^";
 	onestring input_pass_two = "6";
 	onestring input_fail = "";
+
 public:
 	TestMatchAny() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Any Character";
-	}
+	testdoc_t get_title() override { return "Match Any Character"; }
 
 	testdoc_t get_docs() override
 	{
@@ -636,7 +629,7 @@ public:
 		return true;
 	}
 
-	~TestMatchAny(){}
+	~TestMatchAny() = default;
 };
 
 // X-tB0018
@@ -646,13 +639,11 @@ class TestMatchNot : public Test
 	onestring input_pass_one = "b";
 	onestring input_pass_two = "^";
 	onestring input_fail = "4";
+
 public:
 	TestMatchNot() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Negated Specifier";
-	}
+	testdoc_t get_title() override { return "Match Negated Specifier"; }
 
 	testdoc_t get_docs() override
 	{
@@ -667,7 +658,7 @@ public:
 		return true;
 	}
 
-	~TestMatchNot(){}
+	~TestMatchNot() = default;
 };
 
 // X-tB0019
@@ -676,10 +667,7 @@ class TestMatchWithSnag : public Test
 public:
 	TestMatchWithSnag() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Using Snag Units";
-	}
+	testdoc_t get_title() override { return "Match Using Snag Units"; }
 
 	testdoc_t get_docs() override
 	{
@@ -693,7 +681,49 @@ public:
 		return true;
 	}
 
-	~TestMatchWithSnag(){}
+	~TestMatchWithSnag() = default;
+};
+
+// X-tB0020
+class TestNegativeMultiple : public Test
+{
+	onestring model = "abc^!d+/";
+	onestring model2 = "^!d+/abc";
+	onestring model3 = "^!d+/ and ^d+/";
+	onestring model4 = "abc^!d*/";
+	onestring input_pass_one = "abcstuff";
+	onestring input_pass_two = "abc!@#";
+	onestring input_fail_one = "abc123";
+	onestring input_fail_two = "abc";
+public:
+	TestNegativeMultiple() = default;
+
+	testdoc_t get_title() override {
+		return "Match using Negative Multiple modifiers";
+	}
+
+	testdoc_t get_docs() override {
+		return "Match cases with negative multiples to ensure correct behavior";
+	}
+
+	bool run() override {
+		Simplex simplex(model);
+		PL_ASSERT_TRUE(simplex.match(input_pass_one));
+		PL_ASSERT_TRUE(simplex.match(input_pass_two));
+		PL_ASSERT_FALSE(simplex.match(input_fail_one));
+		PL_ASSERT_FALSE(simplex.match(input_fail_two));
+		PL_ASSERT_TRUE(Simplex::match("stuffabc", model2));
+		PL_ASSERT_FALSE(Simplex::match("123abc", model2));
+		PL_ASSERT_FALSE(Simplex::match("abc", model2));
+		PL_ASSERT_TRUE(Simplex::match("ABC and 123", model3));
+		PL_ASSERT_TRUE(Simplex::match("... and 5", model3));
+		PL_ASSERT_FALSE(Simplex::match("123 and 123", model3));
+		PL_ASSERT_TRUE(Simplex::match("abc", model4));
+		PL_ASSERT_FALSE(Simplex::match("abc123", model4));
+		return true;
+	}
+
+	~TestNegativeMultiple() = default;
 };
 
 // TODO: o specifier (math operator)
@@ -715,13 +745,11 @@ class TestStaticMatch : public Test
 	onestring input_pass = "5";
 	onestring input_fail = "d";
 	onestring input_fail2 = "12345";
+
 public:
 	TestStaticMatch() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Static Match";
-	}
+	testdoc_t get_title() override { return "Static Match"; }
 
 	testdoc_t get_docs() override
 	{
@@ -741,11 +769,58 @@ public:
 		return true;
 	}
 
-	~TestStaticMatch(){}
+	~TestStaticMatch() = default;
 };
 
 // X-tB0051
-// more complicated multi unit tests
+class TestGreedyLogic : public Test
+{
+	onestring model1 = "^l+/fred";
+	onestring model2 = "^l+/fred^d+/";
+	onestring model3 = "^l+/ and ^d+/";
+	onestring model4 = "^l*/X^d+/";
+	onestring model1_pass = "stufffred";
+	onestring model1_fail = "stuff";
+	onestring model2_pass = "stufffred1234";
+	onestring model2_fail = "stuff1234";
+	onestring model3_pass = "fred and 1234";
+	onestring model3_fail = "fred 1234";
+	onestring model3_fail_two = "and 4";
+	onestring model4_pass_one = "XaX3";
+	onestring model4_pass_two = "X1";
+	onestring model4_fail = "steve2";
+
+public:
+	TestGreedyLogic() = default;
+
+	testdoc_t get_title() override { return "Test Greedy Logic"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Tests whether multiple is getting too greedy";
+	}
+
+	bool run() override
+	{
+		// Model 1
+		PL_ASSERT_TRUE(Simplex::match(model1_pass, model1));
+		PL_ASSERT_FALSE(Simplex::match(model1_fail, model1));
+		// Model 2
+		PL_ASSERT_TRUE(Simplex::match(model2_pass, model2));
+		PL_ASSERT_FALSE(Simplex::match(model2_fail, model2));
+		// Model 3
+		PL_ASSERT_TRUE(Simplex::match(model3_pass, model3));
+		PL_ASSERT_FALSE(Simplex::match(model3_fail, model3));
+		PL_ASSERT_FALSE(Simplex::match(model3_fail_two, model3));
+		// Model 4
+		PL_ASSERT_TRUE(Simplex::match(model4_pass_one, model4));
+		PL_ASSERT_TRUE(Simplex::match(model4_pass_two, model4));
+		PL_ASSERT_FALSE(Simplex::match(model4_fail, model4));
+		return true;
+	}
+
+	~TestGreedyLogic() = default;
+};
 
 class TestSuite_Basic : public TestSuite
 {
@@ -756,8 +831,7 @@ public:
 	{
 		return "SIMPLExpress: Basic Sanity Tests";
 	}
-	~TestSuite_Basic()
-	{}
+	~TestSuite_Basic() = default;
 };
 
-#endif //SIMPLEXPRESS_BASIC_TESTS_HPP
+#endif  // SIMPLEXPRESS_BASIC_TESTS_HPP
