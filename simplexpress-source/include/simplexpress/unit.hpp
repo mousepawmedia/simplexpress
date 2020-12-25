@@ -1,9 +1,9 @@
 /** Unit [SIMPLEXpress]
-  * Version: 0.1
-  *
-  * Author: Anna R. Dunster, Ben D. Lovy, Jarek Thomas
-  *
-  */
+ * Version: 0.1
+ *
+ * Author: Anna R. Dunster, Ben D. Lovy, Jarek Thomas
+ *
+ */
 
 /* LICENSE
  * Copyright (c) 2016 MousePaw Media.
@@ -47,17 +47,12 @@
 
 #include "pawlib/onechar.hpp"
 #include "pawlib/onestring.hpp"
-
 #include "simplexpress/rules.hpp"
 #include "simplexpress/specifier.hpp"
 
 /**The various categories of unit currently implemented. */
 // TODO: Set, Group
-enum class UnitType
-{
-	Literal,
-	Specifier
-};
+enum class UnitType { Literal, Specifier };
 
 /**The set of attributes and modifiers that can apply to a Unit. */
 class UnitAttributes
@@ -93,8 +88,12 @@ public:
 	 * \param match onechar for either the specifier or the literal
 	 * \param type UnitType
 	 */
-	UnitAttributes(bool optional, bool multiple, bool snag, bool negator,
-				   onechar match, UnitType type);
+	UnitAttributes(bool optional,
+				   bool multiple,
+				   bool snag,
+				   bool negator,
+				   onechar match,
+				   UnitType type);
 
 	/**Copy constructor
 	 * \param Struct to copy
@@ -165,4 +164,4 @@ public:
 	friend std::ostream& operator<<(std::ostream&, const Unit&);
 };
 
-#endif // Unit_H_
+#endif  // Unit_H_

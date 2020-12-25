@@ -3,19 +3,15 @@
 
 // ParseResult
 
-ParseResult::ParseResult()
-: result(false),
-  s(""),
-  remainder("")
-{}
+ParseResult::ParseResult() : result(false), s(""), remainder("") {}
 
 ParseResult::ParseResult(tril res, const onestring& str, const onestring& r)
-: result(res),
-  s(str),
-  remainder(r)
-{}
+: result(res), s(str), remainder(r)
+{
+}
 
-ParseResult ParseResult::make_success(const onestring& match, const onestring& rem)
+ParseResult ParseResult::make_success(const onestring& match,
+									  const onestring& rem)
 {
 	return ParseResult(true, match, rem);
 }
@@ -25,7 +21,7 @@ ParseResult ParseResult::make_error(const onestring& err, const onestring& rem)
 	return ParseResult(false, err, rem);
 }
 
-template <typename F>
+template<typename F>
 ParseResult ParseResult::parse(const onestring& rem, F parser)
 {
 	ParseResult ret = parser(rem);
@@ -52,23 +48,20 @@ UnitParser::UnitParser(onestring& in) : s(in) {}
 
 void UnitParser::chop(onestring& in)
 {
-	if (in.length() > 1)
-	{
+	if (in.length() > 1) {
 		onestring new_rem = in.substr(1, in.length());
 		in = new_rem;
-	}
-	else if (in.length() == 1)
-	{
+	} else if (in.length() == 1) {
 		in = in.at(0);
-	}
-	else
-	{
+	} else {
 		in = "";
 	}
 }
 
 UnitParser::ParsedAttributes::ParsedAttributes(UnitAttributes a, size_t s)
-: attr(a), size(s) {}
+: attr(a), size(s)
+{
+}
 
 UnitParser::ParsedAttributes UnitParser::parse() const
 {
@@ -91,8 +84,7 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 		ret.snag = true;
 	}
 
-	if (unit)
-	{
+	if (unit) {
 		// We found a unit
 		ret.type = UnitType::Specifier;
 		// Add the open unit character to the matched count
@@ -101,8 +93,7 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 		// First - is it negated?
 		ParseResult check_negated = ParseResult::parse(remainder, negator);
 		remainder = check_negated.remainder;
-		if (check_negated.result)
-		{
+		if (check_negated.result) {
 			ret.negated = true;
 			++ret_len;
 		}
@@ -114,11 +105,12 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 		// TODO not yet implemented
 
 		// Is it a specifier?
-		ParseResult check_specifier = ParseResult::parse(remainder, specifier_parser);
+		ParseResult check_specifier =
+			ParseResult::parse(remainder, specifier_parser);
 		remainder = check_specifier.remainder;
-		if (!check_specifier.result)
-		{
-			// FIXME: parse error!! - this whole thing should return a ParseResult<T>!!
+		if (!check_specifier.result) {
+			// FIXME: parse error!! - this whole thing should return a
+			// ParseResult<T>!!
 		}
 
 		// Store it
@@ -129,58 +121,45 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 
 		ParseResult check_modifier = ParseResult::parse(remainder, modifier);
 		remainder = check_modifier.remainder;
-		if (!check_modifier.result)
-		{
+		if (!check_modifier.result) {
 			// FIXME: parse error!!
 		}
 
 		// store modifier, if any
-		if (!check_modifier.s.empty())
-		{
+		if (!check_modifier.s.empty()) {
 			onechar mod = check_modifier.s.at(0);
-			if (mod == '+')
-			{
+			if (mod == '+') {
 				ret.multiple = true;
 				++ret_len;
-			}
-			else if (mod == '?')
-			{
+			} else if (mod == '?') {
 				ret.optional = true;
 				++ret_len;
-			}
-			else if (mod == '*')
-			{
+			} else if (mod == '*') {
 				ret.optional = true;
 				ret.multiple = true;
 				++ret_len;
 			}
-		}
-		else
-		{
+		} else {
 			return UnitParser::ParsedAttributes(ret, ret_len);
 		}
 
 		// Check end of unit
 		ParseResult check_end = ParseResult::parse(remainder, unit_end);
 		remainder = check_end.remainder;
-		if (!check_end.result)
-		{
+		if (!check_end.result) {
 			// FIXME parse error!!
 		}
 		++ret_len;
 
 		return UnitParser::ParsedAttributes(ret, ret_len);
-	}
-	else
-	{
+	} else {
 		// It's a literal - KEEP THIS HERE
 		ret.type = UnitType::Literal;
 
 		// First - is it negated?
 		ParseResult check_negated = ParseResult::parse(remainder, negator);
 		remainder = check_negated.remainder;
-		if (check_negated.result)
-		{
+		if (check_negated.result) {
 			ret.negated = true;
 			ret_len += check_negated.s.length();
 		}
@@ -188,46 +167,34 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 		// Store literal
 		ParseResult lit = ParseResult::parse(remainder, literal);
 		remainder = lit.remainder;
-		if (lit.result)
-		{
+		if (lit.result) {
 			ret.matcher = *lit.s.c_str();
 			// A literal is always of length 1
 
 			++ret_len;
-		}
-		else
-		{
+		} else {
 			// FIXME: parse error!
 		}
 
 		ParseResult check_modifier = ParseResult::parse(remainder, modifier);
 		remainder = check_modifier.remainder;
-		if (!check_modifier.result)
-		{
+		if (!check_modifier.result) {
 			// FIXME: parse error!!
 		}
 		// store modifier, if any
-		if (!check_modifier.s.empty())
-		{
+		if (!check_modifier.s.empty()) {
 			onechar mod = check_modifier.s.at(0);
-			if (mod == '+')
-			{
+			if (mod == '+') {
 				ret.multiple = true;
 				++ret_len;
-			}
-			else if (mod == '?')
-			{
+			} else if (mod == '?') {
 				ret.optional = true;
 				++ret_len;
-			}
-			else if (mod == '*')
-			{
+			} else if (mod == '*') {
 				ret.optional = true;
 				ret.multiple = true;
 				++ret_len;
-			}
-			else
-			{
+			} else {
 				// DO NOTHING
 			}
 		}
@@ -238,22 +205,16 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 ParseResult UnitParser::character(ReservedCharacter rc, onestring in)
 {
 	// if empty, no match
-	if (in.empty())
-	{
+	if (in.empty()) {
 		return ParseResult::make_error("Out of input", "");
-	}
-	else
-	{
+	} else {
 		onechar char_to_match = in.at(0);
 		ReservedCharacter parsed = to_reserved_character(char_to_match);
-		if (parsed == rc)
-		{
+		if (parsed == rc) {
 			// Success!
 			onestring rem = (in.length() > 1) ? in.substr(1, in.length()) : "";
 			return ParseResult::make_success(onestring(char_to_match), rem);
-		}
-		else
-		{
+		} else {
 			// No match
 			onestring msg = onestring("Expecting ");
 			msg.append(static_cast<char>(rc));
@@ -266,21 +227,21 @@ ParseResult UnitParser::character(ReservedCharacter rc, onestring in)
 
 UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
 {
-	if (ch == '+'){
+	if (ch == '+') {
 		return ReservedCharacter::Multiple;
-	} else if (ch == '!'){
+	} else if (ch == '!') {
 		return ReservedCharacter::Negator;
-	} else if (ch == '?'){
+	} else if (ch == '?') {
 		return ReservedCharacter::Optional;
-	} else if (ch == '*'){
+	} else if (ch == '*') {
 		return ReservedCharacter::OptionalMultiple;
-	} else if (ch == '^'){
+	} else if (ch == '^') {
 		return ReservedCharacter::UnitMarker;
-	} else if (ch == '~'){
+	} else if (ch == '~') {
 		return ReservedCharacter::UnitSnag;
-	} else if (ch == '/'){
+	} else if (ch == '/') {
 		return ReservedCharacter::UnitEnd;
-	} else{
+	} else {
 		return ReservedCharacter::Unrecognized;
 	}
 }
@@ -340,8 +301,7 @@ ParseResult UnitParser::literal(const onestring& in)
 	// Matches the first character, whatever it is.  Fails if no input present
 	if (in.length() == 0)
 		return ParseResult::make_error("Out of input!", "");
-	else
-	{
+	else {
 		// Success
 		onestring rem = (in.length() > 1) ? in.substr(1, in.length()) : "";
 		return ParseResult::make_success(in.at(0), rem);
@@ -354,8 +314,7 @@ ParseResult UnitParser::literal(const onestring& in)
 ParseResult UnitParser::specifier_parser(const onestring& in)
 {
 	onestring remainder = in;
-	if (remainder.length() < 1)
-	{
+	if (remainder.length() < 1) {
 		return ParseResult::make_error("Out of input", "");
 	}
 
@@ -363,30 +322,24 @@ ParseResult UnitParser::specifier_parser(const onestring& in)
 	onestring lhs = "";
 	// Is it a real specifier?
 	// first char of input
-	Specifier::SpecifierType lead = Specifier::to_specifier_type(remainder.at(0));
+	Specifier::SpecifierType lead =
+		Specifier::to_specifier_type(remainder.at(0));
 
-	if (lead != Specifier::SpecifierType::Unsupported)
-	{
+	if (lead != Specifier::SpecifierType::Unsupported) {
 		chop(remainder);
 		lhs.append(static_cast<char>(lead));
-	}
-	else
-	{
+	} else {
 		onestring msg = "Unknown specifier!";
 		return ParseResult::make_error(msg, remainder);
 	}
 	// If it is, does it then have a case following?  Upper/lower?
-	if (remainder.length() > 0)
-	{
+	if (remainder.length() > 0) {
 		Rule::LetterCase case_modifier = Rule::to_letter_case(remainder.at(0));
-		if (case_modifier != Rule::LetterCase::Any)
-		{
+		if (case_modifier != Rule::LetterCase::Any) {
 			chop(remainder);
 			lhs.append(static_cast<char>(case_modifier));
-		}
-		else
-		{
-			//If it's neither, ignore it as not part of this parse operation
+		} else {
+			// If it's neither, ignore it as not part of this parse operation
 		}
 	}
 	return ParseResult::make_success(lhs, remainder);
@@ -400,8 +353,7 @@ ParseResult UnitParser::modifier(const onestring& in)
 	size_t len = remainder.length();
 	if (len == 0)
 		return ParseResult::make_success("", "");
-	else
-	{
+	else {
 		// Init return value
 		onestring lhs = "";
 
@@ -413,15 +365,12 @@ ParseResult UnitParser::modifier(const onestring& in)
 		onechar lead = remainder.at(0);
 		ReservedCharacter rc = to_reserved_character(lead);
 
-		if (rc == ReservedCharacter::OptionalMultiple
-			|| rc == ReservedCharacter::Multiple
-			|| rc == ReservedCharacter::Optional)
-		{
+		if (rc == ReservedCharacter::OptionalMultiple ||
+			rc == ReservedCharacter::Multiple ||
+			rc == ReservedCharacter::Optional) {
 			chop(remainder);
 			lhs.append(lead);
-		}
-		else
-		{
+		} else {
 			onestring msg = "Invalid modifier: ";
 			msg.append(lead);
 			return ParseResult::make_error(msg, remainder);
@@ -436,8 +385,7 @@ ParseResult UnitParser::modifier(const onestring& in)
 ParseResult UnitParser::digit_parser(const onestring& in)
 {
 	// If no input, then there are no digits.
-	if (in.length() == 0)
-	{
+	if (in.length() == 0) {
 		return ParseResult::make_error("Out of input", "");
 	}
 
@@ -452,14 +400,13 @@ ParseResult UnitParser::digit_parser(const onestring& in)
 	 * result, then no digits were found and parsing digits failed.
 	 */
 
-	while (remainder.length() > 0)
-	{
-		if(Rule::rule_d(remainder.at(0))) {
+	while (remainder.length() > 0) {
+		if (Rule::rule_d(remainder.at(0))) {
 			lhs.append(remainder.at(0));
 			chop(remainder);
-		} else if(!Rule::rule_d(remainder.at(0)) && lhs.length() > 0) {
+		} else if (!Rule::rule_d(remainder.at(0)) && lhs.length() > 0) {
 			return ParseResult::make_success(lhs, remainder);
-		} else if(!Rule::rule_d(remainder.at(0)) && lhs.length() == 0) {
+		} else if (!Rule::rule_d(remainder.at(0)) && lhs.length() == 0) {
 			return ParseResult::make_error("No digits found", remainder);
 		}
 	}
@@ -468,7 +415,6 @@ ParseResult UnitParser::digit_parser(const onestring& in)
 	// a digit, then we return success on the entire input.
 
 	return ParseResult::make_success(lhs, remainder);
-
 }
 
 // Operators
@@ -476,8 +422,7 @@ ParseResult UnitParser::digit_parser(const onestring& in)
 ParseResult UnitParser::operator_parser(const onestring& in)
 {
 	// If no input, then there is no operator.
-	if (in.length() == 0)
-	{
+	if (in.length() == 0) {
 		return ParseResult::make_error("Out of input", "");
 	}
 
@@ -487,15 +432,13 @@ ParseResult UnitParser::operator_parser(const onestring& in)
 	// Check if first character of input is a math operator, and return success
 	// with the parsed operator and remainder. Otherwise, return error.
 
-	if(Rule::rule_o(remainder.at(0))) {
+	if (Rule::rule_o(remainder.at(0))) {
 		lhs.append(remainder.at(0));
 		chop(remainder);
 		return ParseResult::make_success(lhs, remainder);
 	} else {
 		return ParseResult::make_error("Not a math operator", remainder);
 	}
-
-
 }
 
 // Alphanumeric
@@ -503,8 +446,7 @@ ParseResult UnitParser::operator_parser(const onestring& in)
 ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 {
 	// If no input, then there is no alphanumeric character.
-	if (in.length() == 0)
-	{
+	if (in.length() == 0) {
 		return ParseResult::make_error("Out of input", "");
 	}
 
@@ -520,15 +462,15 @@ ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 	 * characters failed.
 	 */
 
-	while (remainder.length() > 0)
-	{
-		if(Rule::rule_a(remainder.at(0))) {
+	while (remainder.length() > 0) {
+		if (Rule::rule_a(remainder.at(0))) {
 			lhs.append(remainder.at(0));
 			chop(remainder);
-		} else if(!Rule::rule_a(remainder.at(0)) && lhs.length() > 0) {
+		} else if (!Rule::rule_a(remainder.at(0)) && lhs.length() > 0) {
 			return ParseResult::make_success(lhs, remainder);
-		} else if(!Rule::rule_a(remainder.at(0)) && lhs.length() == 0) {
-			return ParseResult::make_error("No alphanumeric characters found", remainder);
+		} else if (!Rule::rule_a(remainder.at(0)) && lhs.length() == 0) {
+			return ParseResult::make_error("No alphanumeric characters found",
+										   remainder);
 		}
 	}
 
@@ -536,6 +478,4 @@ ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 	// an alphanumeric character, then we return success on the entire input.
 
 	return ParseResult::make_success(lhs, remainder);
-
-
 }

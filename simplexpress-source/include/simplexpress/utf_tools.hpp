@@ -1,9 +1,8 @@
 /** UTF Tools [SIMPLEXpress]
-  * Version: 0.1
-  *
-  * Last Updated: 04 April 2020
-  * Author: Ben D. Lovy, Jason C. McDonald
-  */
+ * Version: 0.1
+ *
+ * Author: Ben D. Lovy, Jason C. McDonald
+ */
 
 /* LICENSE
  * Copyright (c) 2016 MousePaw Media.
@@ -59,23 +58,23 @@ class utf_tools : public Specifier
 public:
 	utf_tools() = default;
 
-	static bool s_digit(onechar, int=10);
-	static bool s_greek(onechar, Rule::LetterCase=Rule::LetterCase::Any);
+	static bool s_digit(onechar, int = 10);
+	static bool s_greek(onechar, Rule::LetterCase = Rule::LetterCase::Any);
 	static bool s_ipa(onechar);
-	static bool s_latin_ext(onechar, Rule::LetterCase=Rule::LetterCase::Any);
+	static bool s_latin_ext(onechar, Rule::LetterCase = Rule::LetterCase::Any);
 };
 // FIXME: T1278
-//class utf_utils
+// class utf_utils
 //{
-//public:
+// public:
 //    utf_utils(){}
 //    // TODO virtual?
 //    static int ch_to_hex(onechar);
 //    static int str_to_hex(onestring, bool=false);
 //    static int ch_to_int(onechar);
 //    static int str_to_int(onestring, bool=false);
-//protected:
-//private:
+// protected:
+// private:
 //};
 
-#endif // UTF_TOOLS_H
+#endif  // UTF_TOOLS_H

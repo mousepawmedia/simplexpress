@@ -1,9 +1,8 @@
 /** Unit parser [SIMPLEXpress]
-  * Version: 0.1
-  *
-  * Last Updated: 02 Decemeber 2020
-  * Author: Ben D. Lovy, Anna R. Dunster, Wilfrantz Dede
-  */
+ * Version: 0.1
+ *
+ * Author: Wilfrantz Dede, Anna R. Dunster, Ben D. Lovy
+ */
 
 /* LICENSE
  * Copyright (c) 2020 MousePaw Media.
@@ -47,7 +46,6 @@
 
 #include "pawlib/core_types.hpp"
 #include "pawlib/onestring.hpp"
-
 #include "simplexpress/specifier.hpp"
 #include "simplexpress/unit.hpp"
 
@@ -103,8 +101,7 @@ public:
 	 * \param onestring: reference to input string
 	 * \param Parser to use. Must be a function from onestring to ParseResult
 	 */
-	template <typename F>
-	static ParseResult parse(const onestring&, F);
+	template<typename F> static ParseResult parse(const onestring&, F);
 
 	/**Get the string representation of the result */
 	onestring to_string() const;
@@ -122,8 +119,7 @@ public:
 	explicit UnitParser(onestring&);
 
 	// Specific characters
-	enum class ReservedCharacter : char
-	{
+	enum class ReservedCharacter : char {
 		Multiple = '+',
 		Negator = '!',
 		Optional = '?',
@@ -231,7 +227,6 @@ private:
 	friend class TestDigitsParser;
 	friend class TestOperatorParser;
 	friend class TestAlphanumericParser;
-
 };
 
-#endif // !SIMPLEXPRESS_UNITPARSER_HPP
+#endif  // !SIMPLEXPRESS_UNITPARSER_HPP

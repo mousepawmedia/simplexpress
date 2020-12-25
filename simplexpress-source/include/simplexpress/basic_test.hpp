@@ -695,18 +695,22 @@ class TestNegativeMultiple : public Test
 	onestring input_pass_two = "abc!@#";
 	onestring input_fail_one = "abc123";
 	onestring input_fail_two = "abc";
+
 public:
 	TestNegativeMultiple() = default;
 
-	testdoc_t get_title() override {
+	testdoc_t get_title() override
+	{
 		return "Match using Negative Multiple modifiers";
 	}
 
-	testdoc_t get_docs() override {
+	testdoc_t get_docs() override
+	{
 		return "Match cases with negative multiples to ensure correct behavior";
 	}
 
-	bool run() override {
+	bool run() override
+	{
 		Simplex simplex(model);
 		PL_ASSERT_TRUE(simplex.match(input_pass_one));
 		PL_ASSERT_TRUE(simplex.match(input_pass_two));

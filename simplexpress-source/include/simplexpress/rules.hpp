@@ -1,9 +1,8 @@
 /** Rules [SIMPLEXpress]
-  * Version: 0.1
-  *
-  * Last Updated: 18 November 2020
-  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster, Graham Mix
-  */
+ * Version: 0.1
+ *
+ * Author: Anna R. Dunster, Ben D. Lovy, Graham Mix, Jarek Thomas
+ */
 
 /* LICENSE
  * Copyright (c) 2020 MousePaw Media.
@@ -51,15 +50,15 @@
 
 using std::vector;
 
-/**The Rule class specifies what each rule we want is suppose to do. As the rules
- * expand or change it is easy to go in and change or add one rule at a time.
+/**The Rule class specifies what each rule we want is suppose to do. As the
+ * rules expand or change it is easy to go in and change or add one rule at a
+ * time.
  */
 class Rule
 {
 public:
 	/**Case types used throughout the parser*/
-	enum class LetterCase
-	{
+	enum class LetterCase {
 		Any,
 		Lower = 'l',
 		Upper = 'u',
@@ -87,7 +86,7 @@ public:
 
 	/**Specifier for digits outside of base 10.
 	 * // NOT IMPLEMENTED //
-	 * \param ch onechar to check for a match 
+	 * \param ch onechar to check for a match
 	 * \param radix int for base system being used */
 	bool static rule_d(onechar, int);
 

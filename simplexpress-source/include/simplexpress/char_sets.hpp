@@ -1,9 +1,8 @@
 /** char_sets [SIMPLEXpress]
-  * Version: 0.1
-  *
-  * Last Updated: 04 April 2020
-  * Authors: Ben D. Lovy, Jarek Thomas
-  */
+ * Version: 0.1
+ *
+ * Authors: Ben D. Lovy, Jarek Thomas
+ */
 
 /* LICENSE
  * Copyright (c) 2020 MousePaw Media.
@@ -66,7 +65,7 @@ public:
 	\param the character to check
 	\param the radix for the digit, default 10.
 	\return true if in set, else false*/
-	static bool digit(onechar, int=10);
+	static bool digit(onechar, int = 10);
 
 	/**Checks to see if the character is a lowercase
 	letter (Latin alphabet.)
@@ -120,7 +119,7 @@ public:
 	\return true if in set, else false*/
 	static bool alpha(onechar);
 
-	//See "greek" under atomic sets.
+	// See "greek" under atomic sets.
 	/**Checks to see if the character is a Latin alphabet
 	letter, either uppercase or lowercase.
 	\param the character to check
@@ -155,7 +154,7 @@ public:
 	\param the character to check
 	\param whether to include visible space characters
 	\return true if in set, else false*/
-	//TODO: Change the default on includeVisible based on email responses.
+	// TODO: Change the default on includeVisible based on email responses.
 	// NOTE: what email responses?  True sounds like a good default to me - BDL
 	static bool whitespace(onechar, bool = true);
 
@@ -187,4 +186,4 @@ protected:
 	static const int arr_special_duodecimal[SPECIAL_DUODECIMAL_CNT];
 };
 
-#endif // CHAR_SETS_H
+#endif  // CHAR_SETS_H

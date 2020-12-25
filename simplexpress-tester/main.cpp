@@ -1,10 +1,10 @@
-	/** SIMPLExpress Tester
-  * Version: 1.0
-  *
-  * Allows running tests and custom code for SIMPLExpress.
-  *
-  * Author(s): Jason C. McDonald
-  */
+/** SIMPLExpress Tester
+ * Version: 1.0
+ *
+ * Allows running tests and custom code for SIMPLExpress.
+ *
+ * Author(s): Jason C. McDonald
+ */
 
 /* LICENSE
  * Copyright (c) 2016-2020 MousePaw Media.
@@ -43,23 +43,21 @@
 
 #include "pawlib/goldilocks_shell.hpp"
 #include "pawlib/iochannel.hpp"
-
 #include "simplexpress/basic_test.hpp"
 #include "simplexpress/unit_parser_test.hpp"
 /** Temporary test code goes in this function ONLY.
-  * All test code that is needed long term should be
-  * moved to a dedicated Goldilocks Test and TestSuite.
-  */
-void test_code()
-{
+ * All test code that is needed long term should be
+ * moved to a dedicated Goldilocks Test and TestSuite.
+ */
+void test_code() {
 	return;
-}
+	}
 
 /////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
 
 int main(int argc, char* argv[])
 {
-	//Set up signal handling.
+	// Set up signal handling.
 	ioc.configure_echo(IOEchoMode::cout);
 
 	GoldilocksShell* shell = new GoldilocksShell(">> ");
@@ -67,14 +65,12 @@ int main(int argc, char* argv[])
 	shell->register_suite<TestSuite_UnitParser>("X-sB01");
 
 	// If we got command-line arguments.
-	if(argc > 1)
-	{
+	if (argc > 1) {
 		return shell->command(argc, argv);
-	}
-	else
-	{
+	} else {
 		ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
-			<< "===== SIMPLExpress Tester =====\n" << IOCtrl::endl;
+			<< "===== SIMPLExpress Tester =====\n"
+			<< IOCtrl::endl;
 
 		test_code();
 
@@ -84,7 +80,7 @@ int main(int argc, char* argv[])
 
 	// Delete our GoldilocksShell.
 	delete shell;
-	//shell = 0;
+	// shell = 0;
 
 	return 0;
 }

@@ -1,7 +1,7 @@
-//FIXME: T1278
+// FIXME: T1278
 //#include "simplexpress/utf_tools.hpp"
 //
-//int utf_utils::ch_to_int(onechar ch)
+// int utf_utils::ch_to_int(onechar ch)
 //{
 //    //48 [0] - 57 [9]
 //    // FIXME: line 138 again, but may be okay?
@@ -13,7 +13,7 @@
 //    return i;
 //}
 //
-//int utf_utils::str_to_int(onestring str, bool failsafe)
+// int utf_utils::str_to_int(onestring str, bool failsafe)
 //{
 //    //If we start with 0x, it's hex.
 //    if(str[0] == '0' && str[1] == 'x')

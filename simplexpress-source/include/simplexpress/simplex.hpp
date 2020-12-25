@@ -113,7 +113,8 @@ public:
 	/**Takes the user defined model and matches user input to parse against
 	 * the model.
 	 * \param model_check onestring user input to check
-	 * \return true if input is an exact match for expression in internal model*/
+	 * \return true if input is an exact match for expression in internal
+	 * model*/
 	bool match(onestring& model_check);
 
 	/**Static version to use with an input model rather than repeat use object.

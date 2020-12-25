@@ -1,9 +1,8 @@
 /** Specifier [SIMPLEXpress]
-  * Version: 0.1
-  *
-  * Last Updated: 17 November 2020
-  * Author: Ben D. Lovy, Jarek Thomas, Anna R. Dunster
-  */
+ * Version: 0.1
+ *
+ * Author: Anna R. Dunster, Ben D. Lovy, Jarek Thomas
+ */
 
 /* LICENSE
  * Copyright (c) 2020 MousePaw Media.
@@ -53,7 +52,7 @@
 #include "simplexpress/char_sets.hpp"
 #include "simplexpress/rules.hpp"
 
-/**The specifier class is used to match the specifier characters in unit 
+/**The specifier class is used to match the specifier characters in unit
  * models and interface that information to other classes and functions. */
 class Specifier : protected char_sets
 {
@@ -61,8 +60,7 @@ public:
 	Specifier() = default;
 
 	/* All the supported variants of specifier */
-	enum class SpecifierType : char
-	{
+	enum class SpecifierType : char {
 		Any = '.',
 		Alphanumeric = 'a',
 		Classification = 'c',
@@ -84,9 +82,10 @@ public:
 
 	static SpecifierType to_specifier_type(onechar);
 
-	static bool s_alphanumeric(onechar, Rule::LetterCase = Rule::LetterCase::Any);
+	static bool s_alphanumeric(onechar,
+							   Rule::LetterCase = Rule::LetterCase::Any);
 
-	static bool s_digit(onechar, int=10);
+	static bool s_digit(onechar, int = 10);
 
 	static bool s_latin(onechar, Rule::LetterCase = Rule::LetterCase::Any);
 
