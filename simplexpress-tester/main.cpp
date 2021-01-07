@@ -1,7 +1,7 @@
-/** SIMPLExpress Tester
+/** SIMPLEXpress Tester
  * Version: 1.0
  *
- * Allows running tests and custom code for SIMPLExpress.
+ * Allows running tests and custom code for SIMPLEXpress.
  *
  * Author(s): Jason C. McDonald
  */
@@ -43,8 +43,10 @@
 
 #include "pawlib/goldilocks_shell.hpp"
 #include "pawlib/iochannel.hpp"
-#include "simplexpress/basic_test.hpp"
+#include "simplexpress/simplex_test.hpp"
+#include "simplexpress/snag_test.hpp"
 #include "simplexpress/unit_parser_test.hpp"
+
 /** Temporary test code goes in this function ONLY.
  * All test code that is needed long term should be
  * moved to a dedicated Goldilocks Test and TestSuite.
@@ -63,6 +65,7 @@ int main(int argc, char* argv[])
 	GoldilocksShell* shell = new GoldilocksShell(">> ");
 	shell->register_suite<TestSuite_Basic>("X-sB00");
 	shell->register_suite<TestSuite_UnitParser>("X-sB01");
+	shell->register_suite<TestSuite_Snag>("X-sB02");
 
 	// If we got command-line arguments.
 	if (argc > 1) {

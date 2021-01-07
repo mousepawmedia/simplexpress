@@ -1,7 +1,7 @@
-/** Basic Sanity Tests (SIMPLExpress)
+/** Basic Simplex Tests (SIMPLEXpress)
  * Version: 0.1
  *
- * Tests for the basic integral functions of the Simplex and its functions.
+ * Tests for the generation of the Simplex and the Simplex match function.
  *
  * Author(s): Anna R. Dunster, Ben D. Lovy, Jason C. McDonald
  */
@@ -85,6 +85,9 @@ public:
 
 	~TestConstructASCIISimplex() = default;
 };
+
+// Any further Simplex constructor tests should go here as a, b, etc.
+// For example: if adding unicode constructors, etc.
 
 // X-tB0001
 class TestMatchSingleUnitLiteral : public Test
@@ -419,11 +422,11 @@ class TestMatchMultiUnitLiterals : public Test
 public:
 	TestMatchMultiUnitLiterals() = default;
 
-	testdoc_t get_title() override { return "Match Two Literals"; }
+	testdoc_t get_title() override { return "Match Multiple Literals"; }
 
 	testdoc_t get_docs() override
 	{
-		return "Successfully match against a model containing two literal "
+		return "Successfully match against a model containing multiple literal "
 			   "characters";
 	}
 	bool run() override
@@ -730,6 +733,54 @@ public:
 	~TestNegativeMultiple() = default;
 };
 
+// X-tB0021
+class TestLiteralModifiers : public Test
+{
+// TODO: T1429: Verify, clarify, and fix proper syntax for these models.
+// This test currently passes, but this is NOT how the models should be written
+// for literals with modifiers.
+public:
+	TestLiteralModifiers() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Match Literals With Modifiers";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Match models containing literals with modifiers such as "
+			   "optional, multiple, negative.";
+	}
+
+	bool run() override
+	{
+		// Optionals
+		PL_ASSERT_TRUE(Simplex::match("hi5", "hi?^d/"));
+		PL_ASSERT_TRUE(Simplex::match("h5", "hi?^d/"));
+		PL_ASSERT_FALSE(Simplex::match("hiii5", "hi?^d/"));
+		PL_ASSERT_FALSE(Simplex::match("q5", "hi?^d/"));
+		// Multiples
+		PL_ASSERT_TRUE(Simplex::match("hiii5", "hi+^d/"));
+		PL_ASSERT_FALSE(Simplex::match("h5", "hi+^d/"));
+		PL_ASSERT_FALSE(Simplex::match("q5", "hi+^d/"));
+		// Optional Multiple
+		PL_ASSERT_TRUE(Simplex::match("hi5", "hi*^d/"));
+		PL_ASSERT_TRUE(Simplex::match("hiii5", "hi*^d/"));
+		PL_ASSERT_TRUE(Simplex::match("h5", "hi*^d/"));
+		PL_ASSERT_FALSE(Simplex::match("h 5", "hi*^d/"));
+		PL_ASSERT_FALSE(Simplex::match("q5", "hi*^d/"));
+		// Negative
+		PL_ASSERT_TRUE(Simplex::match("hj5", "h!i^d/"));
+		PL_ASSERT_TRUE(Simplex::match("h75", "h!i^d/"));
+		PL_ASSERT_FALSE(Simplex::match("hi5", "h!i^d/"));
+		PL_ASSERT_FALSE(Simplex::match("h5", "h!i^d/"));
+		return true;
+	}
+
+	~TestLiteralModifiers() = default;
+};
+
 // TODO: o specifier (math operator)
 
 // TODO: Set
@@ -833,7 +884,7 @@ public:
 	void load_tests() override;
 	testdoc_t get_title() override
 	{
-		return "SIMPLExpress: Basic Sanity Tests";
+		return "SIMPLExpress: Basic Simplex Tests";
 	}
 	~TestSuite_Basic() = default;
 };

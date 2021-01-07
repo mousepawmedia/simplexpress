@@ -1,4 +1,4 @@
-/** Unit Parser Tests (SIMPLExpress)
+/** Unit Parser Tests (SIMPLEXpress)
  * Version: 0.1
  *
  * Author(s): Wilfrantz Dede, Anna R. Dunster, Ben D. Lovy

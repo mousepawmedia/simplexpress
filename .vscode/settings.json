@@ -97,4 +97,5 @@
     "C_Cpp.intelliSenseEngineFallback": "Enabled",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
     "restructuredtext.workspaceRoot": "${workspaceRoot}",
+    "cmake.configureOnOpen": false,
 }
