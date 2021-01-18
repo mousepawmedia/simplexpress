@@ -10,4 +10,6 @@ void TestSuite_UnitParser::load_tests()
 	register_test("X-tB0105", new TestDigitsParser());
 	register_test("X-tB0106", new TestOperatorParser());
 	register_test("X-tB0107", new TestAlphanumericParser());
+	register_test("X-tB0108", new TestEscapeParser());
+	register_test("X-tB0109", new TestEscapedHardReserved());
 }

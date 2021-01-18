@@ -62,7 +62,7 @@ class TestCharacterParser : public Test
 	onestring expected_pass_two =
 		ParseResult::make_success('^', "").to_string();
 	onestring expected_fail =
-		ParseResult::make_error("Expecting !, got a", "a").to_string();
+		ParseResult::make_error("Invalid Reserved Character", "a").to_string();
 	onestring expected_fail_two =
 		ParseResult::make_error("Out of input", "").to_string();
 
@@ -226,7 +226,7 @@ class TestVariousUnits : public Test
 	onestring pass_two = "^l/";
 	onestring pass_three = "^a+/";
 	onestring pass_four = "^d*/";
-	onestring pass_five = "!q";
+	onestring pass_five = "^!%q/";
 	onestring pass_six = "^!d/";
 	Unit expected_pass = Unit(
 		UnitAttributes(false, false, false, false, 'a', UnitType::Literal));
@@ -416,6 +416,97 @@ public:
 
 	~TestAlphanumericParser() = default;
 };
+
+// X-tB0108
+class TestEscapeParser : public Test
+{
+	onestring pass = "%";
+	onestring pass_two = "%stuff";
+	onestring fail = "g";
+	onestring fail_two = "";
+	onestring expected_pass = ParseResult::make_success("%", "").to_string();
+	onestring expected_pass_two =
+		ParseResult::make_success("%", "stuff").to_string();
+	onestring expected_fail =
+		ParseResult::make_error("Invalid Reserved Character", "g").to_string();
+	onestring expected_fail_two =
+		ParseResult::make_error("Out of input", "").to_string();
+
+public:
+	TestEscapeParser() = default;
+
+	testdoc_t get_title() override { return "Escape Character Parser"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully match Escape character";
+	}
+
+	bool run() override
+	{
+		// Recognize escape in single character input
+		PL_ASSERT_EQUAL(UnitParser::escape(pass).to_string(),
+						expected_pass);
+		// Recognize escape followed by other content
+		PL_ASSERT_EQUAL(UnitParser::escape(pass_two).to_string(),
+						expected_pass_two);
+		// Fail non-operator
+		PL_ASSERT_EQUAL(UnitParser::escape(fail).to_string(),
+						expected_fail);
+		// Fail empty string
+		PL_ASSERT_EQUAL(UnitParser::escape(fail_two).to_string(),
+						expected_fail_two);
+		return true;
+	}
+
+	~TestEscapeParser() = default;
+};
+
+// X-tB0109
+class TestEscapedHardReserved : public Test
+{
+	onestring pass = "%^";
+	onestring pass_two = "%~";
+	onestring pass_three = "%%";
+	onestring pass_four = "%/";
+	Unit expected_pass = Unit(
+		UnitAttributes(false, false, false, false, '^', UnitType::Literal));
+	Unit expected_pass_two = Unit(
+		UnitAttributes(false, false, false, false, '~', UnitType::Literal));
+	Unit expected_pass_three = Unit(
+		UnitAttributes(false, false, false, false, '%', UnitType::Literal));
+	Unit expected_pass_four = Unit(
+		UnitAttributes(false, false, false, false, '/', UnitType::Literal));
+
+public:
+	TestEscapedHardReserved() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Literal Escape from Hard Reserved";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Tests UnitParser against all hard reserved characters "
+			   "following the escape character";
+	}
+	bool run() override
+	{
+		PL_ASSERT_EQUAL(Unit(UnitParser(pass).parse().attr).to_string(),
+						expected_pass.to_string());
+		PL_ASSERT_EQUAL(Unit(UnitParser(pass_two).parse().attr).to_string(),
+						expected_pass_two.to_string());
+		PL_ASSERT_EQUAL(Unit(UnitParser(pass_three).parse().attr).to_string(),
+						expected_pass_three.to_string());
+		PL_ASSERT_EQUAL(Unit(UnitParser(pass_four).parse().attr).to_string(),
+						expected_pass_four.to_string());
+		return true;
+	}
+
+	~TestEscapedHardReserved() = default;
+};
+
 
 class TestSuite_UnitParser : public TestSuite
 {

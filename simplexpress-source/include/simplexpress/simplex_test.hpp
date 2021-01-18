@@ -52,7 +52,7 @@
 
 // X-sB00 //
 
-// X-tB0000
+// X-tB0000a
 class TestConstructASCIISimplex : public Test
 {
 	onestring model = "~l+/-^a+/-^d/.png";
@@ -86,6 +86,44 @@ public:
 	~TestConstructASCIISimplex() = default;
 };
 
+// X-tB0000b
+class TestConstructLiteralUnit : public Test
+{
+	onestring model1 = "N^%n*/o!";
+	onestring model2 = "h^%i*/^d/";
+	onestring expected1 = "[ Unit<literal>::(N)::(), "
+						  "Unit<literal>::(n)::(?+), "
+						  "Unit<literal>::(o)::(), "
+						  "Unit<literal>::(!)::() ]";
+	onestring expected2 = "[ Unit<literal>::(h)::(), "
+						  "Unit<literal>::(i)::(?+), "
+						  "Unit<specifier>::(d)::() ]";
+
+public:
+	TestConstructLiteralUnit() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Construct Simplex With Literal Units";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully construct 8-char model Simplex from an ASCII "
+			   "model that includes literals inside Units";
+	}
+	bool run() override
+	{
+		Simplex simplex1(model1);
+		PL_ASSERT_EQUAL(simplex1.to_string(), expected1);
+		Simplex simplex2(model2);
+		PL_ASSERT_EQUAL(simplex2.to_string(), expected2);
+		return true;
+	}
+
+	~TestConstructLiteralUnit() = default;
+};
+
 // X-tB0000c
 class TestConstructCharSimplex : public Test
 {
@@ -117,9 +155,6 @@ public:
 
 	~TestConstructCharSimplex() = default;
 };
-
-// Any further Simplex constructor tests should go here as a, b, etc.
-// For example: if adding unicode constructors, etc.
 
 // X-tB0001
 class TestMatchSingleUnitLiteral : public Test
@@ -768,16 +803,10 @@ public:
 // X-tB0021
 class TestLiteralModifiers : public Test
 {
-// TODO: T1429: Verify, clarify, and fix proper syntax for these models.
-// This test currently passes, but this is NOT how the models should be written
-// for literals with modifiers.
 public:
 	TestLiteralModifiers() = default;
 
-	testdoc_t get_title() override
-	{
-		return "Match Literals With Modifiers";
-	}
+	testdoc_t get_title() override { return "Match Literals With Modifiers"; }
 
 	testdoc_t get_docs() override
 	{
@@ -788,32 +817,60 @@ public:
 	bool run() override
 	{
 		// Optionals
-		PL_ASSERT_TRUE(Simplex::match("hi5", "hi?^d/"));
-		PL_ASSERT_TRUE(Simplex::match("h5", "hi?^d/"));
-		PL_ASSERT_FALSE(Simplex::match("hiii5", "hi?^d/"));
-		PL_ASSERT_FALSE(Simplex::match("q5", "hi?^d/"));
+		PL_ASSERT_TRUE(Simplex::match("hi?5", "hi?^d/"));
+		PL_ASSERT_TRUE(Simplex::match("hi5", "h^%i?/^d/"));
+		PL_ASSERT_TRUE(Simplex::match("h5", "h^%i?/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("hiii5", "h^%i?/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("q5", "h^%i?/^d/"));
 		// Multiples
-		PL_ASSERT_TRUE(Simplex::match("hiii5", "hi+^d/"));
-		PL_ASSERT_FALSE(Simplex::match("h5", "hi+^d/"));
-		PL_ASSERT_FALSE(Simplex::match("q5", "hi+^d/"));
+		PL_ASSERT_TRUE(Simplex::match("hiii5", "h^%i+/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("h5", "h^%i+/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("q5", "h^%i+/^d/"));
 		// Optional Multiple
-		PL_ASSERT_TRUE(Simplex::match("hi5", "hi*^d/"));
-		PL_ASSERT_TRUE(Simplex::match("hiii5", "hi*^d/"));
-		PL_ASSERT_TRUE(Simplex::match("h5", "hi*^d/"));
-		PL_ASSERT_FALSE(Simplex::match("h 5", "hi*^d/"));
-		PL_ASSERT_FALSE(Simplex::match("q5", "hi*^d/"));
+		PL_ASSERT_TRUE(Simplex::match("hi5", "h^%i*/^d/"));
+		PL_ASSERT_TRUE(Simplex::match("hiii5", "h^%i*/^d/"));
+		PL_ASSERT_TRUE(Simplex::match("h5", "h^%i*/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("h 5", "h^%i*/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("q5", "h^%i*/^d/"));
 		// Negative
-		PL_ASSERT_TRUE(Simplex::match("hj5", "h!i^d/"));
-		PL_ASSERT_TRUE(Simplex::match("h75", "h!i^d/"));
-		PL_ASSERT_FALSE(Simplex::match("hi5", "h!i^d/"));
-		PL_ASSERT_FALSE(Simplex::match("h5", "h!i^d/"));
+		PL_ASSERT_TRUE(Simplex::match("hj5", "h^!%i/^d/"));
+		PL_ASSERT_TRUE(Simplex::match("h75", "h^!%i/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("hi5", "h^!%i/^d/"));
+		PL_ASSERT_FALSE(Simplex::match("h5", "h^!%i/^d/"));
 		return true;
 	}
 
 	~TestLiteralModifiers() = default;
 };
 
-// TODO: o specifier (math operator)
+// X-tB0022
+class TestOperatorSpecifier : public Test
+{
+public:
+	TestOperatorSpecifier() = default;
+
+	testdoc_t get_title() override { return "Match Operator Specifier"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Match models math operator specifiers";
+	}
+
+	bool run() override
+	{
+		// Pass
+		PL_ASSERT_TRUE(Simplex::match("+", "^o/"));
+		PL_ASSERT_TRUE(Simplex::match("%", "^o/"));
+		PL_ASSERT_TRUE(Simplex::match("-^*", "^o+/"));
+		// Fail
+		PL_ASSERT_FALSE(Simplex::match("#", "^o/"));
+		PL_ASSERT_FALSE(Simplex::match(")", "^o/"));
+		PL_ASSERT_FALSE(Simplex::match("abc", "^o+/"));
+		return true;
+	}
+
+	~TestOperatorSpecifier() = default;
+};
 
 // TODO: Set
 

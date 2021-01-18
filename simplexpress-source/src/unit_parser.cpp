@@ -43,7 +43,6 @@ std::ostream& operator<<(std::ostream& s, const ParseResult& r)
 }
 
 // UnitParser
-
 UnitParser::UnitParser(onestring& in) : s(in) {}
 
 void UnitParser::chop(onestring& in)
@@ -65,28 +64,36 @@ UnitParser::ParsedAttributes::ParsedAttributes(UnitAttributes a, size_t s)
 
 UnitParser::ParsedAttributes UnitParser::parse() const
 {
-	// Init attributes
-
+	// Initialize attributes
 	UnitAttributes ret = UnitAttributes();
 	size_t ret_len = 0;
-
 	onestring remainder = s;
-	/** Before entering the loop, check if the whole thing is a literal,
-	/ * unit or snag unit */
-	ParseResult check_unit_open = ParseResult::parse(remainder, unit_marker);
-	ParseResult check_unit_snag = ParseResult::parse(remainder, unit_snag);
 
-	bool unit = (check_unit_open.result || check_unit_snag.result);
-	if (check_unit_open.result) {
-		remainder = check_unit_open.remainder;
-	} else if (check_unit_snag.result) {
-		remainder = check_unit_snag.remainder;
-		ret.snag = true;
+	/** Before entering the loop, first check if character is escaped, and if
+	 * not, then check if we are opening a unit or snag unit */
+	bool escaped = (ParseResult::parse(remainder, escape).result);
+	bool unit = false;
+
+	if (escaped) {
+		remainder = ParseResult::parse(remainder, escape).remainder;
+		++ret_len;
+	} else {
+		ParseResult check_unit_open =
+			ParseResult::parse(remainder, unit_marker);
+		ParseResult check_unit_snag =
+			ParseResult::parse(remainder, unit_snag);
+
+		unit = (check_unit_open.result || check_unit_snag.result);
+		if (check_unit_open.result) {
+			remainder = check_unit_open.remainder;
+		} else if (check_unit_snag.result) {
+			remainder = check_unit_snag.remainder;
+			ret.snag = true;
+		}
 	}
 
-	if (unit) {
-		// We found a unit
-		ret.type = UnitType::Specifier;
+	if (unit && !escaped) {
+		// We found a Unit
 		// Add the open unit character to the matched count
 		++ret_len;
 
@@ -98,34 +105,47 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 			++ret_len;
 		}
 
+		// Check whether it's escaped to a literal Unit.
+		ParseResult check_escape = ParseResult::parse(remainder, escape);
+		remainder = check_escape.remainder;
+		if (check_escape.result) {
+			ret.type = UnitType::Literal;
+			++ret_len;
+			// Capture and store literal for model matcher.
+			ParseResult lit = ParseResult::parse(remainder, literal);
+			remainder = lit.remainder;
+			if (lit.result) {
+				ret.matcher = *lit.s.c_str();
+				// A literal matcher is always one character long.
+				++ret_len;
+			}
+		}
+
 		// Is it a group?
 		// TODO not yet implemented
 
 		// Is it a set?
-		// TODO not yet implemented
+		// TODO not yet implemented. See T940, T941
 
-		// Is it a specifier?
-		ParseResult check_specifier =
-			ParseResult::parse(remainder, specifier_parser);
-		remainder = check_specifier.remainder;
-		if (!check_specifier.result) {
-			// FIXME: parse error!! - this whole thing should return a
-			// ParseResult<T>!!
+		// If it's not literal, verify that it's a valid specifier.
+		if (!check_escape.result) {
+			ret.type = UnitType::Specifier;
+			ParseResult check_specifier =
+				ParseResult::parse(remainder, specifier_parser);
+			remainder = check_specifier.remainder;
+			if (!check_specifier.result) {
+				// FIXME: parse error!! - this whole thing should return a
+				// ParseResult<T>!!
+			}
+			// Store the specifier
+			ret.matcher = *check_specifier.s.c_str();
+			++ret_len;
 		}
 
-		// Store it
-		ret.matcher = *check_specifier.s.c_str();
-		++ret_len;
-
-		// Check modifier
-
+		// Check for modifier and store result, if any.
 		ParseResult check_modifier = ParseResult::parse(remainder, modifier);
 		remainder = check_modifier.remainder;
-		if (!check_modifier.result) {
-			// FIXME: parse error!!
-		}
 
-		// store modifier, if any
 		if (!check_modifier.s.empty()) {
 			onechar mod = check_modifier.s.at(0);
 			if (mod == '+') {
@@ -139,11 +159,9 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 				ret.multiple = true;
 				++ret_len;
 			}
-		} else {
-			return UnitParser::ParsedAttributes(ret, ret_len);
 		}
 
-		// Check end of unit
+		// Verify end of unit
 		ParseResult check_end = ParseResult::parse(remainder, unit_end);
 		remainder = check_end.remainder;
 		if (!check_end.result) {
@@ -153,50 +171,16 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 
 		return UnitParser::ParsedAttributes(ret, ret_len);
 	} else {
-		// It's a literal - KEEP THIS HERE
+		// If it isn't a Unit, match as a literal.
 		ret.type = UnitType::Literal;
-
-		// First - is it negated?
-		ParseResult check_negated = ParseResult::parse(remainder, negator);
-		remainder = check_negated.remainder;
-		if (check_negated.result) {
-			ret.negated = true;
-			ret_len += check_negated.s.length();
-		}
 
 		// Store literal
 		ParseResult lit = ParseResult::parse(remainder, literal);
 		remainder = lit.remainder;
 		if (lit.result) {
 			ret.matcher = *lit.s.c_str();
-			// A literal is always of length 1
-
+			// A literal matcher is always one character long.
 			++ret_len;
-		} else {
-			// FIXME: parse error!
-		}
-
-		ParseResult check_modifier = ParseResult::parse(remainder, modifier);
-		remainder = check_modifier.remainder;
-		if (!check_modifier.result) {
-			// FIXME: parse error!!
-		}
-		// store modifier, if any
-		if (!check_modifier.s.empty()) {
-			onechar mod = check_modifier.s.at(0);
-			if (mod == '+') {
-				ret.multiple = true;
-				++ret_len;
-			} else if (mod == '?') {
-				ret.optional = true;
-				++ret_len;
-			} else if (mod == '*') {
-				ret.optional = true;
-				ret.multiple = true;
-				++ret_len;
-			} else {
-				// DO NOTHING
-			}
 		}
 		return UnitParser::ParsedAttributes(ret, ret_len);
 	}
@@ -216,10 +200,7 @@ ParseResult UnitParser::character(ReservedCharacter rc, onestring in)
 			return ParseResult::make_success(onestring(char_to_match), rem);
 		} else {
 			// No match
-			onestring msg = onestring("Expecting ");
-			msg.append(static_cast<char>(rc));
-			msg += ", got ";
-			msg.append(char_to_match);
+			onestring msg = onestring("Invalid Reserved Character");
 			return ParseResult::make_error(msg, in);
 		}
 	}
@@ -241,55 +222,56 @@ UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
 		return ReservedCharacter::UnitSnag;
 	} else if (ch == '/') {
 		return ReservedCharacter::UnitEnd;
+	} else if (ch == '%') {
+		return ReservedCharacter::Escape;
 	} else {
 		return ReservedCharacter::Unrecognized;
 	}
 }
 
 // Open unit
-
 ParseResult UnitParser::unit_marker(const onestring& in)
 {
 	return character(ReservedCharacter::UnitMarker, in);
 }
 
 // Open snag unit
-
 ParseResult UnitParser::unit_snag(const onestring& in)
 {
 	return character(ReservedCharacter::UnitSnag, in);
 }
 
 // Close unit
-
 ParseResult UnitParser::unit_end(const onestring& in)
 {
 	return character(ReservedCharacter::UnitEnd, in);
 }
 
-// Negator
+// Escape
+ParseResult UnitParser::escape(const onestring& in)
+{
+	return character(ReservedCharacter::Escape, in);
+}
 
+// Negator
 ParseResult UnitParser::negator(const onestring& in)
 {
 	return character(ReservedCharacter::Negator, in);
 }
 
 // Multiple
-
 ParseResult UnitParser::multiple(const onestring& in)
 {
 	return character(ReservedCharacter::Multiple, in);
 }
 
 // Optional
-
 ParseResult UnitParser::optional(const onestring& in)
 {
 	return character(ReservedCharacter::Multiple, in);
 }
 
 // Optional Multiple
-
 ParseResult UnitParser::optional_multiple(const onestring& in)
 {
 	return character(ReservedCharacter::OptionalMultiple, in);
@@ -309,8 +291,6 @@ ParseResult UnitParser::literal(const onestring& in)
 }
 
 // Specifier
-// NOTE: this is a prime example of why ParseResult<T> is what I want
-// Strongly typed parse results will lead to code bloat and repeated logic
 ParseResult UnitParser::specifier_parser(const onestring& in)
 {
 	onestring remainder = in;
@@ -346,7 +326,6 @@ ParseResult UnitParser::specifier_parser(const onestring& in)
 }
 
 // Modifiers
-
 ParseResult UnitParser::modifier(const onestring& in)
 {
 	onestring remainder = in;
@@ -381,7 +360,6 @@ ParseResult UnitParser::modifier(const onestring& in)
 }
 
 // Digits
-
 ParseResult UnitParser::digit_parser(const onestring& in)
 {
 	// If no input, then there are no digits.
@@ -418,7 +396,6 @@ ParseResult UnitParser::digit_parser(const onestring& in)
 }
 
 // Operators
-
 ParseResult UnitParser::operator_parser(const onestring& in)
 {
 	// If no input, then there is no operator.
@@ -442,7 +419,6 @@ ParseResult UnitParser::operator_parser(const onestring& in)
 }
 
 // Alphanumeric
-
 ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 {
 	// If no input, then there is no alphanumeric character.
