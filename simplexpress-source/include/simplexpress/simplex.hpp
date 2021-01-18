@@ -86,6 +86,11 @@ public:
 	 * \param user_model onestring user definition of model*/
 	explicit Simplex(const onestring& user_model);
 
+	/** Overload of constructor to take a string of chars to build a model
+	 * instead of a onestring variable.
+	 * \param user_model char* model_check */
+	explicit Simplex(const char* user_model);
+
 	/** Internal static function to generate matches and snag results from input
 	 * model using variables passed from match and snag functions
 	 * \param model_check onestring user input to check
@@ -98,11 +103,18 @@ public:
 
 	/** Takes the model defined when creating the Simplex, and matches user
 	 * input against it.
-	 * \param model_check onestring user input to check
+	 * \param model_check user input to check
 	 * \return true if input is an exact match for expression in object model*/
 	bool match(const onestring& model_check);
 
+	/** Overload of member match function, matches char* user input instead of
+	 * onestring.
+	 * \param model_check user input to check
+	 * \return true if input is an exact match for expression in object model*/
+	bool match(const char* model_check);
+
 	/** Static version to use with an input model rather than repeat use object.
+	 * This is the final call of all two parameter overloads of match.
 	 * \param model_check onestring user input to check
 	 * \param input_model onestring model to check against
 	 * \return true if input is an exact match for expression in input model*/
@@ -124,8 +136,16 @@ public:
 	 *         array if match is false.*/
 	FlexArray<onestring> snag(const onestring& snag_check);
 
+	/** Overload of member snag function, runs char* user input instead of
+	 * onestring.
+	 * \param snag_check onestring user input to check
+	 * \return FlexArray of onestring matches in order of snag units, or empty
+	 *         array if match is false.*/
+	FlexArray<onestring> snag(const char* snag_check);
+
 	/** Static version of snag to use with an input model rather than repeat use
 	 * object.
+	 * This is the final call of all two parameter overloads of snag.
 	 * \param snag_check onestring user input to check
 	 * \param input_model onestring model to check against
 	 * \return FlexArray of onestring matches in order of snag units, or empty

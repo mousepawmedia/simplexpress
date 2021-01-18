@@ -7,6 +7,11 @@ Simplex::Simplex(const onestring& user_model)
 	parse_model(user_model, model);
 }
 
+Simplex::Simplex(const char* user_model)
+{
+	parse_model(static_cast<onestring>(user_model), model);
+}
+
 SimplexResult Simplex::simplex_parser(const onestring& model_check,
 									  FlexArray<Unit*>& model_array)
 {
@@ -32,8 +37,8 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 			// If snag unit, store matched characters in snag_array,
 			// skip empty optional.
 			if (model_array[model_index]->attr.snag && matched >= 0) {
-				if(matched > 0) {
-				result.snag_array.push(buffer.substr(0, matched));
+				if (matched > 0) {
+					result.snag_array.push(buffer.substr(0, matched));
 				} else if (matched == 0) {
 					onestring empty = "";
 					result.snag_array.push(empty);
@@ -90,6 +95,13 @@ bool Simplex::match(const onestring& model_check)
 	return result.match;
 }
 
+bool Simplex::match(const char* model_check)
+{
+	SimplexResult result =
+		simplex_parser(static_cast<onestring>(model_check), this->model);
+	return result.match;
+}
+
 bool Simplex::match(const onestring& model_check, const onestring& input_model)
 {
 	FlexArray<Unit*> model_array;
@@ -99,28 +111,32 @@ bool Simplex::match(const onestring& model_check, const onestring& input_model)
 	return result.match;
 }
 
-bool Simplex::match(const char* model_str, const onestring& input_model)
+bool Simplex::match(const char* model_check, const onestring& input_model)
 {
-	onestring model_check = model_str;
-	return match(model_check, input_model);
+	return match(static_cast<onestring>(model_check), input_model);
 }
 
-bool Simplex::match(const onestring& model_check, const char* input_model_char)
+bool Simplex::match(const onestring& model_check, const char* input_model)
 {
-	onestring input_model = input_model_char;
-	return match(model_check, input_model);
+	return match(model_check, static_cast<onestring>(input_model));
 }
 
-bool Simplex::match(const char* model_str, const char* input_model_char)
+bool Simplex::match(const char* model_check, const char* input_model)
 {
-	onestring model_check = model_str;
-	onestring input_model = input_model_char;
-	return match(model_check, input_model);
+	return match(static_cast<onestring>(model_check),
+				 static_cast<onestring>(input_model));
 }
 
 FlexArray<onestring> Simplex::snag(const onestring& snag_check)
 {
 	SimplexResult result = simplex_parser(snag_check, this->model);
+	return result.snag_array;
+}
+
+FlexArray<onestring> Simplex::snag(const char* snag_check)
+{
+	SimplexResult result =
+		simplex_parser(static_cast<onestring>(snag_check), this->model);
 	return result.snag_array;
 }
 
@@ -134,26 +150,23 @@ FlexArray<onestring> Simplex::snag(const onestring& snag_check,
 	return result.snag_array;
 }
 
-FlexArray<onestring> Simplex::snag(const char* model_str,
+FlexArray<onestring> Simplex::snag(const char* snag_check,
 								   const onestring& input_model)
 {
-	onestring snag_check = model_str;
-	return snag(snag_check, input_model);
+	return snag(static_cast<onestring>(snag_check), input_model);
 }
 
 FlexArray<onestring> Simplex::snag(const onestring& snag_check,
-								   const char* input_model_char)
+								   const char* input_model)
 {
-	onestring input_model = input_model_char;
-	return snag(snag_check, input_model);
+	return snag(snag_check, static_cast<onestring>(input_model));
 }
 
-FlexArray<onestring> Simplex::snag(const char* model_str,
-								   const char* input_model_char)
+FlexArray<onestring> Simplex::snag(const char* snag_check,
+								   const char* input_model)
 {
-	onestring snag_check = model_str;
-	onestring input_model = input_model_char;
-	return snag(snag_check, input_model);
+	return snag(static_cast<onestring>(snag_check),
+				static_cast<onestring>(input_model));
 }
 
 onestring Simplex::to_string() const

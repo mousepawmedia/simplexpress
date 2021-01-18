@@ -86,6 +86,38 @@ public:
 	~TestConstructASCIISimplex() = default;
 };
 
+// X-tB0000c
+class TestConstructCharSimplex : public Test
+{
+	onestring expected = "[ Unit<specifier>::(l)::(+~), "
+						 "Unit<literal>::(-)::(), "
+						 "Unit<specifier>::(a)::(+), "
+						 "Unit<literal>::(-)::(), "
+						 "Unit<specifier>::(d)::(), "
+						 "Unit<literal>::(.)::(), "
+						 "Unit<literal>::(p)::(), "
+						 "Unit<literal>::(n)::(), "
+						 "Unit<literal>::(g)::() ]";
+
+public:
+	TestConstructCharSimplex() = default;
+
+	testdoc_t get_title() override { return "Construct Simplex using char*"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully construct Simplex from a char* model";
+	}
+	bool run() override
+	{
+		Simplex simplex("~l+/-^a+/-^d/.png");
+		PL_ASSERT_EQUAL(simplex.to_string(), expected);
+		return true;
+	}
+
+	~TestConstructCharSimplex() = default;
+};
+
 // Any further Simplex constructor tests should go here as a, b, etc.
 // For example: if adding unicode constructors, etc.
 
@@ -875,6 +907,35 @@ public:
 	}
 
 	~TestGreedyLogic() = default;
+};
+
+// X-tB0052
+class TestMemberMatchChar : public Test
+{
+	onestring model = "^!d/";
+	onestring input_pass_one = "b";
+	onestring input_pass_two = "^";
+	onestring input_fail = "4";
+
+public:
+	TestMemberMatchChar() = default;
+
+	testdoc_t get_title() override { return "Member Match using char*"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully match against a member model with a char* input";
+	}
+	bool run() override
+	{
+		Simplex simplex(model);
+		PL_ASSERT_TRUE(simplex.match("b"));
+		PL_ASSERT_TRUE(simplex.match("^"));
+		PL_ASSERT_FALSE(simplex.match("4"));
+		return true;
+	}
+
+	~TestMemberMatchChar() = default;
 };
 
 class TestSuite_Basic : public TestSuite

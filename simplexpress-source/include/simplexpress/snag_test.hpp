@@ -168,12 +168,56 @@ public:
 		PL_ASSERT_TRUE(snag_array3.length() == 0);
 		FlexArray<onestring> snag_array4 = Simplex::snag(input_fail_two, model);
 		PL_ASSERT_TRUE(snag_array4.length() == 0);
-		FlexArray<onestring> snag_array5 = Simplex::snag(input_fail_three, model);
+		FlexArray<onestring> snag_array5 =
+			Simplex::snag(input_fail_three, model);
 		PL_ASSERT_TRUE(snag_array5.length() == 0);
 		return true;
 	}
 
 	~TestMultipleSnags() = default;
+};
+
+// X-tB0203
+class TestMemberSnag : public Test
+{
+	onestring model = "~l+/";
+	onestring input_one = "steve";
+	onestring snag_one = "steve";
+	onestring snag_two = "fred";
+	onestring input_fail_one = "";
+	onestring input_fail_two = "12345";
+
+public:
+	TestMemberSnag() = default;
+
+	testdoc_t get_title() override { return "Member Snag Test"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Testing a single unit Snag Simplex works correctly as a member "
+			   "function with various inputs";
+	}
+	bool run() override
+	{
+		Simplex simplex(model);
+		// Correct contents and length on positive match
+		FlexArray<onestring> snag_array1 = simplex.snag(input_one, model);
+		PL_ASSERT_EQUAL(snag_array1.at(0), snag_one);
+		PL_ASSERT_TRUE(snag_array1.length() == 1);
+		FlexArray<onestring> snag_array2 = simplex.snag("fred", model);
+		PL_ASSERT_EQUAL(snag_array2.at(0), snag_two);
+		PL_ASSERT_TRUE(snag_array2.length() == 1);
+		// Empty array on negative match
+		FlexArray<onestring> snag_array3 = simplex.snag(input_fail_one, model);
+		PL_ASSERT_TRUE(snag_array3.length() == 0);
+		FlexArray<onestring> snag_array4 = simplex.snag(input_fail_two, model);
+		PL_ASSERT_TRUE(snag_array4.length() == 0);
+		FlexArray<onestring> snag_array5 = simplex.snag("893745", model);
+		PL_ASSERT_TRUE(snag_array5.length() == 0);
+		return true;
+	}
+
+	~TestMemberSnag() = default;
 };
 
 class TestSuite_Snag : public TestSuite

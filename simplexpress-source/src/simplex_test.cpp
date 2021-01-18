@@ -3,6 +3,7 @@
 void TestSuite_Basic::load_tests()
 {
 	register_test("X-tB0000", new TestConstructASCIISimplex());
+	register_test("X-tB0000c", new TestConstructCharSimplex());
 	register_test("X-tB0001", new TestMatchSingleUnitLiteral());
 	register_test("X-tB0002", new TestMatchSingleUnitSpecifierAlphanumeric());
 	register_test("X-tB0003", new TestMatchSingleUnitSpecifierDigit());
@@ -26,4 +27,5 @@ void TestSuite_Basic::load_tests()
 	register_test("X-tB0021", new TestLiteralModifiers());
 	register_test("X-tB0050", new TestStaticMatch());
 	register_test("X-tB0051", new TestGreedyLogic());
+	register_test("X-tB0052", new TestMemberMatchChar());
 }
