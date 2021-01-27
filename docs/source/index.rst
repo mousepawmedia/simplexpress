@@ -7,8 +7,8 @@ multiple uses and complex rules, SIMPLEXpress hard-reserves two characters
 and leaves the rest for literal use. Using a few simple syntactic rules,
 the user can easily write powerful expressions.
 
-See SIMPLEXpress' ``README.md``, ``CHANGELOG.md``, ``BUILDING.md``,
-	and ``LICENSE.md`` for more information.
+See SIMPLEXpress' ``README.md``, ``CHANGELOG.md``, ``BUILDING.md``, and
+``LICENSE.md`` for more information.
 
 Contents:
 ====================
@@ -19,7 +19,10 @@ Contents:
 
     general/setup
     simplex/simplex
-    unitparser/*
+    simplex/model
+    simplex/match
+    simplex/snag
+    simplex/simplex_parser
     general/console
     general/tests
     general/support
