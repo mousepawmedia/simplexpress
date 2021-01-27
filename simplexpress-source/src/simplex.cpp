@@ -4,12 +4,12 @@
 
 Simplex::Simplex(const onestring& user_model)
 {
-	parse_model(user_model, model);
+	UnitParser::parse_model(user_model, model);
 }
 
 Simplex::Simplex(const char* user_model)
 {
-	parse_model(static_cast<onestring>(user_model), model);
+	UnitParser::parse_model(static_cast<onestring>(user_model), model);
 }
 
 SimplexResult Simplex::simplex_parser(const onestring& model_check,
@@ -105,7 +105,7 @@ bool Simplex::match(const char* model_check)
 bool Simplex::match(const onestring& model_check, const onestring& input_model)
 {
 	FlexArray<Unit*> model_array;
-	parse_model(input_model, model_array);
+	UnitParser::parse_model(input_model, model_array);
 
 	SimplexResult result = simplex_parser(model_check, model_array);
 	return result.match;
@@ -144,7 +144,7 @@ FlexArray<onestring> Simplex::snag(const onestring& snag_check,
 								   const onestring& input_model)
 {
 	FlexArray<Unit*> model_array;
-	parse_model(input_model, model_array);
+	UnitParser::parse_model(input_model, model_array);
 
 	SimplexResult result = simplex_parser(snag_check, model_array);
 	return result.snag_array;
@@ -176,13 +176,14 @@ onestring Simplex::to_string() const
 	return ss.str();
 }
 
-bool next(const unsigned int& model_index, const FlexArray<Unit*>& model_array)
+bool Simplex::next(const unsigned int& model_index,
+				   const FlexArray<Unit*>& model_array)
 {
 	return !(model_index + 1 >= model_array.length());
 }
 
-bool check_optional(const unsigned int& model_index,
-					const FlexArray<Unit*>& model_array)
+bool Simplex::check_optional(const unsigned int& model_index,
+							 const FlexArray<Unit*>& model_array)
 {
 	unsigned int current_index = model_index;
 	while (next(current_index, model_array)) {
@@ -194,28 +195,10 @@ bool check_optional(const unsigned int& model_index,
 	return true;
 }
 
-void parse_model(const onestring& user_model, FlexArray<Unit*>& model_array)
-{
-	onestring remainder = user_model;
-	// Loop through model input calling the unit parser, removing processed
-	// characters with each iteration
-	while (!remainder.empty()) {
-		// TODO find a way to make VSCode ignore identifier undefined
-		auto [attr, l] = UnitParser(remainder).parse();
-		model_array.push_back(new Unit(attr));
-		if (remainder.length() - l <= 0) {
-			return;
-		}
-		onestring new_rem = remainder.substr(l, remainder.length());
-		remainder = new_rem;
-	}
-	// If user model was empty, to begin with, do nothing - empty simplex
-}
-
-int generosity(const onestring incoming_buffer,
-			   const int total_matched,
-			   const int starting_index,
-			   const FlexArray<Unit*>& model_array)
+int Simplex::generosity(const onestring incoming_buffer,
+						const int total_matched,
+						const int starting_index,
+						const FlexArray<Unit*>& model_array)
 {
 	/** We will handle generosity slightly differently depending whether the
 	 * starting unit is optional or not. We know the first character of the

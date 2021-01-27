@@ -450,7 +450,7 @@ public:
 		// Recognize escape followed by other content
 		PL_ASSERT_EQUAL(UnitParser::escape(pass_two).to_string(),
 						expected_pass_two);
-		// Fail non-operator
+		// Fail non-escape character
 		PL_ASSERT_EQUAL(UnitParser::escape(fail).to_string(),
 						expected_fail);
 		// Fail empty string
@@ -507,6 +507,57 @@ public:
 	~TestEscapedHardReserved() = default;
 };
 
+// X-tB0110
+class TestMultiCharacterSpecifier : public Test
+{
+	onestring pass = "al";
+	onestring pass_two = "al/";
+	onestring pass_three = "aq";
+	onestring fail = "x";
+	onestring fail_two = "";
+	onestring expected_pass = ParseResult::make_success("al", "").to_string();
+	onestring expected_pass_two =
+		ParseResult::make_success("al", "/").to_string();
+	onestring expected_pass_three =
+		ParseResult::make_success("a", "q").to_string();
+	onestring expected_fail =
+		ParseResult::make_error("Unknown specifier!", "x").to_string();
+	onestring expected_fail_two =
+		ParseResult::make_error("Out of input", "").to_string();
+
+public:
+	TestMultiCharacterSpecifier() = default;
+
+	testdoc_t get_title() override { return "Multi Character Specifier"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully match a specifier with multiple characters (for "
+			   "upper/lower case)";
+	}
+
+	bool run() override
+	{
+		// Recognize multicharacter specifier in solitary input
+		PL_ASSERT_EQUAL(UnitParser::specifier_parser(pass).to_string(),
+						expected_pass);
+		// Recognize multicharacter specifier followed by unit end
+		PL_ASSERT_EQUAL(UnitParser::specifier_parser(pass_two).to_string(),
+						expected_pass_two);
+		// Recognize specifier followed by non specifying alphanumeric
+		PL_ASSERT_EQUAL(UnitParser::specifier_parser(pass_three).to_string(),
+						expected_pass_three);
+		// Fail non-operator
+		PL_ASSERT_EQUAL(UnitParser::specifier_parser(fail).to_string(),
+						expected_fail);
+		// Fail empty string
+		PL_ASSERT_EQUAL(UnitParser::specifier_parser(fail_two).to_string(),
+						expected_fail_two);
+		return true;
+	}
+
+	~TestMultiCharacterSpecifier() = default;
+};
 
 class TestSuite_UnitParser : public TestSuite
 {

@@ -15,7 +15,7 @@ UnitAttributes::UnitAttributes(bool optional,
 							   bool multiple,
 							   bool snag,
 							   bool negated,
-							   onechar match,
+							   onestring match,
 							   UnitType type)
 : optional(optional), multiple(multiple), snag(snag), negated(negated),
   matcher(match), type(type)
@@ -58,34 +58,34 @@ std::ostream& operator<<(std::ostream& s, const UnitType& r)
 	return s;
 }
 
-Unit::Unit(UnitAttributes a) : attr(a), model(a.matcher) {}
+Unit::Unit(UnitAttributes a) : attr(a) {}
 
 bool Unit::specifiers(onechar ch)
 {
 	bool return_var = false;
-	Rule::LetterCase sCase;
+	Rule::LetterCase specifier_case;
 
-	/* Which case we are going to be looking for.*/
-	if (model.length() >= 2) {
-		sCase = Rule::to_letter_case(model.at(2).c_str()[0]);
+	/* Determine specifier to match. */
+	Specifier::SpecifierType specifier =
+		Specifier::to_specifier_type(attr.matcher.at(0));
+
+	/* Determine case, if specified.*/
+	if (attr.matcher.length() >= 2) {
+		specifier_case = Rule::to_letter_case(attr.matcher.at(1));
 	} else {
-		sCase = Rule::LetterCase::Any;
+		specifier_case = Rule::LetterCase::Any;
 	}
 
-	/* Determine specifier */
-	Specifier::SpecifierType specifier =
-		Specifier::to_specifier_type(model.at(model_index));
-
-	/* Checks input character against selected specifier */
+	/* Check input against selected specifier rule. */
 	switch (specifier) {
 		case Specifier::SpecifierType::Alphanumeric:
-			return_var = Rule::rule_a(ch, sCase);
+			return_var = Rule::rule_a(ch, specifier_case);
 			break;
 		case Specifier::SpecifierType::Digit:
 			return_var = Rule::rule_d(ch);
 			break;
 		case Specifier::SpecifierType::LatinLetter:
-			return_var = Rule::rule_l(ch, sCase);
+			return_var = Rule::rule_l(ch, specifier_case);
 			break;
 		case Specifier::SpecifierType::Newline:
 			return_var = Rule::rule_n(ch);
@@ -120,9 +120,8 @@ bool Unit::specifiers(onechar ch)
 
 bool Unit::literals(onechar ch)
 {
-	/*has to match Unicode character exactly
-	otherwise its false*/
-	return ch == model[model_index];
+	// Match Unicode character exactly.
+	return ch == attr.matcher.at(0);
 }
 
 bool Unit::literal_sets(onechar ch)
@@ -138,22 +137,8 @@ bool Unit::model_matches(onechar ch)
 	bool return_var = false;
 	if (attr.type == UnitType::Specifier) {
 		// Run if this unit is a specifier.
-
-		// NOTE: This does not feel like the recommended way to switch on a
-		// onechar
-		// FIXME: handle error of not having something after it
-		// Should have a function to check for sets, return enum?
-		switch (model.at(1).c_str()[0]) {
-			case '<':
-				// literal_sets(ch);
-				break;
-			case '[':
-				// sets(ch);
-				break;
-			default:
-				return_var = specifiers(ch);
-				break;
-		}
+		return_var = specifiers(ch);
+		// TODO: UnitType and logic for sets and literal sets
 	} else {
 		// Otherwise run as a literal.
 		return_var = literals(ch);
@@ -161,7 +146,7 @@ bool Unit::model_matches(onechar ch)
 	return return_var;
 }
 
-int Unit::check_model(onestring s)
+int Unit::check_model(onestring parsestring)
 {
 	// Negated handler
 	if (attr.negated) {
@@ -169,8 +154,8 @@ int Unit::check_model(onestring s)
 		if (attr.optional && attr.multiple) {
 			// Iterate until failure. If empty, pass.
 			int ret = 0;
-			for (size_t i = 0; i < s.length(); ++i) {
-				if (!model_matches(s.at(i))) {
+			for (size_t i = 0; i < parsestring.length(); ++i) {
+				if (!model_matches(parsestring.at(i))) {
 					ret += 1;
 				} else {
 					break;
@@ -181,7 +166,7 @@ int Unit::check_model(onestring s)
 		// Negative optional
 		else if (attr.optional) {
 			// Check for a match. If empty or no (negative) matches, pass.
-			if (!model_matches(s.at(0))) {
+			if (!model_matches(parsestring.at(0))) {
 				return 1;
 			} else {
 				return 0;
@@ -190,13 +175,13 @@ int Unit::check_model(onestring s)
 		// Negative multiple
 		else if (attr.multiple) {
 			// If no matches, return -1 to fail match.
-			if (model_matches(s.at(0))) {
+			if (model_matches(parsestring.at(0))) {
 				return -1;
 			}
 			// Otherwise, iterate until failure.
 			int ret = 0;
-			for (size_t i = 0; i < s.length(); ++i) {
-				if (!model_matches(s.at(i))) {
+			for (size_t i = 0; i < parsestring.length(); ++i) {
+				if (!model_matches(parsestring.at(i))) {
 					ret += 1;
 				} else {
 					break;
@@ -205,7 +190,7 @@ int Unit::check_model(onestring s)
 			return ret;
 		}
 		// Only Negative
-		if (model_matches(s.at(0))) {
+		if (model_matches(parsestring.at(0))) {
 			return -1;
 		} else {
 			return 1;
@@ -216,8 +201,8 @@ int Unit::check_model(onestring s)
 	else if (attr.optional && attr.multiple) {
 		// Iterate until failure. If empty, pass.
 		int ret = 0;
-		for (size_t i = 0; i < s.length(); ++i) {
-			if (model_matches(s.at(i))) {
+		for (size_t i = 0; i < parsestring.length(); ++i) {
+			if (model_matches(parsestring.at(i))) {
 				ret += 1;
 			} else {
 				break;
@@ -229,7 +214,7 @@ int Unit::check_model(onestring s)
 	// Optional handler
 	else if (attr.optional) {
 		// Check for a match. If empty or no matches, pass.
-		if (model_matches(s.at(0))) {
+		if (model_matches(parsestring.at(0))) {
 			return 1;
 		} else {
 			return 0;
@@ -239,13 +224,13 @@ int Unit::check_model(onestring s)
 	// Multiple handler
 	else if (attr.multiple) {
 		// If no matches, return -1 to fail match.
-		if (!model_matches(s.at(0))) {
+		if (!model_matches(parsestring.at(0))) {
 			return -1;
 		}
 		// Otherwise, iterate until failure.
 		int ret = 0;
-		for (size_t i = 0; i < s.length(); i++) {
-			if (model_matches(s.at(i))) {
+		for (size_t i = 0; i < parsestring.length(); i++) {
+			if (model_matches(parsestring.at(i))) {
 				ret += 1;
 			} else {
 				break;
@@ -256,7 +241,7 @@ int Unit::check_model(onestring s)
 
 	// Otherwise check single character
 	else {
-		if (model_matches(s.at(0))) {
+		if (model_matches(parsestring.at(0))) {
 			return 1;
 		} else {
 			return -1;
@@ -271,10 +256,11 @@ onestring Unit::to_string() const
 	return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& s, const Unit& unit)
+std::ostream& operator<<(std::ostream& stream, const Unit& unit)
 {
-	s << "Unit<" << unit.attr.type << ">::(" << unit.attr.matcher << ")::("
-	  << (unit.attr.optional ? "?" : "") << (unit.attr.multiple ? "+" : "")
-	  << (unit.attr.snag ? "~" : "") << (unit.attr.negated ? "!" : "") << ")";
-	return s;
+	stream << "Unit<" << unit.attr.type << ">::(" << unit.attr.matcher << ")::("
+		   << (unit.attr.optional ? "?" : "") << (unit.attr.multiple ? "+" : "")
+		   << (unit.attr.snag ? "~" : "") << (unit.attr.negated ? "!" : "")
+		   << ")";
+	return stream;
 }

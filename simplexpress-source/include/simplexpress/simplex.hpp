@@ -59,7 +59,7 @@
  */
 struct SimplexResult {
 	// Default initialization to true, parser will set false as needed.
-	SimplexResult(): match(true) {}
+	SimplexResult() : match(true) {}
 	bool match;
 	FlexArray<onestring> snag_array;
 };
@@ -165,42 +165,37 @@ public:
 	FlexArray<onestring> static snag(const char* model_check,
 									 const char* input_model);
 
+	// Helper functions
+
+	/** Checks whether there are additional Units in the model.
+	 * \param model_index int the current index
+	 * \param model_array the Unit array
+	 * \return true if additional Units present, false if last Unit in model*/
+	bool static next(const unsigned int& model_index,
+					 const FlexArray<Unit*>& model_array);
+
+	/** Checks if all additional Units in model are optional, in case no matches
+	 * are present for optional Units on the end of a model.
+	 * \param model_index int the current index
+	 * \param model_array the Unit array
+	 * \return false if any non-optional Units exist in remainder of model*/
+	bool static check_optional(const unsigned int& model_index,
+							   const FlexArray<Unit*>& model_array);
+
+	/** Used by match() and snag() to not be too greedy
+	 * \param buffer onestring to digest
+	 * \param total_matched int of possible matches
+	 * \param starting_index int of starting index in model
+	 * \param model_array array of Units, the working model
+	 * \return number of matches to consume without invalidating later Units*/
+	int static generosity(const onestring buffer,
+						  const int total_matched,
+						  const int starting_index,
+						  const FlexArray<Unit*>& model_array);
+
 	/**Convert to string for testing*/
 	onestring to_string() const;
 	friend std::ostream& operator<<(std::ostream&, const Simplex&);
 };
-
-// Helper functions
-
-/** Parses through the user defined model to generate Unit array.
- * Uses enumeration to pull out each type of model we can have.
- * \param user_model onestring user definition of model
- * \param model_array array to contain the Units.*/
-void parse_model(const onestring&, FlexArray<Unit*>&);
-
-/** Checks whether there are additional Units in the model.
- * \param model_index int the current index
- * \param model_array the Unit array
- * \return true if additional Units present, false if last Unit in model*/
-bool next(const unsigned int& model_index, const FlexArray<Unit*>& model_array);
-
-/** Checks if all additional Units in model are optional, in case no matches
- * are present for optional Units on the end of a model.
- * \param model_index int the current index
- * \param model_array the Unit array
- * \return false if any non-optional Units exist in remainder of model*/
-bool check_optional(const unsigned int& model_index,
-					const FlexArray<Unit*>& model_array);
-
-/** Used by match() and snag() to not be too greedy
- * \param buffer onestring to digest
- * \param total_matched int of possible matches
- * \param starting_index int of starting index in model
- * \param model_array array of Units, the working model
- * \return number of matches to consume without invalidating later Units*/
-int generosity(const onestring buffer,
-			   const int total_matched,
-			   const int starting_index,
-			   const FlexArray<Unit*>& model_array);
 
 #endif

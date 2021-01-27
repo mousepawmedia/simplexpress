@@ -156,6 +156,39 @@ public:
 	~TestConstructCharSimplex() = default;
 };
 
+// X-tB0000d
+class TestMultiCharSpeciferSimplex : public Test
+{
+	onestring model1 = "^al/";
+	onestring expected1 = "[ Unit<specifier>::(al)::() ]";
+	onestring model2 = "^al+/";
+	onestring expected2 = "[ Unit<specifier>::(al)::(+) ]";
+
+public:
+	TestMultiCharSpeciferSimplex() = default;
+
+	testdoc_t get_title() override
+	{
+		return "Multi-Character Specifier Unit generation";
+	}
+
+	testdoc_t get_docs() override
+	{
+		return "Successfully construct Simplex using a multi-character "
+			   "specifier Unit model";
+	}
+	bool run() override
+	{
+		Simplex simplex1(model1);
+		PL_ASSERT_EQUAL(simplex1.to_string(), expected1);
+		Simplex simplex2(model2);
+		PL_ASSERT_EQUAL(simplex2.to_string(), expected2);
+		return true;
+	}
+
+	~TestMultiCharSpeciferSimplex() = default;
+};
+
 // X-tB0001
 class TestMatchSingleUnitLiteral : public Test
 {
@@ -853,7 +886,7 @@ public:
 
 	testdoc_t get_docs() override
 	{
-		return "Match models math operator specifiers";
+		return "Match models containing math operator specifiers";
 	}
 
 	bool run() override
@@ -870,6 +903,33 @@ public:
 	}
 
 	~TestOperatorSpecifier() = default;
+};
+
+// X-tB0023
+class TestCapitalSpecifiers : public Test
+{
+public:
+	TestCapitalSpecifiers() = default;
+
+	testdoc_t get_title() override { return "Match Capitalized Specifiers"; }
+
+	testdoc_t get_docs() override
+	{
+		return "Match models with capitalized specifiers";
+	}
+
+	bool run() override
+	{
+		// Pass
+		PL_ASSERT_TRUE(Simplex::match("abc", "^al+/"));
+		PL_ASSERT_TRUE(Simplex::match("ABC", "^au+/"));
+		// Fail
+		PL_ASSERT_FALSE(Simplex::match("abc", "^au+/"));
+		PL_ASSERT_FALSE(Simplex::match("ABC", "^al+/"));
+		return true;
+	}
+
+	~TestCapitalSpecifiers() = default;
 };
 
 // TODO: Set

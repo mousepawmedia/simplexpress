@@ -12,4 +12,5 @@ void TestSuite_UnitParser::load_tests()
 	register_test("X-tB0107", new TestAlphanumericParser());
 	register_test("X-tB0108", new TestEscapeParser());
 	register_test("X-tB0109", new TestEscapedHardReserved());
+	register_test("X-tB0110", new TestMultiCharacterSpecifier());
 }

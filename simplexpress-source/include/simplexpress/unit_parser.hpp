@@ -45,14 +45,11 @@
 #include <sstream>
 
 #include "pawlib/core_types.hpp"
+#include "pawlib/flex_array.hpp"
 #include "pawlib/onestring.hpp"
 #include "simplexpress/specifier.hpp"
 #include "simplexpress/unit.hpp"
 
-// NOTE: (to self) I'm starting to feel like using some of this for parsing in
-// Simplex, too.  Take care to keep general parts separate.
-
-std::ostream& operator<<(std::ostream& s, const UnitType& r);
 
 /**Each parser returns a Parse Result.
  * To use this struct, define a parser function that returns a ParseResult.
@@ -69,6 +66,9 @@ class ParseResult
 	 */
 	ParseResult(tril, const onestring&, const onestring&);
 
+	/**The default constructor returns an Error with an empty message*/
+	ParseResult();
+
 public:
 	/**This is the ultimate result of the parse operation*/
 	tril result = maybe;
@@ -76,13 +76,10 @@ public:
 	/**For a success, this the matched part of the input.
 	 * For an Error, this is an error message. If empty, unknown.
 	 */
-	onestring s = "";
+	onestring parsedstring = "";
 
 	/**This is the unparsed remainder, set in constructor.*/
 	onestring remainder;
-
-	/**The default constructor returns an Error with an empty message*/
-	ParseResult();
 
 	/** Construct a successful match result
 	 * \param onestring: the successfully matched portion
@@ -109,8 +106,18 @@ public:
 	friend std::ostream& operator<<(std::ostream& s, const ParseResult& r);
 };
 
+/** Return type for UnitParser's parse() function.
+ * Contains the UnitAttributes for Unit construction, and the length of parsed
+ * input in onechars to progress within parse_model(). */
+struct ParsedAttributes
+{
+	UnitAttributes attr;
+	size_t size;
+	ParsedAttributes(UnitAttributes, size_t);
+};
+
 /** UnitParser encapsulates the logic for converting a PawLIB::onestring to a
- * single Unit of a simplexpress::Simplex*/
+ * single Unit of a simplexpress::Simplex model*/
 class UnitParser
 {
 public:
@@ -133,22 +140,19 @@ public:
 
 	static ReservedCharacter to_reserved_character(onechar);
 
-	/** Holds the final parsed attributes as well as length of parsed input*/
-	class ParsedAttributes
-	{
-	public:
-		UnitAttributes attr;
-		size_t size;
-		ParsedAttributes(UnitAttributes, size_t);
-	};
-
 	/**Get parsed unit attributes.
 	 * Returns the attributes and the size of the unit in onechars*/
 	ParsedAttributes parse() const;
 
+	/** Parses through the user defined model to generate Unit array. Used by
+	 * the Simplex class's constructor.
+	 * \param user_model onestring user definition of model
+	 * \param model_array array to contain the Units.*/
+	void static parse_model(const onestring&, FlexArray<Unit*>&);
+
 private:
 	/**Input string being parsed*/
-	onestring s;
+	onestring parsedstring;
 
 	/**Success base message*/
 	inline static const onestring success_base = "Matched ";
@@ -220,13 +224,12 @@ private:
 	/**High-level parser for Unit parsing*/
 	static ParseResult unit(const onestring&);
 
-	/**High-level parser for Literal parsing*/
-
 	/** Helper function to safely chop head off a onestring in place.
 	 * \param onestring to remove first character from
 	 */
 	static void chop(onestring&);
 
+	/** Friend classes for testing purposes only*/
 	friend class TestCharacterParser;
 	friend class TestLiteralParser;
 	friend class TestSpecifierParser;
@@ -235,7 +238,9 @@ private:
 	friend class TestOperatorParser;
 	friend class TestAlphanumericParser;
 	friend class TestEscapeParser;
-
+	friend class TestMultiCharacterSpecifier;
 };
+
+std::ostream& operator<<(std::ostream& s, const UnitType& r);
 
 #endif  // !SIMPLEXPRESS_UNITPARSER_HPP

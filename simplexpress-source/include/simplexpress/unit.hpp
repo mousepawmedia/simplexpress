@@ -72,7 +72,7 @@ public:
 	bool negated;
 
 	/**Which specifier is being matched, or which literal*/
-	onechar matcher;
+	onestring matcher;
 
 	/**Type of unit*/
 	UnitType type;
@@ -85,14 +85,14 @@ public:
 	 * \param multiple bool flag
 	 * \param snag bool flag
 	 * \param negator bool flag
-	 * \param match onechar for either the specifier or the literal
+	 * \param match onestring for either the specifier or the literal
 	 * \param type UnitType
 	 */
 	UnitAttributes(bool optional,
 				   bool multiple,
 				   bool snag,
 				   bool negator,
-				   onechar match,
+				   onestring matcher,
 				   UnitType type);
 
 	/**Copy constructor
@@ -115,18 +115,13 @@ public:
 class Unit
 {
 public:
-	UnitAttributes attr;
-
-	/**Used for the purpose of parsing through the model. Is set in
-	 * constructor. Includes an identifier if present, followed by a case
-	 * if present. */
-	onestring model;
+	/** Attributes created in Unit construction by the Unit Parser class. These
+	 * are the actual model information used by Simplex to check input. Must be
+	 * set in constructor. */
+	const UnitAttributes attr;
 
 	/**Explicit constructor*/
 	explicit Unit(UnitAttributes);
-
-	/**Keep track of where we are in the model. */
-	int model_index = 0;
 
 	/**Checks current onechar against model for match.
 	 * \param onechar that is being checked */

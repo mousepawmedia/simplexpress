@@ -3,12 +3,12 @@
 
 // ParseResult
 
-ParseResult::ParseResult() : result(false), s(""), remainder("") {}
-
 ParseResult::ParseResult(tril res, const onestring& str, const onestring& r)
-: result(res), s(str), remainder(r)
+: result(res), parsedstring(str), remainder(r)
 {
 }
+
+ParseResult::ParseResult() : result(false), parsedstring(""), remainder("") {}
 
 ParseResult ParseResult::make_success(const onestring& match,
 									  const onestring& rem)
@@ -35,39 +35,44 @@ onestring ParseResult::to_string() const
 	return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& s, const ParseResult& r)
+// ParsedAttributes
+ParsedAttributes::ParsedAttributes(UnitAttributes attr, size_t size)
+: attr(attr), size(size)
 {
-	s << ((static_cast<bool>(r.result)) ? "Ok" : "Err");
-	s << '(' << r.s << ", " << r.remainder << ')';
-	return s;
 }
 
 // UnitParser
-UnitParser::UnitParser(onestring& in) : s(in) {}
+UnitParser::UnitParser(onestring& in) : parsedstring(in) {}
 
-void UnitParser::chop(onestring& in)
+UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
 {
-	if (in.length() > 1) {
-		onestring new_rem = in.substr(1, in.length());
-		in = new_rem;
-	} else if (in.length() == 1) {
-		in = in.at(0);
+	if (ch == '+') {
+		return ReservedCharacter::Multiple;
+	} else if (ch == '!') {
+		return ReservedCharacter::Negator;
+	} else if (ch == '?') {
+		return ReservedCharacter::Optional;
+	} else if (ch == '*') {
+		return ReservedCharacter::OptionalMultiple;
+	} else if (ch == '^') {
+		return ReservedCharacter::UnitMarker;
+	} else if (ch == '~') {
+		return ReservedCharacter::UnitSnag;
+	} else if (ch == '/') {
+		return ReservedCharacter::UnitEnd;
+	} else if (ch == '%') {
+		return ReservedCharacter::Escape;
 	} else {
-		in = "";
+		return ReservedCharacter::Unrecognized;
 	}
 }
 
-UnitParser::ParsedAttributes::ParsedAttributes(UnitAttributes a, size_t s)
-: attr(a), size(s)
-{
-}
-
-UnitParser::ParsedAttributes UnitParser::parse() const
+ParsedAttributes UnitParser::parse() const
 {
 	// Initialize attributes
 	UnitAttributes ret = UnitAttributes();
 	size_t ret_len = 0;
-	onestring remainder = s;
+	onestring remainder = parsedstring;
 
 	/** Before entering the loop, first check if character is escaped, and if
 	 * not, then check if we are opening a unit or snag unit */
@@ -80,8 +85,7 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 	} else {
 		ParseResult check_unit_open =
 			ParseResult::parse(remainder, unit_marker);
-		ParseResult check_unit_snag =
-			ParseResult::parse(remainder, unit_snag);
+		ParseResult check_unit_snag = ParseResult::parse(remainder, unit_snag);
 
 		unit = (check_unit_open.result || check_unit_snag.result);
 		if (check_unit_open.result) {
@@ -115,7 +119,7 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 			ParseResult lit = ParseResult::parse(remainder, literal);
 			remainder = lit.remainder;
 			if (lit.result) {
-				ret.matcher = *lit.s.c_str();
+				ret.matcher = lit.parsedstring;
 				// A literal matcher is always one character long.
 				++ret_len;
 			}
@@ -138,16 +142,16 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 				// ParseResult<T>!!
 			}
 			// Store the specifier
-			ret.matcher = *check_specifier.s.c_str();
-			++ret_len;
+			ret.matcher = check_specifier.parsedstring;
+			ret_len += check_specifier.parsedstring.length();
 		}
 
 		// Check for modifier and store result, if any.
 		ParseResult check_modifier = ParseResult::parse(remainder, modifier);
 		remainder = check_modifier.remainder;
 
-		if (!check_modifier.s.empty()) {
-			onechar mod = check_modifier.s.at(0);
+		if (!check_modifier.parsedstring.empty()) {
+			onechar mod = check_modifier.parsedstring.at(0);
 			if (mod == '+') {
 				ret.multiple = true;
 				++ret_len;
@@ -168,8 +172,6 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 			// FIXME parse error!!
 		}
 		++ret_len;
-
-		return UnitParser::ParsedAttributes(ret, ret_len);
 	} else {
 		// If it isn't a Unit, match as a literal.
 		ret.type = UnitType::Literal;
@@ -178,14 +180,34 @@ UnitParser::ParsedAttributes UnitParser::parse() const
 		ParseResult lit = ParseResult::parse(remainder, literal);
 		remainder = lit.remainder;
 		if (lit.result) {
-			ret.matcher = *lit.s.c_str();
+			ret.matcher = lit.parsedstring;
 			// A literal matcher is always one character long.
 			++ret_len;
 		}
-		return UnitParser::ParsedAttributes(ret, ret_len);
 	}
+	return ParsedAttributes(ret, ret_len);
 }
 
+void UnitParser::parse_model(const onestring& user_model,
+							 FlexArray<Unit*>& model_array)
+{
+	onestring remainder = user_model;
+	// Loop through model input calling the unit parser, removing processed
+	// characters with each iteration
+	while (!remainder.empty()) {
+		ParsedAttributes parsedattr = UnitParser(remainder).parse();
+		model_array.push_back(new Unit(parsedattr.attr));
+		if (remainder.length() - parsedattr.size <= 0) {
+			return;
+		}
+		onestring new_rem =
+			remainder.substr(parsedattr.size, remainder.length());
+		remainder = new_rem;
+	}
+	// If user model was empty, to begin with, do nothing - empty simplex
+}
+
+// Parser: Reserved Character
 ParseResult UnitParser::character(ReservedCharacter rc, onestring in)
 {
 	// if empty, no match
@@ -206,78 +228,55 @@ ParseResult UnitParser::character(ReservedCharacter rc, onestring in)
 	}
 }
 
-UnitParser::ReservedCharacter UnitParser::to_reserved_character(onechar ch)
-{
-	if (ch == '+') {
-		return ReservedCharacter::Multiple;
-	} else if (ch == '!') {
-		return ReservedCharacter::Negator;
-	} else if (ch == '?') {
-		return ReservedCharacter::Optional;
-	} else if (ch == '*') {
-		return ReservedCharacter::OptionalMultiple;
-	} else if (ch == '^') {
-		return ReservedCharacter::UnitMarker;
-	} else if (ch == '~') {
-		return ReservedCharacter::UnitSnag;
-	} else if (ch == '/') {
-		return ReservedCharacter::UnitEnd;
-	} else if (ch == '%') {
-		return ReservedCharacter::Escape;
-	} else {
-		return ReservedCharacter::Unrecognized;
-	}
-}
-
-// Open unit
+// Parser: Open unit
 ParseResult UnitParser::unit_marker(const onestring& in)
 {
 	return character(ReservedCharacter::UnitMarker, in);
 }
 
-// Open snag unit
+// Parser: Open snag unit
 ParseResult UnitParser::unit_snag(const onestring& in)
 {
 	return character(ReservedCharacter::UnitSnag, in);
 }
 
-// Close unit
+// Parser: Close unit
 ParseResult UnitParser::unit_end(const onestring& in)
 {
 	return character(ReservedCharacter::UnitEnd, in);
 }
 
-// Escape
+// Parser: Escape
 ParseResult UnitParser::escape(const onestring& in)
 {
 	return character(ReservedCharacter::Escape, in);
 }
 
-// Negator
+// Parser: Negator
 ParseResult UnitParser::negator(const onestring& in)
 {
 	return character(ReservedCharacter::Negator, in);
 }
 
-// Multiple
+// Parser: Multiple
 ParseResult UnitParser::multiple(const onestring& in)
 {
 	return character(ReservedCharacter::Multiple, in);
 }
 
-// Optional
+// Parser: Optional
 ParseResult UnitParser::optional(const onestring& in)
 {
 	return character(ReservedCharacter::Multiple, in);
 }
 
-// Optional Multiple
+// Parser: Optional Multiple
 ParseResult UnitParser::optional_multiple(const onestring& in)
 {
 	return character(ReservedCharacter::OptionalMultiple, in);
 }
 
-// Literal
+// Parser: Literal
 ParseResult UnitParser::literal(const onestring& in)
 {
 	// Matches the first character, whatever it is.  Fails if no input present
@@ -290,7 +289,7 @@ ParseResult UnitParser::literal(const onestring& in)
 	}
 }
 
-// Specifier
+// Parser: Specifier
 ParseResult UnitParser::specifier_parser(const onestring& in)
 {
 	onestring remainder = in;
@@ -325,7 +324,7 @@ ParseResult UnitParser::specifier_parser(const onestring& in)
 	return ParseResult::make_success(lhs, remainder);
 }
 
-// Modifiers
+// Parser: Modifiers
 ParseResult UnitParser::modifier(const onestring& in)
 {
 	onestring remainder = in;
@@ -359,7 +358,7 @@ ParseResult UnitParser::modifier(const onestring& in)
 	}
 }
 
-// Digits
+// Parser: Digits
 ParseResult UnitParser::digit_parser(const onestring& in)
 {
 	// If no input, then there are no digits.
@@ -395,7 +394,7 @@ ParseResult UnitParser::digit_parser(const onestring& in)
 	return ParseResult::make_success(lhs, remainder);
 }
 
-// Operators
+// Parser: Operators
 ParseResult UnitParser::operator_parser(const onestring& in)
 {
 	// If no input, then there is no operator.
@@ -418,7 +417,7 @@ ParseResult UnitParser::operator_parser(const onestring& in)
 	}
 }
 
-// Alphanumeric
+// Parser: Alphanumeric
 ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 {
 	// If no input, then there is no alphanumeric character.
@@ -454,4 +453,24 @@ ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 	// an alphanumeric character, then we return success on the entire input.
 
 	return ParseResult::make_success(lhs, remainder);
+}
+
+// Helper Functions
+void UnitParser::chop(onestring& in)
+{
+	if (in.length() > 1) {
+		onestring new_rem = in.substr(1, in.length());
+		in = new_rem;
+	} else if (in.length() == 1) {
+		in = in.at(0);
+	} else {
+		in = "";
+	}
+}
+
+std::ostream& operator<<(std::ostream& parsedstring, const ParseResult& r)
+{
+	parsedstring << ((static_cast<bool>(r.result)) ? "Ok" : "Err");
+	parsedstring << '(' << r.parsedstring << ", " << r.remainder << ')';
+	return parsedstring;
 }
