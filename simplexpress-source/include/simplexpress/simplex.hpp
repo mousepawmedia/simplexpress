@@ -71,7 +71,7 @@ class Simplex
 {
 protected:
 	/**The model itself, an array of Unit objects.*/
-	FlexArray<Unit*> model;
+	FlexArray<Unit> model;
 
 	/**Used to keep track of whether we are in a unit or not. If we encounter
 	 * a `^` then we add 1 and if we encounter a `/` then we subtract 1. If
@@ -99,7 +99,7 @@ public:
 	 *         function and FlexArray "snag_array" of onestring matches in order
 	 *         of snag units, or empty array if match is false.*/
 	SimplexResult static simplex_parser(const onestring& model_check,
-										FlexArray<Unit*>& model_array);
+										FlexArray<Unit>& model_array);
 
 	/** Takes the model defined when creating the Simplex, and matches user
 	 * input against it.
@@ -172,7 +172,7 @@ public:
 	 * \param model_array the Unit array
 	 * \return true if additional Units present, false if last Unit in model*/
 	bool static next(const unsigned int& model_index,
-					 const FlexArray<Unit*>& model_array);
+					 const FlexArray<Unit>& model_array);
 
 	/** Checks if all additional Units in model are optional, in case no matches
 	 * are present for optional Units on the end of a model.
@@ -180,7 +180,7 @@ public:
 	 * \param model_array the Unit array
 	 * \return false if any non-optional Units exist in remainder of model*/
 	bool static check_optional(const unsigned int& model_index,
-							   const FlexArray<Unit*>& model_array);
+							   const FlexArray<Unit>& model_array);
 
 	/** Used by match() and snag() to not be too greedy
 	 * \param buffer onestring to digest
@@ -191,7 +191,7 @@ public:
 	int static generosity(const onestring buffer,
 						  const int total_matched,
 						  const int starting_index,
-						  const FlexArray<Unit*>& model_array);
+						  const FlexArray<Unit>& model_array);
 
 	/**Convert to string for testing*/
 	onestring to_string() const;

@@ -188,24 +188,25 @@ ParsedAttributes UnitParser::parse() const
 	return ParsedAttributes(ret, ret_len);
 }
 
-void UnitParser::parse_model(const onestring& user_model,
-							 FlexArray<Unit*>& model_array)
+FlexArray<Unit> UnitParser::parse_model(const onestring& user_model)
 {
 	onestring remainder = user_model;
+	FlexArray<Unit> model_array;
 	// Loop through model input calling the unit parser, removing processed
 	// characters with each iteration
 	while (!remainder.empty()) {
 		ParsedAttributes parsedattr = UnitParser(remainder).parse();
-		model_array.push_back(new Unit(parsedattr.attr));
+		model_array.push_back(Unit(parsedattr.attr));
 		if (remainder.length() - parsedattr.size <= 0) {
-			return;
+			break;
 		}
 		onestring new_rem =
 			remainder.substr(parsedattr.size, remainder.length());
 		remainder = new_rem;
 	}
 	// If user model was empty, to begin with, do nothing - empty simplex
-}
+	return model_array;
+};
 
 // Parser: Reserved Character
 ParseResult UnitParser::character(ReservedCharacter rc, onestring in)

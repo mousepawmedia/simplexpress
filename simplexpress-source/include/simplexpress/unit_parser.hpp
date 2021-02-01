@@ -50,7 +50,6 @@
 #include "simplexpress/specifier.hpp"
 #include "simplexpress/unit.hpp"
 
-
 /**Each parser returns a Parse Result.
  * To use this struct, define a parser function that returns a ParseResult.
  * Call `ParseResult::parse(myString, myParser)` and use the resulting object
@@ -109,8 +108,7 @@ public:
 /** Return type for UnitParser's parse() function.
  * Contains the UnitAttributes for Unit construction, and the length of parsed
  * input in onechars to progress within parse_model(). */
-struct ParsedAttributes
-{
+struct ParsedAttributes {
 	UnitAttributes attr;
 	size_t size;
 	ParsedAttributes(UnitAttributes, size_t);
@@ -148,7 +146,7 @@ public:
 	 * the Simplex class's constructor.
 	 * \param user_model onestring user definition of model
 	 * \param model_array array to contain the Units.*/
-	void static parse_model(const onestring&, FlexArray<Unit*>&);
+	FlexArray<Unit> static parse_model(const onestring&);
 
 private:
 	/**Input string being parsed*/

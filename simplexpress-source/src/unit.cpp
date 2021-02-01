@@ -58,9 +58,13 @@ std::ostream& operator<<(std::ostream& s, const UnitType& r)
 	return s;
 }
 
-Unit::Unit(UnitAttributes a) : attr(a) {}
+Unit::Unit(UnitAttributes attr) : attr(attr) {}
 
-bool Unit::specifiers(onechar ch)
+Unit::Unit() {}
+
+Unit::Unit(const Unit& unit) : attr(unit.attr) {}
+
+bool Unit::specifiers(onechar ch) const
 {
 	bool return_var = false;
 	Rule::LetterCase specifier_case;
@@ -118,7 +122,7 @@ bool Unit::specifiers(onechar ch)
 	return return_var;
 }
 
-bool Unit::literals(onechar ch)
+bool Unit::literals(onechar ch) const
 {
 	// Match Unicode character exactly.
 	return ch == attr.matcher.at(0);
@@ -132,7 +136,7 @@ bool Unit::literal_sets(onechar ch)
 	return return_var;
 }
 
-bool Unit::model_matches(onechar ch)
+bool Unit::model_matches(onechar ch) const
 {
 	bool return_var = false;
 	if (attr.type == UnitType::Specifier) {
@@ -146,7 +150,7 @@ bool Unit::model_matches(onechar ch)
 	return return_var;
 }
 
-int Unit::check_model(onestring parsestring)
+int Unit::check_model(onestring parsestring) const
 {
 	// Negated handler
 	if (attr.negated) {

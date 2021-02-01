@@ -105,7 +105,7 @@ public:
 	 */
 	UnitAttributes(UnitAttributes&&);
 
-	/**Assignment overload*/
+	/** Assignment overload*/
 	UnitAttributes& operator=(const UnitAttributes&);
 };
 
@@ -116,21 +116,26 @@ class Unit
 {
 public:
 	/** Attributes created in Unit construction by the Unit Parser class. These
-	 * are the actual model information used by Simplex to check input. Must be
-	 * set in constructor. */
-	const UnitAttributes attr;
+	 * are the actual model information used by Simplex to check input. */
+	UnitAttributes attr;
 
 	/**Explicit constructor*/
 	explicit Unit(UnitAttributes);
 
+	/** Default constructor for empty Unit */
+	Unit();
+
+	/** Copy constructor */
+	Unit(const Unit& unit);
+
 	/**Checks current onechar against model for match.
 	 * \param onechar that is being checked */
-	bool model_matches(onechar);
+	bool model_matches(onechar) const;
 
 	/**Checks matcher and current onechar against specifier list, returns true
 	 * if match exists
 	 * \param onechar: the actual unicode to check against the specifiers.*/
-	bool specifiers(onechar);
+	bool specifiers(onechar) const;
 
 	/**Simplex set calls specifiers func, but returns true on the first
 	 * specifier found to be true within the set.
@@ -145,14 +150,14 @@ public:
 	/**Literals, Everything entered outside a unit. These are taken as they
 	 * are and what user is checking against them has to match literal exactly.
 	 * \param onechar that we are checking for a literal match exactly.*/
-	bool literals(onechar ch);
+	bool literals(onechar ch) const;
 
 	/**Used by Simplex class to generate match boolean.
 	 * \param onestring that we are checking against the model.
 	 * \return number of characters that match the current Unit in the model,
 	 *         0 for no matches on an optional Unit, or -1 for no matches on a
 	 *         non-optional Unit*/
-	int check_model(onestring);
+	int check_model(onestring) const;
 
 	/**Convert to string for testing*/
 	onestring to_string() const;

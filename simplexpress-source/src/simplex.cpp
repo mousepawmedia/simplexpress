@@ -4,16 +4,16 @@
 
 Simplex::Simplex(const onestring& user_model)
 {
-	UnitParser::parse_model(user_model, model);
+	model = UnitParser::parse_model(user_model);
 }
 
 Simplex::Simplex(const char* user_model)
 {
-	UnitParser::parse_model(static_cast<onestring>(user_model), model);
+	model = UnitParser::parse_model(static_cast<onestring>(user_model));
 }
 
 SimplexResult Simplex::simplex_parser(const onestring& model_check,
-									  FlexArray<Unit*>& model_array)
+									  FlexArray<Unit>& model_array)
 {
 	SimplexResult result;
 	unsigned int model_index = 0;
@@ -23,10 +23,10 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 	}
 	while (!buffer.empty()) {
 		// Checks how many characters are matched by the current Unit in model
-		int matched = model_array[model_index]->check_model(buffer);
+		int matched = model_array[model_index].check_model(buffer);
 		std::cout << "Matching " << buffer;
-		std::cout << " against " << *model_array[model_index] << "... ";
-		if (model_array[model_index]->attr.optional) {
+		std::cout << " against " << model_array[model_index] << "... ";
+		if (model_array[model_index].attr.optional) {
 			std::cout << (matched > 0 ? "true" : "false") << "\n";
 		} else {
 			std::cout << (matched > -1 ? "true" : "false") << "\n";
@@ -36,7 +36,7 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 		if (matched > -1) {
 			// If snag unit, store matched characters in snag_array,
 			// skip empty optional.
-			if (model_array[model_index]->attr.snag && matched >= 0) {
+			if (model_array[model_index].attr.snag && matched >= 0) {
 				if (matched > 0) {
 					result.snag_array.push(buffer.substr(0, matched));
 				} else if (matched == 0) {
@@ -54,7 +54,7 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 			}
 			// Check whether we're being too greedy on multiples,
 			// skip empty optional.
-			if (model_array[model_index]->attr.multiple && matched > 0) {
+			if (model_array[model_index].attr.multiple && matched > 0) {
 				matched = generosity(buffer, matched, model_index, model_array);
 			}
 			// Then remove the matched amount from the front.
@@ -104,8 +104,7 @@ bool Simplex::match(const char* model_check)
 
 bool Simplex::match(const onestring& model_check, const onestring& input_model)
 {
-	FlexArray<Unit*> model_array;
-	UnitParser::parse_model(input_model, model_array);
+	FlexArray<Unit> model_array = UnitParser::parse_model(input_model);
 
 	SimplexResult result = simplex_parser(model_check, model_array);
 	return result.match;
@@ -143,8 +142,7 @@ FlexArray<onestring> Simplex::snag(const char* snag_check)
 FlexArray<onestring> Simplex::snag(const onestring& snag_check,
 								   const onestring& input_model)
 {
-	FlexArray<Unit*> model_array;
-	UnitParser::parse_model(input_model, model_array);
+	FlexArray<Unit> model_array = UnitParser::parse_model(input_model);
 
 	SimplexResult result = simplex_parser(snag_check, model_array);
 	return result.snag_array;
@@ -177,18 +175,18 @@ onestring Simplex::to_string() const
 }
 
 bool Simplex::next(const unsigned int& model_index,
-				   const FlexArray<Unit*>& model_array)
+				   const FlexArray<Unit>& model_array)
 {
 	return !(model_index + 1 >= model_array.length());
 }
 
 bool Simplex::check_optional(const unsigned int& model_index,
-							 const FlexArray<Unit*>& model_array)
+							 const FlexArray<Unit>& model_array)
 {
 	unsigned int current_index = model_index;
 	while (next(current_index, model_array)) {
 		current_index++;
-		if (!model_array[current_index]->attr.optional) {
+		if (!model_array[current_index].attr.optional) {
 			return false;
 		}
 	}
@@ -198,7 +196,7 @@ bool Simplex::check_optional(const unsigned int& model_index,
 int Simplex::generosity(const onestring incoming_buffer,
 						const int total_matched,
 						const int starting_index,
-						const FlexArray<Unit*>& model_array)
+						const FlexArray<Unit>& model_array)
 {
 	/** We will handle generosity slightly differently depending whether the
 	 * starting unit is optional or not. We know the first character of the
@@ -213,7 +211,7 @@ int Simplex::generosity(const onestring incoming_buffer,
 	 * so we copy everything.*/
 	onestring buffer;
 	int greedy_match;
-	if (model_array[starting_index]->attr.optional) {
+	if (model_array[starting_index].attr.optional) {
 		buffer = incoming_buffer;
 		greedy_match = total_matched + 1;
 	} else {
@@ -230,7 +228,7 @@ int Simplex::generosity(const onestring incoming_buffer,
 	while (greedy_match > 0) {
 		--greedy_match;
 		++count;
-		int matched = model_array[current_index + 1]->check_model(buffer);
+		int matched = model_array[current_index + 1].check_model(buffer);
 
 		if (matched <= 0) {
 			// Advance buffer if next unit doesn't match, but if we already
@@ -276,7 +274,7 @@ int Simplex::generosity(const onestring incoming_buffer,
 	 * have to remove it here.*/
 	if (match_start_index > 0 &&
 		(generous_match + match_start_index >= total_matched)) {
-		return (model_array[starting_index]->attr.optional)
+		return (model_array[starting_index].attr.optional)
 				   ? (match_start_index - 1)
 				   : match_start_index;
 	} else {
@@ -288,7 +286,7 @@ std::ostream& operator<<(std::ostream& s, const Simplex& sx)
 {
 	s << "[ ";
 	for (size_t i = 0; i < sx.model.length(); i++) {
-		s << *sx.model[i];
+		s << sx.model[i];
 		if (i < sx.model.length() - 1) {
 			s << ", ";
 		}
