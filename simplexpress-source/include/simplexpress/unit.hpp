@@ -50,15 +50,15 @@
 #include "simplexpress/rules.hpp"
 #include "simplexpress/specifier.hpp"
 
-/**The various categories of unit currently implemented. */
+/** The various categories of unit currently implemented. */
 // TODO: Set, Group
 enum class UnitType { Literal, Specifier };
 
-/**The set of attributes and modifiers that can apply to a Unit. */
+/** The set of attributes and modifiers that can apply to a Unit. */
 class UnitAttributes
 {
 public:
-	/**Check flags:
+	/** Check flags:
 	 * ? for optional
 	 * + for multiple
 	 * * for both optional and multiple*/
@@ -68,19 +68,19 @@ public:
 	/** ~ for snag group*/
 	bool snag;
 
-	/**Is ! flag set*/
+	/** Is ! flag set*/
 	bool negated;
 
-	/**Which specifier is being matched, or which literal*/
+	/** Which specifier is being matched, or which literal*/
 	onestring matcher;
 
-	/**Type of unit*/
+	/** Type of unit*/
 	UnitType type;
 
-	/**Default constructor*/
+	/** Default constructor*/
 	UnitAttributes();
 
-	/**Full constructor
+	/** Full constructor
 	 * \param optional bool flag
 	 * \param multiple bool flag
 	 * \param snag bool flag
@@ -95,12 +95,12 @@ public:
 				   onestring matcher,
 				   UnitType type);
 
-	/**Copy constructor
+	/** Copy constructor
 	 * \param Struct to copy
 	 */
 	UnitAttributes(const UnitAttributes&);
 
-	/**Move constructor
+	/** Move constructor
 	 * \param Struct to move
 	 */
 	UnitAttributes(UnitAttributes&&);
@@ -109,7 +109,7 @@ public:
 	UnitAttributes& operator=(const UnitAttributes&);
 };
 
-/**The Unit class is where we check against the model. Depending on what is
+/** The Unit class is where we check against the model. Depending on what is
  * put in to check against, the model determines what function is called. It is
  * possible to have all types within one model.*/
 class Unit
@@ -119,7 +119,7 @@ public:
 	 * are the actual model information used by Simplex to check input. */
 	UnitAttributes attr;
 
-	/**Explicit constructor*/
+	/** Explicit constructor*/
 	explicit Unit(UnitAttributes);
 
 	/** Default constructor for empty Unit */
@@ -128,38 +128,48 @@ public:
 	/** Copy constructor */
 	Unit(const Unit& unit);
 
-	/**Checks current onechar against model for match.
+	/** Enum used by check model to indicate match status.
+	 * Also used by parser and generosity in Simplex.
+	 * Number values greater than 1 indicate a multi character match on a Unit
+	 * with the multiple attribute. */
+	enum match_status {
+		no_required_match = -1,
+		no_optional_match = 0,
+		single_character_match = 1
+	};
+
+	/** Checks current onechar against model for match.
 	 * \param onechar that is being checked */
 	bool model_matches(onechar) const;
 
-	/**Checks matcher and current onechar against specifier list, returns true
+	/** Checks matcher and current onechar against specifier list, returns true
 	 * if match exists
 	 * \param onechar: the actual unicode to check against the specifiers.*/
 	bool specifiers(onechar) const;
 
-	/**Simplex set calls specifiers func, but returns true on the first
+	/** Simplex set calls specifiers func, but returns true on the first
 	 * specifier found to be true within the set.
 	 * \param onechar: the unicode we are checking in the set.*/
 	bool sets(onechar ch);
 
-	/**Literal sets, Input against the model has to match exactly what is
+	/** Literal sets, Input against the model has to match exactly what is
 	 * inside the literal set.
 	 * \param onestring: the onestring we are checking for a literal match */
 	bool literal_sets(onechar ch);
 
-	/**Literals, Everything entered outside a unit. These are taken as they
+	/** Literals, Everything entered outside a unit. These are taken as they
 	 * are and what user is checking against them has to match literal exactly.
 	 * \param onechar that we are checking for a literal match exactly.*/
 	bool literals(onechar ch) const;
 
-	/**Used by Simplex class to generate match boolean.
+	/** Used by Simplex class to generate match boolean.
 	 * \param onestring that we are checking against the model.
 	 * \return number of characters that match the current Unit in the model,
 	 *         0 for no matches on an optional Unit, or -1 for no matches on a
 	 *         non-optional Unit*/
-	int check_model(onestring) const;
+	[[nodiscard]] int check_model(onestring) const;
 
-	/**Convert to string for testing*/
+	/** Convert to string for testing*/
 	onestring to_string() const;
 	friend std::ostream& operator<<(std::ostream&, const Unit&);
 };

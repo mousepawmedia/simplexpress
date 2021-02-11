@@ -27,19 +27,22 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 		std::cout << "Matching " << buffer;
 		std::cout << " against " << model_array[model_index] << "... ";
 		if (model_array[model_index].attr.optional) {
-			std::cout << (matched > 0 ? "true" : "false") << "\n";
+			std::cout << (matched > Unit::no_optional_match ? "true" : "false")
+					  << "\n";
 		} else {
-			std::cout << (matched > -1 ? "true" : "false") << "\n";
+			std::cout << (matched > Unit::no_required_match ? "true" : "false")
+					  << "\n";
 		}
 
 		// Only advance if we're matching
-		if (matched > -1) {
+		if (matched > Unit::no_required_match) {
 			// If snag unit, store matched characters in snag_array,
 			// skip empty optional.
-			if (model_array[model_index].attr.snag && matched >= 0) {
-				if (matched > 0) {
+			if (model_array[model_index].attr.snag &&
+				matched >= Unit::no_optional_match) {
+				if (matched > Unit::no_optional_match) {
 					result.snag_array.push(buffer.substr(0, matched));
-				} else if (matched == 0) {
+				} else if (matched == Unit::no_optional_match) {
 					onestring empty = "";
 					result.snag_array.push(empty);
 				}
@@ -54,7 +57,8 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 			}
 			// Check whether we're being too greedy on multiples,
 			// skip empty optional.
-			if (model_array[model_index].attr.multiple && matched > 0) {
+			if (model_array[model_index].attr.multiple &&
+				matched > Unit::no_optional_match) {
 				matched = generosity(buffer, matched, model_index, model_array);
 			}
 			// Then remove the matched amount from the front.
@@ -230,7 +234,7 @@ int Simplex::generosity(const onestring incoming_buffer,
 		++count;
 		int matched = model_array[current_index + 1].check_model(buffer);
 
-		if (matched <= 0) {
+		if (matched <= Unit::no_optional_match) {
 			// Advance buffer if next unit doesn't match, but if we already
 			// advanced the model, we need to retry it against the beginning
 			// of the model, so we don't advance.

@@ -171,16 +171,16 @@ int Unit::check_model(onestring parsestring) const
 		else if (attr.optional) {
 			// Check for a match. If empty or no (negative) matches, pass.
 			if (!model_matches(parsestring.at(0))) {
-				return 1;
+				return single_character_match;
 			} else {
-				return 0;
+				return no_optional_match;
 			}
 		}
 		// Negative multiple
 		else if (attr.multiple) {
-			// If no matches, return -1 to fail match.
+			// If no matches, fail match.
 			if (model_matches(parsestring.at(0))) {
-				return -1;
+				return no_required_match;
 			}
 			// Otherwise, iterate until failure.
 			int ret = 0;
@@ -195,9 +195,9 @@ int Unit::check_model(onestring parsestring) const
 		}
 		// Only Negative
 		if (model_matches(parsestring.at(0))) {
-			return -1;
+			return no_required_match;
 		} else {
-			return 1;
+			return single_character_match;
 		}
 	}
 
@@ -219,17 +219,17 @@ int Unit::check_model(onestring parsestring) const
 	else if (attr.optional) {
 		// Check for a match. If empty or no matches, pass.
 		if (model_matches(parsestring.at(0))) {
-			return 1;
+			return single_character_match;
 		} else {
-			return 0;
+			return no_optional_match;
 		}
 	}
 
 	// Multiple handler
 	else if (attr.multiple) {
-		// If no matches, return -1 to fail match.
+		// If no matches, fail match.
 		if (!model_matches(parsestring.at(0))) {
-			return -1;
+			return no_required_match;
 		}
 		// Otherwise, iterate until failure.
 		int ret = 0;
@@ -246,9 +246,9 @@ int Unit::check_model(onestring parsestring) const
 	// Otherwise check single character
 	else {
 		if (model_matches(parsestring.at(0))) {
-			return 1;
+			return single_character_match;
 		} else {
-			return -1;
+			return no_required_match;
 		}
 	}
 }
