@@ -43,6 +43,7 @@
 
 #include "pawlib/goldilocks_shell.hpp"
 #include "pawlib/iochannel.hpp"
+#include "simplexpress/lex_test.hpp"
 #include "simplexpress/simplex_test.hpp"
 #include "simplexpress/snag_test.hpp"
 #include "simplexpress/unit_parser_test.hpp"
@@ -66,6 +67,7 @@ int main(int argc, char* argv[])
 	shell->register_suite<TestSuite_Basic>("X-sB00");
 	shell->register_suite<TestSuite_UnitParser>("X-sB01");
 	shell->register_suite<TestSuite_Snag>("X-sB02");
+	shell->register_suite<TestSuite_Lexer>("X-sB03");
 
 	// If we got command-line arguments.
 	if (argc > 1) {

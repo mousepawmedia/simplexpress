@@ -40,7 +40,7 @@ the declaration, too:
     // Using char
     Simplex char_simplex("^l/");
 
-The major functions of Simplex, ``match`` and ``snag``, can be also used without
-creating a Simplex object. (See the function pages for details on use.) Creating
-a Simplex object is the more efficient of these two methods when you will be
-reusing the model, however.
+The major functions of Simplex, ``match``, ``snag`` and ``lex()``, can be also
+used without creating a Simplex object. (See the function pages for details on
+use.) Creating a Simplex object is the more efficient of these two methods when
+you will be reusing the model, however.

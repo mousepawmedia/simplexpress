@@ -10,11 +10,14 @@ The :code:`match()` member function is used to determine whether input matches
 the specified :ref:`model<simplex_model>` or not. When used with a generated
 Simplex object, it takes either a onestring or a string of ``char`` as a
 parameter (the input to check), and the function returns true if the input is an
-exact match to the model, false if not. This replaces both match and search in
-standard regex, as Simplex is a single pass parser; if you want to include
-matches in the middle of an input, build the model accordingly (ie, with a Unit
-like :code:`^.*/` - which is any character, one or more, optionally, on either
-end of the units you're trying to match).
+exact match to the model, false if not. It will only return true if the *entire*
+input matches the *entire* model. If you want to check for a match at the
+beginning of input, use :ref:`lex<simplex_lex>` instead.
+
+Simplex is a single pass parser; if you want to include matches later than the
+beginning of input, build the model accordingly (ie, with a Unit like
+:code:`^.*/` - which is any character, one or more, optionally - at the
+beginning of the units you're trying to match or lex).
 
 
 ..  code-block:: c++
@@ -23,13 +26,13 @@ end of the units you're trying to match).
     onestring model = "^d/";
 
     onestring match_input1 = "3";
-    bool match1 = simplex.match(search_input1);
+    bool match1 = simplex.match(match_input1);
     // match1 is true
     onestring match_input2 = "abc";
-    bool match2 = simplex.match(search_input2);
+    bool match2 = simplex.match(match_input2);
     // match2 is false
     onestring match_input3 = "3a";
-    bool match3 = simplex.match(search_input3);
+    bool match3 = simplex.match(match_input3);
     // match3 is false
 
 ..  note::

@@ -55,17 +55,18 @@
 #include "simplexpress/unit.hpp"
 #include "simplexpress/unit_parser.hpp"
 
-/** Holds parser results for use by match and snag functions. */
+/** Holds parser results for use by match, snag, and lex functions. */
 struct SimplexResult {
 	// Default initialization to true, parser will set false as needed.
-	SimplexResult() : match(true) {}
+	SimplexResult() : match(true), match_length(0) {}
 	bool match;
 	FlexArray<onestring> snag_array;
+	uint_fast16_t match_length;
 };
 
-/** The simplex class is the overall model of Simplexpress. A simplex contains an
- * array of Units. Everything entered outside a Unit is taken as a literal and
- * must be matched exactly. */
+/** The simplex class is the overall model of Simplexpress. A simplex contains
+ * an array of Units. Everything entered outside a Unit is taken as a literal
+ * and must be matched exactly. */
 class Simplex
 {
 protected:
@@ -88,11 +89,13 @@ public:
 	 * model using variables passed from match and snag functions
 	 * \param model_check onestring user input to check
 	 * \param model_array FlexArray of Units that is the model to check
+	 * \param lexing flags whether we are lexing, optional, defaults to false
 	 * \return result SimplexResult including a boolean "match" for match
 	 *         function and FlexArray "snag_array" of onestring matches in order
 	 *         of snag units, or empty array if match is false. */
 	SimplexResult static simplex_parser(const onestring& model_check,
-										FlexArray<Unit>& model_array);
+										FlexArray<Unit>& model_array,
+										bool lexing);
 
 	/** Takes the model defined when creating the Simplex, and matches user
 	 * input against it.
@@ -158,6 +161,36 @@ public:
 	FlexArray<onestring> static snag(const char* model_check,
 									 const char* input_model);
 
+	/** Takes the model defined when creating the Simplex, and lexes user
+	 * input against it.
+	 * \param model_check user input to check
+	 * \return SimplexResult containing match data */
+	SimplexResult lex(const onestring& model_check);
+
+	/** Overload of member lex function, matches char* user input instead of
+	 * onestring.
+	 * \param model_check user input to check
+	 * \return SimplexResult containing match data */
+	SimplexResult lex(const char* model_check);
+
+	/** Static version to use with an input model rather than repeat use object.
+	 * This is the final call of all two parameter overloads of lex.
+	 * \param model_check onestring user input to check
+	 * \param input_model onestring model to check against
+	 * \return SimplexResult containing match data */
+	SimplexResult static lex(const onestring& model_check,
+							 const onestring& input_model);
+
+	/** Static lex conversion overloads from various string literals.
+	 * \param model_check user input to check
+	 * \param input_model model to check against
+	 * \return SimplexResult containing match data */
+	SimplexResult static lex(const char* model_check,
+							 const onestring& input_model);
+	SimplexResult static lex(const onestring& model_check,
+							 const char* input_model);
+	SimplexResult static lex(const char* model_check, const char* input_model);
+
 	// Helper functions
 
 	/** Checks whether there are additional Units in the model.
@@ -180,11 +213,13 @@ public:
 	 * \param total_matched int of possible matches
 	 * \param starting_index int of starting index in model
 	 * \param model_array array of Units, the working model
+	 * \param lexing flags whether we are lexing, optional, defaults to false
 	 * \return number of matches to consume without invalidating later Units */
 	int static generosity(const onestring buffer,
 						  const int total_matched,
 						  const int starting_index,
-						  const FlexArray<Unit>& model_array);
+						  const FlexArray<Unit>& model_array,
+						  bool lexing);
 
 	/** Convert to string for testing. */
 	onestring to_string() const;

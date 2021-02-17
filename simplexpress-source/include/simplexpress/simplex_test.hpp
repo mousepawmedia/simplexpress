@@ -7,7 +7,7 @@
  */
 
 /* LICENSE
- * Copyright (c) 2020 MousePaw Media.
+ * Copyright (c) 2021 MousePaw Media.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1055,6 +1055,7 @@ public:
 	~TestMemberMatchChar() = default;
 };
 
+// X-sB00 //
 class TestSuite_Basic : public TestSuite
 {
 public:

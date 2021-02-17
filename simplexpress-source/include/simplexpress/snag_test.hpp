@@ -220,6 +220,7 @@ public:
 	~TestMemberSnag() = default;
 };
 
+// X-sB02 //
 class TestSuite_Snag : public TestSuite
 {
 public:

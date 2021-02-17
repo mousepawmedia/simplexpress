@@ -22,6 +22,7 @@ Contents:
     simplex/model
     simplex/match
     simplex/snag
+    simplex/lex
     simplex/simplex_parser
     general/console
     general/tests

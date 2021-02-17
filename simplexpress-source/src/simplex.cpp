@@ -13,7 +13,8 @@ Simplex::Simplex(const char* user_model)
 }
 
 SimplexResult Simplex::simplex_parser(const onestring& model_check,
-									  FlexArray<Unit>& model_array)
+									  FlexArray<Unit>& model_array,
+									  bool lexing = false)
 {
 	SimplexResult result;
 	unsigned int model_index = 0;
@@ -36,6 +37,17 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 
 		// Only advance if we're matching
 		if (matched > Unit::no_required_match) {
+			// Check whether we're being too greedy on multiples,
+			// skip empty optional, skip if this is the last Unit.
+			if (model_array[model_index].attr.multiple &&
+				matched > Unit::no_optional_match &&
+				next(model_index, model_array)) {
+				matched = generosity(buffer,
+									 matched,
+									 model_index,
+									 model_array,
+									 lexing);
+			}
 			// If snag unit, store matched characters in snag_array,
 			// skip empty optional.
 			if (model_array[model_index].attr.snag &&
@@ -49,18 +61,17 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 			}
 			// Check for input greater than matches if last Unit in model.
 			if (!next(model_index, model_array)) {
-				if (matched < static_cast<int>(buffer.length())) {
+				if (lexing) {
+					// Don't fail if we're just lexing off the front.
+					result.match_length += matched;
+				} else if (matched < static_cast<int>(buffer.length())) {
+					// Otherwise, input longer than model, fail match.
 					std::cout << "Input longer than model." << std::endl;
-					result.match = false;  // Input longer than model, fail
+					result.match = false;
 				}
 				break;
 			}
-			// Check whether we're being too greedy on multiples,
-			// skip empty optional.
-			if (model_array[model_index].attr.multiple &&
-				matched > Unit::no_optional_match) {
-				matched = generosity(buffer, matched, model_index, model_array);
-			}
+
 			// Then remove the matched amount from the front.
 			if (static_cast<int>(buffer.length()) >= matched) {
 				if (static_cast<int>(buffer.length()) == matched) {
@@ -81,14 +92,16 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 			}
 			// Advance to next Unit in model
 			++model_index;
+			result.match_length += matched;
 		} else {
 			result.match = false;  // failed a match
 			break;
 		}
 	}
-	// Empty return array if match is false
+	// Empty return array and match length if match is false
 	if (result.match == false) {
 		result.snag_array.clear();
+		result.match_length = 0;
 	}
 	return result;
 }
@@ -171,6 +184,46 @@ FlexArray<onestring> Simplex::snag(const char* snag_check,
 				static_cast<onestring>(input_model));
 }
 
+SimplexResult Simplex::lex(const onestring& model_check)
+{
+	SimplexResult result = simplex_parser(model_check, this->model, true);
+	return result;
+}
+
+SimplexResult Simplex::lex(const char* model_check)
+{
+	SimplexResult result =
+		simplex_parser(static_cast<onestring>(model_check), this->model, true);
+	return result;
+}
+
+SimplexResult Simplex::lex(const onestring& model_check,
+						   const onestring& input_model)
+{
+	FlexArray<Unit> model_array = UnitParser::parse_model(input_model);
+
+	SimplexResult result = simplex_parser(model_check, model_array, true);
+	return result;
+}
+
+SimplexResult Simplex::lex(const char* model_check,
+						   const onestring& input_model)
+{
+	return lex(static_cast<onestring>(model_check), input_model);
+}
+
+SimplexResult Simplex::lex(const onestring& model_check,
+						   const char* input_model)
+{
+	return lex(model_check, static_cast<onestring>(input_model));
+}
+
+SimplexResult Simplex::lex(const char* model_check, const char* input_model)
+{
+	return lex(static_cast<onestring>(model_check),
+			   static_cast<onestring>(input_model));
+}
+
 onestring Simplex::to_string() const
 {
 	std::ostringstream ss;
@@ -200,7 +253,8 @@ bool Simplex::check_optional(const unsigned int& model_index,
 int Simplex::generosity(const onestring incoming_buffer,
 						const int total_matched,
 						const int starting_index,
-						const FlexArray<Unit>& model_array)
+						const FlexArray<Unit>& model_array,
+						bool lexing = false)
 {
 	/** We will handle generosity slightly differently depending whether the
 	 * starting unit is optional or not. We know the first character of the
@@ -253,7 +307,7 @@ int Simplex::generosity(const onestring incoming_buffer,
 			current_index = starting_index;
 			generous_match = 0;
 		} else {
-			// If next unit matches, store index if we don't already one...
+			// If next unit matches, store index if we don't already have one...
 			if (!(match_start_index > 0)) {
 				match_start_index = count;
 			}
@@ -261,8 +315,15 @@ int Simplex::generosity(const onestring incoming_buffer,
 			++current_index;
 			generous_match += matched;
 			// ... and advance buffer, unless we run out of units or buffer.
-			if (!next(current_index, model_array) ||
-				static_cast<int>(buffer.length()) <= matched) {
+			if (lexing && !next(current_index, model_array)) {
+				if (buffer.length() <= 1) {
+					buffer.clear();
+				} else {
+					buffer = buffer.substr(1);
+				}
+				break;
+			} else if (!next(current_index, model_array) ||
+					   static_cast<int>(buffer.length()) <= matched) {
 				break;
 			} else {
 				buffer = buffer.substr(matched);
@@ -278,6 +339,10 @@ int Simplex::generosity(const onestring incoming_buffer,
 	 * have to remove it here.*/
 	if (match_start_index > 0 &&
 		(generous_match + match_start_index >= total_matched)) {
+		return (model_array[starting_index].attr.optional)
+				   ? (match_start_index - 1)
+				   : match_start_index;
+	} else if (match_start_index > 0 && lexing) {
 		return (model_array[starting_index].attr.optional)
 				   ? (match_start_index - 1)
 				   : match_start_index;
