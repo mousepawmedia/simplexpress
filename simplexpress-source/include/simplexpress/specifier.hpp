@@ -47,8 +47,8 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-#include "pawlib/onechar.hpp"
-#include "pawlib/onestring.hpp"
+#include "onestring/onechar.hpp"
+#include "onestring/onestring.hpp"
 #include "simplexpress/char_sets.hpp"
 #include "simplexpress/rules.hpp"
 

@@ -47,8 +47,8 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-#include "pawlib/onechar.hpp"
-#include "pawlib/onestring.hpp"
+#include "onestring/onechar.hpp"
+#include "onestring/onestring.hpp"
 
 using std::cout;
 using std::endl;

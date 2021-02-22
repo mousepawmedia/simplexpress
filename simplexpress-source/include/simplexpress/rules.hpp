@@ -46,7 +46,7 @@
 #include <string>
 #include <vector>
 
-#include "pawlib/onechar.hpp"
+#include "onestring/onechar.hpp"
 
 using std::vector;
 

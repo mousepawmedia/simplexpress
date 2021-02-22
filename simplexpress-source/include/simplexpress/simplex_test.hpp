@@ -46,8 +46,8 @@
 
 #include <type_traits>
 
-#include "pawlib/goldilocks.hpp"
-#include "pawlib/iochannel.hpp"
+#include "goldilocks/assertions.hpp"
+#include "goldilocks/goldilocks.hpp"
 #include "simplexpress/simplex.hpp"
 
 // X-sB00 //

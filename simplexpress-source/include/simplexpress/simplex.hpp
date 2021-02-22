@@ -49,9 +49,9 @@
 #include <string>
 #include <vector>
 
-#include "pawlib/flex_array.hpp"
-#include "pawlib/onechar.hpp"
-#include "pawlib/onestring.hpp"
+#include "nimbly/flexarray.hpp"
+#include "onestring/onechar.hpp"
+#include "onestring/onestring.hpp"
 #include "simplexpress/unit.hpp"
 #include "simplexpress/unit_parser.hpp"
 

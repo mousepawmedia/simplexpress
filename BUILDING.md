@@ -15,12 +15,22 @@ Clang (3.4 or later).
 
 ## Building and Linking Dependencies
 
-SIMPLEXpress relies on CPGF and PawLIB. The default behavior of the build
-system is to look for MousePaw Media's `libdeps/` and `pawlib/` repositories,
-cloned parallel to this repository's main folder. Simply run `$ make ready` in
-each of those repositories (optionally, you can run `$ make cpgf`
-in `libdeps/`) before building this one. (This is our default for company
-development environments.)
+SIMPLEXpress relies on the following:
+
+* Arctic Tern
+* eventpp
+* IOSqueak
+* Nimbly
+* Onestring
+* Goldilocks (tester only)
+
+The default behavior of the build system is to look for MousePaw Media's
+repositories for each of these, cloned parallel to this repository's main
+folder. Clone (from MousePaw's GitHub or Phabricator source) and then run
+`$ make ready` in each of the following: `libdeps/`, `arctic-tern/`,
+`iosqueak/`, `nimbly/`, `onestring/`, and `goldilocks/` (optionally, you can run
+`$ make eventpp` in `libdeps/`) before building this one. (This is our default
+for company development environments.)
 
 You can specify custom paths for these libraries by creating a `.config` file
 in the root of this repository. Make a copy of `build.config.txt` and save it
@@ -55,8 +65,8 @@ building and debugging.
 
 ## Source Directories
 
-- The '/docs' folder contains the Sphinx documentation for SIMPLEXpress.
-- The '/simplexpress-source' folder contains the source code for the
+* The '/docs' folder contains the Sphinx documentation for SIMPLEXpress.
+* The '/simplexpress-source' folder contains the source code for the
   SIMPLEXpress library.
-- The '/simplexpress-tester' folder contains the console application for
+* The '/simplexpress-tester' folder contains the console application for
   testing the SIMPLEXpress library.

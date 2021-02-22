@@ -44,9 +44,9 @@
 
 #include <sstream>
 
-#include "pawlib/core_types.hpp"
-#include "pawlib/flex_array.hpp"
-#include "pawlib/onestring.hpp"
+#include "arctic-tern/tril.hpp"
+#include "nimbly/flexarray.hpp"
+#include "onestring/onestring.hpp"
 #include "simplexpress/specifier.hpp"
 #include "simplexpress/unit.hpp"
 

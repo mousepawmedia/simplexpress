@@ -132,8 +132,12 @@ include_directories(include)
 
 # CHANGEME: Include headers of dependencies.
 include_directories(${CMAKE_HOME_DIRECTORY}/../simplexpress-source/include)
-include_directories(${PAWLIB_DIR}/include)
-include_directories(${CPGF_DIR}/include)
+include_directories(${NIMBLY_DIR}/include)
+include_directories(${GOLDILOCKS_DIR}/include)
+include_directories(${ONESTRING_DIR}/include)
+include_directories(${IOSQUEAK_DIR}/include)
+include_directories(${ARCTICTERN_DIR}/include)
+include_directories(${EVENTPP_DIR}/include)
 
 # CHANGEME: Include files to compile.
 add_executable(${TARGET_NAME}
@@ -142,8 +146,9 @@ add_executable(${TARGET_NAME}
 
 # CHANGEME: Link against dependencies.
 target_link_libraries(${TARGET_NAME} ${CMAKE_HOME_DIRECTORY}/../simplexpress-source/lib/${CMAKE_BUILD_TYPE}/libsimplexpress.a)
-target_link_libraries(${TARGET_NAME} ${PAWLIB_DIR}/lib/libpawlib.a)
-target_link_libraries(${TARGET_NAME} ${CPGF_DIR}/lib/libcpgf.a)
+target_link_libraries(${TARGET_NAME} ${NIMBLY_DIR}/lib/libnimbly.a)
+target_link_libraries(${TARGET_NAME} ${GOLDILOCKS_DIR}/lib/libgoldilocks.a)
+target_link_libraries(${TARGET_NAME} ${IOSQUEAK_DIR}/lib/libiosqueak.a)
 
 if(COMPILERTYPE STREQUAL "clang")
     if(SAN STREQUAL "address")

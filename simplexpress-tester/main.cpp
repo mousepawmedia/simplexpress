@@ -41,8 +41,8 @@
  * on how to contribute to our projects.
  */
 
-#include "pawlib/goldilocks_shell.hpp"
-#include "pawlib/iochannel.hpp"
+#include "goldilocks/shell.hpp"
+#include "iosqueak/channel.hpp"
 #include "simplexpress/lex_test.hpp"
 #include "simplexpress/simplex_test.hpp"
 #include "simplexpress/snag_test.hpp"
@@ -61,7 +61,7 @@ void test_code() {
 int main(int argc, char* argv[])
 {
 	// Set up signal handling.
-	ioc.configure_echo(IOEchoMode::cout);
+	channel.configure_echo(IOEchoMode::cout);
 
 	GoldilocksShell* shell = new GoldilocksShell(">> ");
 	shell->register_suite<TestSuite_Basic>("X-sB00");
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 	if (argc > 1) {
 		return shell->command(argc, argv);
 	} else {
-		ioc << IOFormatTextAttr::bold << IOFormatTextFG::blue
+		channel << IOFormatTextAttr::bold << IOFormatTextFG::blue
 			<< "===== SIMPLExpress Tester =====\n"
 			<< IOCtrl::endl;
 

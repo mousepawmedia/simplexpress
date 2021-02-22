@@ -45,8 +45,8 @@
 
 #include <iostream>
 
-#include "pawlib/onechar.hpp"
-#include "pawlib/onestring.hpp"
+#include "onestring/onechar.hpp"
+#include "onestring/onestring.hpp"
 #include "simplexpress/rules.hpp"
 #include "simplexpress/specifier.hpp"
 
