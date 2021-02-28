@@ -8,9 +8,9 @@
             "type": "lldb",
             "request": "launch",
             "name": "LLDB",
-            "program": "${workspaceRoot}/tester_debug",
+            "program": "${workspaceFolder}/tester_debug",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceFolder}",
             "preLaunchTask": "Build Debug",
             "terminal": "external"
         },
