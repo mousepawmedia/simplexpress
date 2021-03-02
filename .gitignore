@@ -3,7 +3,7 @@
 # Based in part on https://github.com/github/gitignore
 
 # CHANGE: Project "ready" directory (MUST have leading slash)
-/sandbox/
+/simplexpress/
 
 # Tester symlinks
 tester
