@@ -52,9 +52,10 @@ Planned Functionality (Soft Reserved Characters)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * ``[ ]``: Set. Match any one of the Unit values within. Space delimited.
-* ``<>``: Literal Set: Any literal character within. * ``( )``: Group. Allows
-  for literal characters, strings, and further Units (simplex-ception!) within a
-  Unit. For example, ``^(abc)?/`` matches optional abc.
+* ``<>``: Literal Set: Any literal character within.
+* ``( )``: Group. Allows for literal characters, strings, and further Units
+  (simplex-ception!) within a Unit. For example, ``^(abc)?/`` matches optional
+  abc.
 * ``%``: Escape following character (to make literal). Affects exactly one
   character. Modifiers following that character will affect that character's
   Unit.
@@ -67,10 +68,10 @@ Planned Functionality (Soft Reserved Characters)
 
 Examples:
 
-* ``^[(abc) (123)]/`` matches either abc or 123, but not both.
+* ``^[(abc) (123)]/`` matches either ``abc`` or ``123``, but not both.
 * ``^[lu d]/`` matches either an uppercase letter or a digit, but not both.
 * ``^[(abc) d]/`` matches either ``abc`` or a digit.
-* ``^[<abc> d]/`` matches either a, b, c, or a digit.
+* ``^[<abc> d]/`` matches either ``a``, ``b``, ``c``, or a digit.
 
 Units
 ---------------------------------------
@@ -191,7 +192,7 @@ Planned Specifier Functionality
       indicate upper or lower case.
     * ``c``: classification (Reserved for later expanded character classes, such
       as ``c_hangal`` for Hangal characters) (2.0-3.0)
-    * ``u#``: unicode (accepts `u78` or `u57-78`) (2.0)
+    * ``u#``: unicode (accepts ``u78`` or ``u57-78``) (2.0)
 
 * ``e``: extended Latin (2.0)
 * ``g``: greek (2.0)
