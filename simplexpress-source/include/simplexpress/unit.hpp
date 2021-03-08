@@ -45,6 +45,7 @@
 
 #include <iostream>
 
+#include "iosqueak/channel.hpp"
 #include "onestring/onechar.hpp"
 #include "onestring/onestring.hpp"
 #include "simplexpress/rules.hpp"

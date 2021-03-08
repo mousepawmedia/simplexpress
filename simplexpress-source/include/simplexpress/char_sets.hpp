@@ -50,9 +50,6 @@
 #include "onestring/onechar.hpp"
 #include "onestring/onestring.hpp"
 
-using std::cout;
-using std::endl;
-
 /** The char_sets class holds categories of characters to match against*/
 class char_sets
 {

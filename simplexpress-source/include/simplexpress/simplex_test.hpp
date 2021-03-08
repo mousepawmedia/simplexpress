@@ -44,8 +44,6 @@
 #ifndef SIMPLEXPRESS_BASIC_TESTS_HPP
 #define SIMPLEXPRESS_BASIC_TESTS_HPP
 
-#include <type_traits>
-
 #include "goldilocks/assertions.hpp"
 #include "goldilocks/goldilocks.hpp"
 #include "simplexpress/simplex.hpp"

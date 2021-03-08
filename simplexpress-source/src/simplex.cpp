@@ -25,14 +25,14 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 	while (!buffer.empty()) {
 		// Checks how many characters are matched by the current Unit in model
 		int matched = model_array[model_index].check_model(buffer);
-		std::cout << "Matching " << buffer;
-		std::cout << " against " << model_array[model_index] << "... ";
+		channel << IOCat::debug << "Matching " << buffer;
+		channel << " against " << model_array[model_index] << "... ";
 		if (model_array[model_index].attr.optional) {
-			std::cout << (matched > Unit::no_optional_match ? "true" : "false")
-					  << "\n";
+			channel << (matched > Unit::no_optional_match ? "true" : "false")
+					  << IOCtrl::endl;
 		} else {
-			std::cout << (matched > Unit::no_required_match ? "true" : "false")
-					  << "\n";
+			channel << (matched > Unit::no_required_match ? "true" : "false")
+					  << IOCtrl::endl;
 		}
 
 		// Only advance if we're matching
@@ -66,7 +66,7 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 					result.match_length += matched;
 				} else if (matched < static_cast<int>(buffer.length())) {
 					// Otherwise, input longer than model, fail match.
-					std::cout << "Input longer than model." << std::endl;
+					channel << IOCat::debug << "Input longer than model." << IOCtrl::endl;
 					result.match = false;
 				}
 				break;

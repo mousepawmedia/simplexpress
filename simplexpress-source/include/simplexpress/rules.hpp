@@ -44,11 +44,8 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include "onestring/onechar.hpp"
-
-using std::vector;
 
 /**The Rule class specifies what each rule we want is suppose to do. As the
  * rules expand or change it is easy to go in and change or add one rule at a

@@ -49,6 +49,7 @@
 #include <string>
 #include <vector>
 
+#include "iosqueak/channel.hpp"
 #include "nimbly/flexarray.hpp"
 #include "onestring/onechar.hpp"
 #include "onestring/onestring.hpp"

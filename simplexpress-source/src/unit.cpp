@@ -116,7 +116,7 @@ bool Unit::specifiers(onechar ch) const
 			return_var = Rule::rule_z(ch);
 			break;
 		default:
-			std::cout << "Invalid specifier.\n";
+			channel << IOCat::debug << "Invalid specifier.\n" << IOCtrl::endl;
 			break;
 	}
 	return return_var;
