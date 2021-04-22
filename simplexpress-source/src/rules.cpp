@@ -51,14 +51,15 @@ bool Rule::rule_e(onechar ch, Rule::LetterCase letterCase)
 	/*Determines whether the user entered character needs to be upper or lower
 	case if neither is set or specified then character can be any case*/
 	switch (letterCase) {
-		case LetterCase::Any:
-			letrCase = LetterCase::Any;
-			return Specifier::s_alphanumeric(ch, letrCase);
 		case LetterCase::Lower:
 			letrCase = LetterCase::Lower;
 			return Specifier::s_alphanumeric(ch, letrCase);
 		case LetterCase::Upper:
 			letrCase = LetterCase::Upper;
+			return Specifier::s_alphanumeric(ch, letrCase);
+		case LetterCase::Any:
+		default:
+			letrCase = LetterCase::Any;
 			return Specifier::s_alphanumeric(ch, letrCase);
 	}
 }
@@ -94,14 +95,15 @@ bool Rule::rule_l(onechar ch, Rule::LetterCase letterCase)
 	/*Determines whether the user entered character needs to be upper or lower
 	case if neither is set or specified then character can be any case*/
 	switch (letterCase) {
-		case LetterCase::Any:
-			letrCase = LetterCase::Any;
-			return Specifier::s_latin(ch, letrCase);
 		case LetterCase::Lower:
 			letrCase = LetterCase::Lower;
 			return Specifier::s_latin(ch, letrCase);
 		case LetterCase::Upper:
 			letrCase = LetterCase::Upper;
+			return Specifier::s_latin(ch, letrCase);
+		case LetterCase::Any:
+		default:
+			letrCase = LetterCase::Any;
 			return Specifier::s_latin(ch, letrCase);
 	}
 }
