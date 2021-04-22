@@ -129,6 +129,9 @@ public:
 	/** Copy constructor */
 	Unit(const Unit& unit);
 
+	/** Copy assignment */
+	Unit& operator=(const Unit& unit);
+
 	/** Enum used by check model to indicate match status.
 	 * Also used by parser and generosity in Simplex.
 	 * Number values greater than 1 indicate a multi character match on a Unit

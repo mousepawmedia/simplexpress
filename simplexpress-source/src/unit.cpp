@@ -64,6 +64,11 @@ Unit::Unit() {}
 
 Unit::Unit(const Unit& unit) : attr(unit.attr) {}
 
+Unit& Unit::operator=(const Unit& unit) {
+	this->attr = unit.attr;
+	return *this;
+}
+
 bool Unit::specifiers(onechar ch) const
 {
 	bool return_var = false;
