@@ -110,6 +110,7 @@ public:
 		return "Successfully construct 8-char model Simplex from an ASCII "
 			   "model that includes literals inside Units";
 	}
+
 	bool run() override
 	{
 		Simplex simplex1(model1);

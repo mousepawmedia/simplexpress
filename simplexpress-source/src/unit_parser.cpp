@@ -457,10 +457,12 @@ ParseResult UnitParser::alphanumeric_parser(const onestring& in)
 }
 
 // Helper Functions
+
+/// Remove first character from onestring
 void UnitParser::chop(onestring& in)
 {
 	if (in.length() > 1) {
-		onestring new_rem = in.substr(1, in.length());
+		onestring new_rem = in.substr(1, in.length() - 1);
 		in = new_rem;
 	} else if (in.length() == 1) {
 		in = in.at(0);
