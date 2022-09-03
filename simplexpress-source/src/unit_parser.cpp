@@ -200,8 +200,12 @@ FlexArray<Unit> UnitParser::parse_model(const onestring& user_model)
 		if (remainder.length() - parsedattr.size <= 0) {
 			break;
 		}
+
+		// If "parsedattr.size" is greater than zero, putting remainder.length() as length will throw an error.
+		auto safeLength = remainder.length() - parsedattr.size;
+
 		onestring new_rem =
-			remainder.substr(parsedattr.size, remainder.length());
+			remainder.substr(parsedattr.size, safeLength);
 		remainder = new_rem;
 	}
 	// If user model was empty, to begin with, do nothing - empty simplex
@@ -219,7 +223,7 @@ ParseResult UnitParser::character(ReservedCharacter rc, onestring in)
 		ReservedCharacter parsed = to_reserved_character(char_to_match);
 		if (parsed == rc) {
 			// Success!
-			onestring rem = (in.length() > 1) ? in.substr(1, in.length()) : "";
+			onestring rem = (in.length() > 1) ? in.substr(1, in.length()-1) : "";
 			return ParseResult::make_success(onestring(char_to_match), rem);
 		} else {
 			// No match
@@ -285,7 +289,7 @@ ParseResult UnitParser::literal(const onestring& in)
 		return ParseResult::make_error("Out of input!", "");
 	else {
 		// Success
-		onestring rem = (in.length() > 1) ? in.substr(1, in.length()) : "";
+		onestring rem = (in.length() > 1) ? in.substr(1, in.length()-1) : "";
 		return ParseResult::make_success(in.at(0), rem);
 	}
 }
