@@ -2,6 +2,24 @@
 
 #include "simplexpress/rules.hpp"
 
+std::ostream& operator<<(std::ostream& stream,
+						 const SimplexResult& simplex_result)
+{
+	stream << "Result: " << (simplex_result.match ? "match. " : "no match. ");
+	if (simplex_result.snag_array.length() > 0) {
+		stream << "Snags: ";
+		for (size_t i = 0; i < simplex_result.snag_array.length(); ++i) {
+			stream << i << ": " << simplex_result.snag_array[i]
+				   << (i + 1 < simplex_result.snag_array.length() ? ", " : "");
+		}
+	} else {
+		stream << "No Snags.";
+	}
+	return stream;
+}
+
+Simplex::Simplex() {};
+
 Simplex::Simplex(const onestring& user_model)
 {
 	model = UnitParser::parse_model(user_model);
@@ -29,10 +47,10 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 		channel << " against " << model_array[model_index] << "... ";
 		if (model_array[model_index].attr.optional) {
 			channel << (matched > Unit::no_optional_match ? "true" : "false")
-					  << IOCtrl::endl;
+					<< IOCtrl::endl;
 		} else {
 			channel << (matched > Unit::no_required_match ? "true" : "false")
-					  << IOCtrl::endl;
+					<< IOCtrl::endl;
 		}
 
 		// Only advance if we're matching
@@ -66,7 +84,8 @@ SimplexResult Simplex::simplex_parser(const onestring& model_check,
 					result.match_length += matched;
 				} else if (matched < static_cast<int>(buffer.length())) {
 					// Otherwise, input longer than model, fail match.
-					channel << IOCat::debug << "Input longer than model." << IOCtrl::endl;
+					channel << IOCat::debug << "Input longer than model."
+							<< IOCtrl::endl;
 					result.match = false;
 				}
 				break;

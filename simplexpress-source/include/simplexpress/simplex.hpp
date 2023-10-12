@@ -65,16 +65,22 @@ struct SimplexResult {
 	uint_fast16_t match_length;
 };
 
+/** Overload stream insertion operator for SimplexResult */
+std::ostream& operator<<(std::ostream& stream,
+						 const SimplexResult& simplex_result);
+
 /** The simplex class is the overall model of Simplexpress. A simplex contains
  * an array of Units. Everything entered outside a Unit is taken as a literal
  * and must be matched exactly. */
 class Simplex
 {
-protected:
+public:
 	/** The model itself, an array of Unit objects. */
 	FlexArray<Unit> model;
 
-public:
+	/** Default constructor for empty Simplex */
+	Simplex();
+
 	/** Constructor, When a Simplex is created, parse_input is called to parse
 	 * through the user defined model. Then it will call match to check
 	 * everything against the model.

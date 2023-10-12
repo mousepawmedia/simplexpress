@@ -1,13 +1,14 @@
-/** SIMPLEXpress Tester
+/** SIMPLEXpress Experimenter
  * Version: 1.0
  *
- * Allows running tests and custom code for SIMPLEXpress.
+ * A simple loop that can be enabled in the tester for manual testing and
+ * experiments with Simplex models and results.
  *
- * Author(s): Jason C. McDonald
+ * Author(s): Anna R Dunster
  */
 
 /* LICENSE
- * Copyright (c) 2016-2020 MousePaw Media.
+ * Copyright (c) 2021 MousePaw Media.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,57 +42,50 @@
  * on how to contribute to our projects.
  */
 
-#include "goldilocks/shell.hpp"
+#ifndef SIMPLEXPRESS_EXPERIMENTER_HPP
+#define SIMPLEXPRESS_EXPERIMENTER_HPP
+
 #include "iosqueak/channel.hpp"
-#include "simplexpress/lex_test.hpp"
-#include "simplexpress/simplex_test.hpp"
-#include "simplexpress/snag_test.hpp"
-#include "simplexpress/unit_parser_test.hpp"
+#include "onestring/onestring.hpp"
+#include "simplexpress/simplex.hpp"
 
-// Include the experimenter script from this directory.
-#include "experimenter.hpp"
-
-/** Temporary test code goes in this function ONLY.
- * All test code that is needed long term should be
- * moved to a dedicated Goldilocks Test and TestSuite.
- */
-void test_code() { return; }
-
-/////// WARNING: DO NOT ALTER BELOW THIS POINT! ///////
-
-int main(int argc, char* argv[])
+/** Simplex Experimenter.
+ * A simple loop to input a model and an input to
+ * manually test the output of various matches. */
+void simplex_experimenter()
 {
-	// Set up signal handling.
-	channel.configure_echo(IOEchoMode::cout);
+	onestring model_input;
+	Simplex simplex;
+	onestring user_input;
+	SimplexResult simplex_result;
 
-	GoldilocksShell* shell = new GoldilocksShell(">> ");
-	shell->register_suite<TestSuite_Basic>("X-sB00");
-	shell->register_suite<TestSuite_UnitParser>("X-sB01");
-	shell->register_suite<TestSuite_Snag>("X-sB02");
-	shell->register_suite<TestSuite_Lexer>("X-sB03");
+	/** Get input and return as onestring */
+	auto get_input = []() {
+		std::string console_input;
+		getline(std::cin, console_input);
+		onestring return_str = console_input;
+		return return_str;
+	};
 
-	// If we got command-line arguments.
-	if (argc > 1) {
-		return shell->command(argc, argv);
-	} else {
-		channel << IOFormatTextAttr::bold << IOFormatTextFG::blue
-				<< "===== SIMPLExpress Tester =====\n"
+	channel << "Experimenter Engaged." << IOCtrl::endl;
+	while (true) {
+		channel << "Enter a Simplex model, or just hit enter to exit:"
 				<< IOCtrl::endl;
-
-		test_code();
-
-		// Uncomment to run manual experiments, testing, and demo of Simplex
-		// models. Recommended to comment out the interactive console line while
-		// using.
-		// simplex_experimenter();
-
-		// Shift control to the interactive console.
-		shell->interactive();
+		model_input = get_input();
+		if (model_input.empty()) {
+			break;
+		} else {
+			simplex = Simplex(model_input);
+		}
+		channel << "Your model is: " << simplex
+				<< "\nEnter the user input to check against the model:"
+				<< IOCtrl::endl;
+		user_input = get_input();
+		simplex_result =
+			simplex.simplex_parser(user_input, simplex.model, false);
+		channel << "Checking " << user_input << " against the model.\n"
+				<< simplex_result << IOCtrl::endl;
 	}
-
-	// Delete our GoldilocksShell.
-	delete shell;
-	// shell = 0;
-
-	return 0;
 }
+
+#endif  // !SIMPLEXPRESS_EXPERIMENTER_HPP
